@@ -1,0 +1,11 @@
+country_code,series_code,year_start,year_end,gap_length,action,note
+MYS,AG.LND.PRCP.MM,2023,2023,1,excluded,"edge gap, no surrounding value for interpolation"
+MYS,EG.FEC.RNEW.ZS,2022,2023,2,excluded,"edge gap, no surrounding value for interpolation"
+MYS,EG.USE.COMM.FO.ZS,2007,2007,1,interpolated,"linear interpolation, 1-year gap"
+MYS,EN.CLC.MDAT.ZS,1990,2008,19,excluded,"edge gap, no surrounding value for interpolation"
+MYS,EN.CLC.MDAT.ZS,2010,2023,14,excluded,"edge gap, no surrounding value for interpolation"
+PHL,AG.LND.PRCP.MM,2023,2023,1,excluded,"edge gap, no surrounding value for interpolation"
+PHL,EG.FEC.RNEW.ZS,2022,2023,2,excluded,"edge gap, no surrounding value for interpolation"
+PHL,EN.CLC.MDAT.ZS,1990,2008,19,excluded,"edge gap, no surrounding value for interpolation"
+PHL,EN.CLC.MDAT.ZS,2010,2023,14,excluded,"edge gap, no surrounding value for interpolation"
+PHL,NV.IND.MANF.ZS,1990,1999,10,excluded,"edge gap, no surrounding value for interpolation"

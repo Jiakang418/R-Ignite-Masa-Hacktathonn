@@ -1,0 +1,11 @@
+Indicator,Risk Type,Cat Layer,Actuarial Justification
+CHIRPS 3-day max precipitation,Physical,Hazard,Sub-national daily rainfall: direct input to GEV model. 3-day max drives flood event peak flow
+WDI Total GHG (EN.ATM.GHGT.KT.CE),Physical/Transition,Hazard,Upstream atmospheric forcing. IPCC AR6: +7% extreme precip per °C. ARIMA target for R2
+WDI Urban population % (SP.URB.TOTL.IN.ZS),Physical,Vulnerability,Insured asset concentration. Same flood footprint × more urban density = higher loss per event
+WDI Land below 5m (EN.CLC.MDAT.ZS),Physical,Vulnerability,Coastal surge amplification. Non-linear loss at inundation threshold for property portfolios
+WDI GDP per capita (NY.GDP.PCAP.CD),Physical,Loss,Insurance penetration driver. Higher GDP → more insured value per km² of flood footprint
+NOAA ONI (El Niño/La Niña index),Physical,Hazard (Dependence),"Inter-annual loss dependence. La Niña → MYS flood spike. El Niño → PHL drought, but storm surge intensification post-event"
+NGFS Carbon price (Current Policies),Transition,Loss (Regulatory),Regulatory compliance cost for carbon-intensive cedant portfolios under current policy trajectory
+NGFS Carbon price (Net Zero 2050),Transition,Loss (Regulatory),BNM-grade carbon price under Paris-aligned transition. Direct input to CCPT compliance cost estimate
+Climate Watch: Energy sector GHG,Transition,Transition Exposure,Energy sector = largest GHG contributor → highest transition cost exposure for Malaysian cedants
+Climate Watch: Industry sector GHG,Transition,Transition Exposure,Heavy industry stranded asset risk → treaty loss amplification through property write-downs
