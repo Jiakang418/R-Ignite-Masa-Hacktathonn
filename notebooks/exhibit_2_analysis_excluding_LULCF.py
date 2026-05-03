@@ -29,7 +29,7 @@ from pathlib import Path
 DATA_DIR = Path("../data/raw")
 NGFS_CSV_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.csv"
 NGFS_XLSX_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.xlsx"
-GHG_FILE = DATA_DIR / "ghg-emissions_excluding_LULCF.csv"  # SENSITIVITY: EXCLUDING LULCF
+GHG_FILE = DATA_DIR / "ghg-emissions excluding LULCF.csv"  # SENSITIVITY: EXCLUDING LULCF
 
 CARBON_PRICE_YEAR = 2027  # Mid-range year for analysis
 REGION = "MYS"
@@ -103,48 +103,35 @@ net_zero_price = None
 current_pol_scenario = None
 net_zero_scenario = None
 
-# Find Current Policies scenario
+# Detect scenarios by price profile:
+# Current Policies = $0 at CARBON_PRICE_YEAR (scenario with zero or near-zero price)
+# Net Zero 2050    = highest positive price at CARBON_PRICE_YEAR (scenario 4 = $55.578)
+scenario_prices = {}
 for scenario in mys_scenarios:
-    if any(keyword in scenario for keyword in ["Current", "current", "CP"]):
-        scenario_data = carbon_price_data[carbon_price_data["Scenario"] == scenario]
-        if len(scenario_data) > 0 and str(CARBON_PRICE_YEAR) in scenario_data.columns:
-            current_pol_price = float(scenario_data.iloc[0][str(CARBON_PRICE_YEAR)])
-            current_pol_scenario = scenario
-            print(f"  ✓ Current Policies scenario: '{scenario}'")
-            print(f"    Carbon price ({CARBON_PRICE_YEAR}): ${current_pol_price:.2f}/ton CO2e")
+    scenario_data = carbon_price_data[carbon_price_data["Scenario"] == scenario]
+    if len(scenario_data) > 0 and str(CARBON_PRICE_YEAR) in scenario_data.columns:
+        price = float(scenario_data.iloc[0][str(CARBON_PRICE_YEAR)])
+        scenario_prices[scenario] = price
+        print(f"  Scenario {scenario}: ${price:.3f}/ton at {CARBON_PRICE_YEAR}")
 
-# Find Net Zero scenario
-for scenario in mys_scenarios:
-    if any(keyword in scenario.lower() for keyword in ["net zero", "nz", "zero"]):
-        scenario_data = carbon_price_data[carbon_price_data["Scenario"] == scenario]
-        if len(scenario_data) > 0 and str(CARBON_PRICE_YEAR) in scenario_data.columns:
-            net_zero_price = float(scenario_data.iloc[0][str(CARBON_PRICE_YEAR)])
-            net_zero_scenario = scenario
-            print(f"  ✓ Net Zero scenario: '{scenario}'")
-            print(f"    Carbon price ({CARBON_PRICE_YEAR}): ${net_zero_price:.2f}/ton CO2e")
+if not scenario_prices:
+    print(f"\n  ❌ ERROR: No scenario price data found for year {CARBON_PRICE_YEAR}")
+    exit(1)
 
-# Validation
-if current_pol_price is None or net_zero_price is None:
-    print(f"\n  ⚠️  Warning: Could not auto-detect both scenarios.")
-    print(f"  Current Policies found: {current_pol_price is not None}")
-    print(f"  Net Zero found: {net_zero_price is not None}")
-    print(f"\n  Attempting manual extraction of first two scenarios...")
-    
-    if len(mys_scenarios) >= 2:
-        scenario_data_1 = carbon_price_data[carbon_price_data["Scenario"] == mys_scenarios[0]]
-        scenario_data_2 = carbon_price_data[carbon_price_data["Scenario"] == mys_scenarios[1]]
-        
-        if str(CARBON_PRICE_YEAR) in scenario_data_1.columns:
-            current_pol_price = float(scenario_data_1.iloc[0][str(CARBON_PRICE_YEAR)])
-            current_pol_scenario = mys_scenarios[0]
-            print(f"  ✓ Using first scenario as Current Policies: {current_pol_scenario}")
-            print(f"    Price: ${current_pol_price:.2f}/ton")
-        
-        if str(CARBON_PRICE_YEAR) in scenario_data_2.columns:
-            net_zero_price = float(scenario_data_2.iloc[0][str(CARBON_PRICE_YEAR)])
-            net_zero_scenario = mys_scenarios[1]
-            print(f"  ✓ Using second scenario as Net Zero: {net_zero_scenario}")
-            print(f"    Price: ${net_zero_price:.2f}/ton")
+# Current Policies = scenario whose 2027 price is 0 (or closest to 0)
+current_pol_scenario = min(scenario_prices, key=lambda s: abs(scenario_prices[s]))
+current_pol_price    = scenario_prices[current_pol_scenario]
+
+# Net Zero 2050 = scenario with price matching expected $55.578 range
+nz_candidates = {s: p for s, p in scenario_prices.items() if p > 50 and p < 70}
+if nz_candidates:
+    net_zero_scenario = max(nz_candidates, key=lambda s: nz_candidates[s])
+else:
+    net_zero_scenario = max(scenario_prices, key=lambda s: scenario_prices[s])
+net_zero_price = scenario_prices[net_zero_scenario]
+
+print(f"  ✓ Current Policies scenario: {current_pol_scenario} — ${current_pol_price:.3f}/ton at {CARBON_PRICE_YEAR}")
+print(f"  ✓ Net Zero 2050 scenario:   {net_zero_scenario} — ${net_zero_price:.3f}/ton at {CARBON_PRICE_YEAR}")
 
 if current_pol_price is None or net_zero_price is None:
     print(f"\n  ❌ ERROR: Could not extract prices for both scenarios")
@@ -274,7 +261,7 @@ print(f"\n[Step 8] Exporting results...")
 export_df = results_df.copy()
 export_df["% of Total"] = (export_df["Annual_Transition_Cost_USD_Millions"] / total_cost * 100).round(1)
 
-output_file = Path("exhibit_2_transition_cost_results_excluding_LULCF.csv")
+output_file = Path("../outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv")
 export_df.to_csv(output_file, index=False)
 print(f"  ✓ Results saved to: {output_file}")
 

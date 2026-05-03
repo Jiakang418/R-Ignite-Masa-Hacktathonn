@@ -1,0 +1,4 @@
+Country,Scenario,Carbon_Price_USD_per_t,Total_GHG_Baseline_MtCO2e,Annual_Transition_Cost_USD_Millions,Annual_Transition_Cost_USD_Billions,Cost_Pct_GDP,Largest_Sector,Largest_Sector_Pct,Note
+Malaysia,Primary (incl. LULUCF),55.578,402.61000000000007,22376.26,22.376,6.0,Energy,69.5,MYS LULUCF = +63.3 MtCO2e (net emitter)
+Malaysia,Sensitivity (excl. LULUCF),55.578,339.32000000000005,18858.73,18.859,5.0,Energy,82.5,Conservative bound; excludes LULUCF sector
+Philippines,Primary (excl. LULUCF sink),55.578,266.28,14799.31,14.799,3.3,Energy,60.4,"PHL LULUCF = -26.9 MtCO2e (net sink, excluded as offset credit)"
