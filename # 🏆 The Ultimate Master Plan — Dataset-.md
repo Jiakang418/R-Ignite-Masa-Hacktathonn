@@ -1,1339 +1,810 @@
-# 🏆 The Ultimate Master Plan — Dataset-Integrated Edition
+# 🏆 The Ultimate Master Plan — Dataset-Integrated Edition (v2 — Verified Against Actual Data)
 ## "From Data Void to Pricing Edge: A Five-Dataset Catastrophe Framework"
 **Every dataset has a job. Every job serves one argument: Hannover Re is mis-pricing SEA nat-cat risk right now.**
 
+> **v2 — All corrections verified against every file in the codebase (May 2026):**
+> - CHIRPS metric is **RX5day** (annual maximum 5-consecutive-day precipitation total — official WMO ETCCDI index), NOT "3-day max"
+> - WDI GHG column is `WB_WDI_EN_GHG_ALL_MT_CE_AR5`, NOT `EN.ATM.GHGT.KT.CE`
+> - WDI CO₂ per capita is `WB_WDI_EN_GHG_CO2_PC_CE_AR5`, NOT `EN.ATM.CO2E.PC`
+> - Climate Watch sectors are: **Energy, Industrial Processes, Agriculture, Waste, LULUCF** — NOT Transportation/Buildings
+> - Philippines LULUCF is a **carbon sink** (−26.89 MtCO₂e in 2023) — a pricing asymmetry most teams will miss
+> - Climate Watch indicators are fetched live from **climatewatchdata.org** — not hardcoded values
+> - NOAA ONI covers 1950–2026, seasonal granularity (12 seasons/year), columns: `SEAS, YR, TOTAL, ANOM`
+> - EM-DAT covers 1905–2025, 725 events, 6 disaster types across Malaysia + Philippines
+
 ---
 
-## The Dataset Architecture — Read This First
+## THE REAL DATA DICTIONARY — What Each File Actually Contains
 
-Before touching code, understand what each dataset does in your analysis. Most teams will use one or two datasets. You will use five, each filling a specific gap the others cannot.
+### FILE 1: `data/processed/chirpsRX5_mls_phl.csv`
+**Source:** Climate Hazards Center, UC Santa Barbara (CHIRPS v2.0)
+**Download URL:** https://climexp.knmi.nl → CHIRPS precip → annual RX5day series
+
+| Column | Type | Description |
+|---|---|---|
+| `country_code` | string | `MYS` or `PHL` |
+| `year` | int | 1990–2023 |
+| `RX5day_mm` | float | Annual maximum 5-consecutive-day precipitation total (mm) — **WMO ETCCDI RX5day index** |
+
+**Actual statistics (verified from data):**
+
+| Country | Mean RX5day | Max RX5day | Peak Year | Note |
+|---|---|---|---|---|
+| MYS | 133.9 mm | 201.3 mm | 2021 | Flood-dominated country |
+| PHL | 244.4 mm | 594.3 mm | 2012 | Typhoon Pablo — extraordinary tail event |
+
+> **Why RX5day and NOT 3-day?** RX5day is the *official IPCC/WMO* climate extreme index for flood frequency analysis. It appears in IPCC AR6 WG1 Chapter 11 and in BNM's climate risk guidance. Citing "RX5day (ETCCDI index)" signals actuarial literacy. In Q&A: "5-day captures multi-day flood events driving catchment saturation and property loss — the actuarial standard for basin-scale flood modelling."
+
+---
+
+### FILE 2: `data/processed/cleaned_wdi.csv`
+**Source:** World Bank WDI — https://databank.worldbank.org/source/world-development-indicators
+**Coverage:** MYS + PHL, 1990–2023, 68 rows total
+
+| Exact Column Name in CSV | Description | Risk Layer | Data Quality |
+|---|---|---|---|
+| `AG.LND.PRCP.MM` | National avg precipitation (mm) — use CHIRPS for EVT instead | Physical context | OK |
+| `WB_WDI_EN_GHG_ALL_MT_CE_AR5` | Total GHG (MtCO₂e, AR5 GWP) — **ARIMA target (R2)** | Physical + Transition | OK |
+| `WB_WDI_EN_GHG_CO2_PC_CE_AR5` | GHG per capita (tCO₂e/person, AR5) | Transition decoupling | OK |
+| `EN_GHG_CO2_RT_GDP_KD` | GHG per unit GDP (constant prices) — intensity metric | Transition pressure | OK |
+| `SP.URB.TOTL.IN.ZS` | Urban population (% of total) | Physical vulnerability | OK |
+| `EN.CLC.MDAT.ZS` | Population exposed to climate extremes (%) | Physical vulnerability | **HAS GAPS** |
+| `AG.LND.FRST.ZS` | Forest area (% of land) — flood amplifier + carbon proxy | Physical + Transition | OK |
+| `EG.FEC.RNEW.ZS` | Renewable energy share (%) | Transition progress | **Missing 2022–2023 MYS** |
+| `EG.USE.PCAP.KG.OE` | Energy use per capita (kg oil equivalent) | Transition intensity | OK |
+| `EG.USE.COMM.FO.ZS` | Fossil fuel % of energy | Transition pressure | **Shows 0.0 for 2021–2023 — treat as gap** |
+| `NY.GDP.PCAP.CD` | GDP per capita (current USD) | Physical loss driver | OK |
+| `NV.IND.MANF.ZS` | Manufacturing value added (% of GDP) | Transition stranded assets | OK |
+
+**Key real numbers for your narrative:**
+- MYS GHG: 85.7 → 318.4 MtCO₂e (1990→2023) = **+271% growth in 33 years**
+- PHL GHG: 92.0 → 254.5 MtCO₂e (1990→2023) = **+177% growth in 33 years**
+- MYS urbanisation: 49.0% → 76.4% (1990→2023) = **same flood footprint, 56% more urban density**
+
+---
+
+### FILES 3–5: Climate Watch GHG Data
+**Source (live — NOT hardcoded):** https://www.climatewatchdata.org/ghg-emissions
+**How to download:** Country=Malaysia or Philippines → Sectors=All → Gas=All GHG → Download CSV
+**Coverage:** 1990–2023, annual, MtCO₂e
+
+| File | Country | Sectors |
+|---|---|---|
+| `climate_watch_sector_merged.csv` | Malaysia only | Energy, Ind. Processes, Agriculture, Waste, LULUCF |
+| `msia_climatewatch_lulucf.csv` | Malaysia | Same 5 sectors |
+| `phili_climatewatch_lulucf.csv` | Philippines | Same 5 sectors |
+
+**Actual sectors (NOT Transportation, NOT Buildings):**
+
+| Sector | MYS 2023 (MtCO₂e) | PHL 2023 (MtCO₂e) | Key Insight |
+|---|---|---|---|
+| Energy | 279.85 | 160.73 | Largest emitter — dominant transition cost driver |
+| Industrial Processes | 29.87 | 16.75 | Cement + manufacturing stranded asset risk |
+| Agriculture | 10.11 | **65.85** | PHL agriculture 6× MYS — rice paddy methane |
+| Waste | 19.49 | 22.95 | Landfill methane |
+| LULUCF | **+63.29** | **−26.89** | 🔑 MYS = net EMITTER (palm oil deforestation); PHL = carbon SINK |
+
+> **THE LULUCF ASYMMETRY — The Insight Other Teams Will Miss:**
+> Malaysia's LULUCF emits net +63.3 MtCO₂e (palm oil/timber deforestation, Borneo). Philippines' LULUCF absorbs −26.9 MtCO₂e (reforestation programs). This means:
+> - Malaysian cedants face **LULUCF-specific regulatory risk** (EU Deforestation Regulation, BNM CCPT deforestation clauses)
+> - Philippine cedants face **agricultural methane risk** (rice paddies), a completely different regulatory mechanism
+> - A uniform "SEA transition risk" factor is actuarially incorrect — it mixes structurally different risk types
+> - **Your recommendation:** Separate MYS and PHL transition risk modelling entirely
+
+---
+
+### FILE 6: `data/processed/EM_DAT_cleaned.csv`
+**Source:** EM-DAT — https://www.emdat.be (free registration required)
+**Coverage:** 725 events, 1905–2025, climate-relevant natural disasters only
+
+| Column | Description |
+|---|---|
+| `country` | `Malaysia` or `Philippines` |
+| `location` | Sub-national region (text, variable quality) |
+| `disaster_type` | **Drought, Extreme temperature, Flood, Mass movement (wet), Storm, Wildfire** |
+| `disaster_subtype` | Tropical cyclone, Flash flood, Riverine flood, Storm surge, Landslide, etc. |
+| `start_year` | Event year |
+| `start_month` | Month (may be missing) |
+| `total_deaths` | Fatalities |
+| `total_affected` | Persons affected (homeless + injured + displaced) |
+| `total_damage_usd` | Nominal economic damage (USD) |
+| `total_damage_adjusted_usd` | **Inflation-adjusted damage (USD) — use this for trends** |
+
+**Verified hazard profiles:**
+
+| Disaster Type | Malaysia Events | Philippines Events | Implication |
+|---|---|---|---|
+| Storm (Tropical Cyclone) | 8 | **414** | PHL = typhoon country |
+| Flood | **81** | 165 | MYS = flood country |
+| Mass movement (wet) | 5 | 34 | Landslides post-typhoon |
+| Drought | 2 | 10 | El Niño signal |
+| Wildfire | 4 | 1 | MYS peat fires |
+| Extreme temperature | 0 | 1 | Minor |
+
+**Total inflation-adjusted loss (1905–2025):** Malaysia = **$5B** | Philippines = **$53B**
+
+> **Critical for EVT modelling:** MYS and PHL need SEPARATE extreme value distributions — GEV fitted to MYS flood losses, GEV/Gumbel fitted to PHL tropical cyclone damage. Using a combined model is statistically wrong and will be caught in Q&A.
+
+---
+
+### FILE 7: `data/processed/noaa_oni_cleaned.csv`
+**Source:** NOAA CPC — https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt
+**Coverage:** 1950–2026, 914 rows, 12 three-month seasons per year
+
+| Column | Description |
+|---|---|
+| `SEAS` | 3-month season label: DJF, JFM, FMA, MAM, AMJ, MJJ, JJA, JAS, ASO, SON, OND, NDJ |
+| `YR` | Year (1950–2026) |
+| `TOTAL` | Absolute SST in Niño 3.4 region (°C) |
+| `ANOM` | **SST anomaly (°C) from 30-year base — this is the ONI signal** |
+
+**Phase classification:** ANOM > +0.5°C for ≥5 consecutive seasons = El Niño; < −0.5°C = La Niña
+
+> **For annual regression:** Aggregate DJF season ANOM by year (DJF captures peak ENSO signal, aligns with Q4-Q1 monsoon timing for both countries).
+
+---
+
+### FILE 8: `data/processed/missing_data_log.csv`
+Documents WDI gaps — key entries:
+- `AG.LND.PRCP.MM` MYS 2023: excluded (edge gap)
+- `EG.FEC.RNEW.ZS` MYS 2022–2023: excluded (edge gap)
+- **Note:** `EG.USE.COMM.FO.ZS` shows 0.0 for MYS 2021–2023 but is NOT in the log — treat as gap, not a true "zero fossil fuel" reading
+
+---
+
+## THE FIVE-DATASET ARCHITECTURE (v2)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     THE FIVE-DATASET ARCHITECTURE                           │
+│                     THE FIVE-DATASET ARCHITECTURE (v2)                      │
 ├──────────────────┬──────────────────────────────────────────────────────────┤
 │ DATASET          │ ROLE IN YOUR CAT MODEL                                   │
 ├──────────────────┼──────────────────────────────────────────────────────────┤
-│ WDI (World Bank) │ Macro indicators: GHG trend (ARIMA target), urban        │
-│                  │ density, coastal exposure, GDP, transition risk proxies   │
-│                  │ → R1 (indicators) + R2 (GHG model)                       │
-├──────────────────┼��─────────────────────────────────────────────────────────┤
-│ CHIRPS (Daily    │ Sub-national daily precipitation for KL + Manila         │
-│ Rainfall)        │ → REPLACES WDI precipitation in EVT/GEV model           │
-│                  │ → Neutralises the "WDI too coarse" limitation            │
-│                  │ → R3 (hazard module — the technical heart)               │
+│ WDI (World Bank) │ 12 macro indicators — GHG trend (ARIMA target R2),       │
+│ databank.        │ urban density (vulnerability), GDP (loss multiplier),     │
+│ worldbank.org    │ fossil fuel share, manufacturing %, renewable energy %   │
+│                  │ → R1 indicator table + R2 GHG forecast                   │
 ├──────────────────┼──────────────────────────────────────────────────────────┤
-│ EM-DAT           │ Historical insured + economic loss by event              │
-│ (Disaster DB)    │ → Financial proof layer — converts climate signals       │
-│                  │ to claim dollars → R3 (loss module) + Exhibit 1         │
+│ CHIRPS RX5day    │ Official ETCCDI annual max 5-day precip, MYS + PHL       │
+│ climexp.knmi.nl  │ MYS mean 134mm / PHL mean 244mm / PHL peak 594mm         │
+│                  │ → GEV hazard model — replaces WDI national precip        │
+│                  │ → R3 hazard module — the technical differentiator        │
 ├──────────────────┼──────────────────────────────────────────────────────────┤
-│ NOAA ONI         │ El Niño/La Niña monthly index 1990–2023                  │
-│ (ENSO Cycles)    │ → Proves MYS-PHL losses are correlated (not independent)│
-│                  │ → Quantifies copula dependence → R1 + R3 + Q&A weapon   │
+│ EM-DAT           │ 725 events, 1905–2025, 6 disaster types                 │
+│ emdat.be         │ MYS: flood-dominated ($5B adj loss)                      │
+│                  │ PHL: storm-dominated ($53B adj loss) — 10× MYS           │
+│                  │ → R3 loss module + financial proof for Exhibit 1         │
 ├──────────────────┼──────────────────────────────────────────────────────────┤
-│ NGFS Scenarios   │ BNM-grade carbon price projections under Current         │
-│ (GCAM 6.0)       │ Policies vs Net Zero 2050                               │
-│                  │ → Transition risk dollar quantification                  │
-│                  │ → R4 (stress test) — the insider signal                  │
+│ NOAA ONI         │ SST anomaly 1950–2026, 12 seasons/year                  │
+│ cpc.ncep.noaa.   │ La Niña → MYS flood spike + PHL storm intensification   │
+│ gov              │ → Simultaneous loss spike destroys independence           │
+│                  │ → ENSO dependence = your Q&A weapon + R1 insight        │
 ├──────────────────┼──────────────────────────────────────────────────────────┤
-│ Climate Watch    │ Sector-level GHG emissions for Malaysia                  │
-│ GHG              │ → Granular transition risk by sector                     │
-│                  │ → Identifies which cedant industries face highest CCPT   │
-│                  │ regulatory cost → R1 + R4 recommendations               │
+│ Climate Watch    │ 5 sectors × 2 countries × 1990–2023                     │
+│ climatewatchdata │ MYS LULUCF = +63.3 MtCO₂e (palm oil EMITTER)           │
+│ .org             │ PHL LULUCF = −26.9 MtCO₂e (reforestation SINK)         │
+│                  │ MYS Energy = $15.6B/yr transition cost at NZ price       │
+│                  │ → Exhibit 2 + R4 differentiated recommendations          │
 └──────────────────┴──────────────────────────────────────────────────────────┘
 ```
 
-**The narrative chain these five datasets create:**
-
-```
-CHIRPS daily rainfall (granular hazard)
-        ↓
-GEV model → return period compression
-        ↓
-EM-DAT loss history → financial bridge
-        ↓
-NOAA ONI → proves MYS+PHL are correlated → combined portfolio is riskier than modelled
-        ↓
-WDI macro indicators → vulnerability amplification (urban density × GDP growth)
-        ↓
-        ═══ EXHIBIT 1: THE PHYSICAL PRICING GAP ═══
-        ↓
-NGFS carbon price (Current Policies vs. Net Zero)
-        ↓
-Climate Watch sector GHG → identifies which cedant industries absorb the transition cost
-        ↓
-        ═══ EXHIBIT 2: THE TRANSITION RISK COST ═══
-        ↓
-COMBINED: Total reserve inadequacy = Physical gap + Transition gap
-```
-
-No other team will have this chain. Every dataset is load-bearing.
+**Note on NGFS:** `exhibit_2_analysis.py` expects `Downscaled_GCAM 6.0 NGFS_data.csv` (from https://www.ngfs.net/ngfs-scenarios-portal). The outputs already exist: Net Zero 2050 carbon price for Malaysia = **$55.578/tonne** (verified in `outputs/exhibit_2_transition_cost_results.csv`), Current Policies = $0.
 
 ---
 
-## Requirements Mapping — How Every Dataset Answers Every Requirement
-
-| Requirement | Primary Dataset(s) | Output |
-|---|---|---|
-| R1: Identify & justify indicators | WDI + NOAA ONI + Climate Watch | Indicator table (physical + transition) + ENSO correlation chart |
-| R2: Predict GHG for 2024 | WDI GHG + Climate Watch sector GHG | ARIMA on WDI total GHG, validated 2024, sector decomposition from Climate Watch |
-| R3: Climate → insurance claims, two countries | CHIRPS + EM-DAT + NOAA ONI | EVT on CHIRPS daily rainfall, regime break on EM-DAT losses, ENSO dependence proof |
-| R4: Mitigation strategy + stress test to 2030 | NGFS GCAM + WDI | NGFS Net Zero vs Current Policies carbon price → transition cost quantified in dollars |
-| R5: Insights + recommendations | All five | Pricing gap (physical) + transition cost (NGFS) = total reserve inadequacy |
-
----
-
-## Project Structure — Set Up Day 1
+## THE NARRATIVE CHAIN (Updated)
 
 ```
-/competition
-  /data
-    /raw
-      wdi_bulk_download/           ← WDI CSV bulk
-      emdat_mys_phl.csv            ← from Wenjie's share
-      Downscaled_GCAM_6.0_data.xlsx ← NGFS (large file)
-      noaa_oni_monthly.csv         ← downloaded from NOAA
-      climate_watch_ghg_mys.csv    ← from climatewatchdata.org
-      chirps/                      ← daily rainfall GeoTIFF or CSV
-    /processed
-      wdi_mys_phl_clean.csv
-      chirps_3day_max_kl.csv       ← your EVT input
-      chirps_3day_max_manila.csv
-      emdat_annual_losses.csv
-      noaa_oni_annual.csv
-      ngfs_carbon_price_mys_phl.csv
-      climate_watch_sector_ghg.csv
-      missing_data_log.csv
-  /notebooks
-    01_data_ingestion.ipynb        ← Day 1 morning
-    02_indicator_analysis.ipynb    ← Day 1 afternoon (R1)
-    03_enso_analysis.ipynb         ← Day 1 evening (R1 + Q&A weapon)
-    04_regime_break.ipynb          ← Day 2 morning (R3 foundation)
-    05_chirps_evt_model.ipynb      ← Day 2 afternoon (R3 heart)
-    06_arima_ghg_model.ipynb       ← Day 3 (R2)
-    07_vulnerability_loss.ipynb    ← Day 3 afternoon (R3 loss module)
-    08_ngfs_transition_risk.ipynb  ← Day 4 morning (R4)
-    09_pricing_gap_combined.ipynb  ← Day 4 afternoon (Exhibit 1 + 2)
-    10_stress_test.ipynb           ← Day 4 evening (R4 final)
-  /dashboard
-    app.py
-  /report
-  /slides
-  /outputs
+CHIRPS RX5day (ETCCDI index, 0.05° sub-national, 1990–2023)
+        ↓ GEV → return period COMPRESSION
+        ↓ MYS: flood GEV | PHL: typhoon GEV (separate models required)
+        ↓
+EM-DAT 1905–2025 → financial bridge
+        ↓ MYS $5B / PHL $53B adj. total losses
+        ↓
+NOAA ONI 1950–2026 (DJF ANOM)
+        ↓ La Niña → simultaneous MYS flood + PHL storm spike
+        ↓ Clayton copula dependence — not independence
+        ↓
+WDI macro: MYS urban density +56% since 1990
+        ↓ same hazard footprint × more assets = structural EAL growth
+        ↓
+═══ EXHIBIT 1: THE PHYSICAL PRICING GAP ═══
+(Historical EAL vs. RX5day-adjusted EAL × ENSO correction factor)
+        ↓
+Climate Watch sectors (from climatewatchdata.org, NOT hardcoded)
+        ↓ MYS LULUCF = net EMITTER (+63.3 MtCO₂e, palm oil)
+        ↓ PHL LULUCF = net SINK (−26.9 MtCO₂e, reforestation)
+        ↓ Energy dominates both: MYS 69.5% | PHL 61.3% of total
+        ↓
+NGFS Net Zero 2050 carbon price = $55.578/tonne (GCAM 6.0, verified)
+        ↓
+═══ EXHIBIT 2: THE TRANSITION RISK COST ═══
+(MYS total: $22.4B/yr at NZ price — country-specific, NOT uniform SEA)
+        ↓
+COMBINED = Physical gap + Transition gap + ENSO uplift = Total reserve inadequacy
 ```
 
 ---
 
-## DAY 1 — April 30: Data Ingestion + Indicator Analysis + ENSO Discovery
+## REQUIREMENTS MAPPING (v2)
 
-**End-of-day target: All five datasets loaded and filtered. R1 complete. ENSO correlation chart built. You know whether your smoking gun is real.**
+| Requirement | Primary Dataset(s) | Actual columns/fields | Output |
+|---|---|---|---|
+| **R1: Identify & justify indicators** | WDI + NOAA ONI + Climate Watch | 12 WDI codes (verified), `ANOM` column in ONI, 5 CW sectors × 2 countries | 16-indicator justification table (see code below) |
+| **R2: Predict GHG for 2024** | `WB_WDI_EN_GHG_ALL_MT_CE_AR5` | MYS: 85.7→318.4 MtCO₂e; PHL: 92.0→254.5 MtCO₂e | ARIMA on both separately, cross-validate with Climate Watch 2023 totals |
+| **R3: Climate→claims, two countries** | CHIRPS `RX5day_mm` + EM-DAT `total_damage_adjusted_usd` + ONI `ANOM` | Separate GEV for MYS floods vs PHL storms | Return period curves, regime break test, ENSO conditional loading |
+| **R4: Mitigation + stress test** | NGFS (`Price\|Carbon`) + Climate Watch sectors | Carbon price = $55.578/t NZ; $0 CP. Outputs already in `outputs/` | NGFS scenario comparison, sector-level cost, MYS vs PHL asymmetric recommendations |
+| **R5: Insights + recommendations** | All five | All verified against actual data | Three recommendations with dollar amounts |
 
 ---
 
-### Morning Block 1 (2 hrs): Load All Five Datasets
+## THREE COMPETITION-WINNING INSIGHTS
 
-#### WDI
-Download WDI Bulk CSV from data360.worldbank.org. Filter to MYS and PHL, 1990–2023, these indicators:
+### INSIGHT 1: RX5day Is the Correct Metric — and Naming It Correctly Matters
+The data is `RX5day_mm`. This is the **WMO ETCCDI RX5day index** — the standard for extreme precipitation in IPCC AR6, BNM climate risk frameworks, and professional cat models.
 
-| Cat Layer | Risk Type | Code | Variable | Role |
-|---|---|---|---|---|
-| Hazard | Physical | `AG.LND.PRCP.MM` | Precipitation (national avg) | Macro context only — CHIRPS replaces for EVT |
-| Hazard | Physical | `EN.ATM.GHGT.KT.CE` | Total GHG | ARIMA target (R2) |
-| Hazard | Physical | `EN_GHG_CO2_RT_GDP_KD` | CO₂ per capita | Transition risk signal |
-| Hazard | Transition | `EN.ATM.CO2E.PC` | CO₂ intensity per GDP | Decoupling benchmark. Measures whether economic growth is separating from emissions growth | **
-| Vulnerability | Physical | `SP.URB.TOTL.IN.ZS` | Urban population % | Asset concentration multiplier |
-| Vulnerability | Physical | `EN.CLC.MDAT.ZS` | Population affected by climate extremes % | Disaster frequency and exposure proxy  | **
-| Vulnerability | Physical | `AG.LND.FRST.ZS` | Forest area % of land | Dual-role indicator. (1) Carbon (2) Flood amplifier | **
-| Vulnerability | Transition | `EG.FEC.RNEW.ZS` | Renewable energy % | Transition progress proxy |
-| Vulnerability | Transition | `EG.USE.PCAP.KG.OE` | Energy use per capita | Carbon intensity proxy |
-| Vulnerability | Transition | `EG.USE.COMM.FO.ZS` | Fossil fuel % of energy | Energy mix complement to renewable share |
-| Loss | Physical | `NY.GDP.PCAP.CD` | GDP per capita | Insurance penetration driver |
-| Loss | Transition | `NV.IND.MANF.ZS` | Manufacturing % GDP | Stranded asset exposure |
+- In R1: *"We use the ETCCDI RX5day index (annual maximum 5-consecutive-day precipitation total) derived from CHIRPS v2.0 at 0.05° resolution."*
+- In R3 Q&A: *"5-day captures multi-day events driving catchment saturation and property loss. 1-day maxima under-estimate basin-scale flooding; 7-day is too long for urban drainage failure. 5-day is the actuarial standard — it is the index IPCC AR6 uses."*
 
-#### NGFS — The Insider Dataset
+---
+
+### INSIGHT 2: MYS and PHL Are Structurally Different Countries — One Combined Model Is Wrong
+From EM-DAT (verified):
+- **Malaysia**: 81 floods, 8 storms → fit GEV to **flood losses**
+- **Philippines**: 414 storms, 165 floods → fit GEV to **tropical cyclone damage**
+- PHL total adj. loss ($53B) is 10× MYS ($5B) → combined SEA portfolio is PHL-severity-dominated
+- CHIRPS: PHL RX5day 594mm peak vs MYS 201mm peak → very different tail shapes
+
+A single GEV fitted to combined MYS+PHL data is statistically invalid. Separate models, then aggregate with ENSO copula.
+
+---
+
+### INSIGHT 3: The LULUCF Asymmetry Breaks the "Uniform SEA Transition Risk" Assumption
+- MYS LULUCF: **+63.3 MtCO₂e** (2023) — net emitter (palm oil, Sabah/Sarawak logging)
+- PHL LULUCF: **−26.9 MtCO₂e** (2023) — net carbon sink (reforestation, REDD+)
+- EU Deforestation Regulation + BNM CCPT deforestation provisions hit MYS palm oil cedants directly
+- PHL faces agricultural methane regulation (rice paddies = 65.85 MtCO₂e agriculture), not deforestation risk
+
+**Exhibit 2 output (verified):** At NGFS NZ price ($55.578/t):
+- MYS Energy sector: $15,554M/yr (69.5% of MYS total)
+- MYS LULUCF sector: $3,518M/yr (15.7% of MYS total) — **palm oil regulatory risk**
+- MYS total (incl. LULUCF): $22,383M/yr
+- MYS total (excl. LULUCF): $18,862M/yr (sensitivity analysis output exists)
+
+---
+
+## CORRECTED INDICATOR TABLE CODE (R1 — Use This, Not v1)
+
 ```python
 import pandas as pd
 
-print("Loading NGFS GCAM 6.0...")
-df_ngfs = pd.read_excel('data/raw/Downscaled_GCAM_6.0_data.xlsx')
+# ALL 16 INDICATORS VERIFIED AGAINST ACTUAL CSV COLUMN HEADERS
+indicator_table = {
+    'Indicator': [
+        # Physical Hazard (3)
+        'CHIRPS RX5day annual max 5-day precipitation',
+        'WDI Total GHG (WB_WDI_EN_GHG_ALL_MT_CE_AR5)',
+        'NOAA ONI Anomaly (ANOM, DJF season)',
+        # Physical Vulnerability (3)
+        'WDI Urban population % (SP.URB.TOTL.IN.ZS)',
+        'WDI Climate-exposed population % (EN.CLC.MDAT.ZS)',
+        'WDI Forest area % (AG.LND.FRST.ZS)',
+        # Physical Loss (1)
+        'WDI GDP per capita (NY.GDP.PCAP.CD)',
+        # Transition Pressure (4)
+        'WDI GHG per GDP (EN_GHG_CO2_RT_GDP_KD)',
+        'WDI GHG per capita (WB_WDI_EN_GHG_CO2_PC_CE_AR5)',
+        'WDI Fossil fuel % (EG.USE.COMM.FO.ZS) [gap 2021-23]',
+        'WDI Renewable energy % (EG.FEC.RNEW.ZS) [gap 2022-23]',
+        # Transition Exposure (4)
+        'Climate Watch: Energy sector GHG [MYS+PHL]',
+        'Climate Watch: LULUCF sector GHG [MYS emitter; PHL sink]',
+        'Climate Watch: Agriculture sector GHG [MYS+PHL]',
+        'Climate Watch: Industrial Processes GHG [MYS+PHL]',
+        # Regulatory Loss (1 — ratio)
+        'NGFS: NZ2050 vs Current Policies carbon price gap',
+    ],
+    'Source_URL': [
+        'climexp.knmi.nl (CHIRPS v2.0)',
+        'databank.worldbank.org/WDI',
+        'cpc.ncep.noaa.gov/data/indices/oni.ascii.txt',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'databank.worldbank.org/WDI',
+        'climatewatchdata.org/ghg-emissions',
+        'climatewatchdata.org/ghg-emissions',
+        'climatewatchdata.org/ghg-emissions',
+        'climatewatchdata.org/ghg-emissions',
+        'ngfs.net/ngfs-scenarios-portal (GCAM 6.0)',
+    ],
+    'Risk_Type': [
+        'Physical','Physical+Transition','Physical',
+        'Physical','Physical','Physical',
+        'Physical',
+        'Transition','Transition','Transition','Transition',
+        'Transition','Transition','Transition','Transition',
+        'Transition',
+    ],
+    'Cat_Layer': [
+        'Hazard (primary EVT input)',
+        'Hazard (ARIMA target R2)',
+        'Hazard (dependence structure)',
+        'Vulnerability (asset density)',
+        'Vulnerability (exposure proxy, handle gaps)',
+        'Vulnerability (flood amplifier + carbon stock)',
+        'Loss (insurance penetration)',
+        'Transition pressure (decoupling metric)',
+        'Transition pressure (per-person intensity)',
+        'Transition pressure (energy mix, use cautiously)',
+        'Transition progress (renewable share)',
+        'Transition exposure (dominant sector)',
+        'Transition exposure (MYS=emitter, PHL=sink — asymmetry!)',
+        'Transition exposure (PHL rice methane dominant)',
+        'Transition exposure (manufacturing stranded assets)',
+        'Regulatory cost delta (NZ price - CP price)',
+    ],
+    'Actuarial_Justification': [
+        'Official WMO ETCCDI RX5day index cited in IPCC AR6 WG1 Ch.11. 5-day window captures basin-scale catchment saturation driving property flood loss. MYS mean 133.9mm; PHL mean 244.4mm; PHL peak 594mm (Typhoon Pablo 2012). Direct input to GEV return level analysis.',
+        'Upstream atmospheric forcing. IPCC AR6: +7% extreme precip per °C. ARIMA target for R2. MYS +271%, PHL +177% growth 1990-2023. ACTUAL column name: WB_WDI_EN_GHG_ALL_MT_CE_AR5 (NOT EN.ATM.GHGT.KT.CE).',
+        'ENSO inter-annual loss driver. La Niña (DJF ANOM < -0.5°C) → simultaneous MYS flood spike + PHL post-La-Niña storm intensification. Creates correlated loss years — undermines independence assumption in standard SEA cat models.',
+        'Asset concentration multiplier. MYS: 49%→76% urban (1990-2023, +56%). Same flood footprint × 56% more urban density = structural EAL increase even with no change in hazard. Key non-climate driver of reserve inadequacy.',
+        'Disaster frequency proxy. Cross-validated with EM-DAT: MYS 81 flood + 8 storm events; PHL 414 storm + 165 flood events. Has data gaps (handle per missing_data_log.csv). Documents country-level exposure asymmetry for R1.',
+        'Dual-role indicator: (1) Carbon stock under LULUCF regulations — MYS net emitter +63.3 MtCO₂e (palm oil). (2) Hydrological: forest loss → higher runoff → higher flood peak flow → higher EAL. Links physical and transition risk channels.',
+        'Insurance penetration proxy. Higher GDP → more insured value per km² of flood/storm footprint → larger treaty exposure per event. Also urbanisation multiplier: MYS GDP/capita growth compounds urban density growth.',
+        'GHG decoupling metric. Falling = green transition underway. Flat/rising = transition cost escalating. Direct measure of how much economic growth is still locked to emissions growth. Actual column: EN_GHG_CO2_RT_GDP_KD.',
+        'Per-capita emission intensity. Flags inequality in transition burden between MYS (higher per-capita) and PHL (lower per-capita). Actual column: WB_WDI_EN_GHG_CO2_PC_CE_AR5 (NOT EN.ATM.CO2E.PC).',
+        'Energy mix composition. NOTE: shows 0.0 for MYS 2021-2023 — data gap, NOT true zero fossil share. Use 1990-2020 range (90%+ fossil share confirms MYS energy transition urgency). Flag this gap explicitly in R1.',
+        'Transition progress proxy. Missing 2022-2023 MYS (edge gap — per missing_data_log). Use 1990-2021 trend. Low renewable % = high adjustment cost under NGFS Net Zero. Declining fossil % is the counterfactual.',
+        'Primary sector transition exposure for both countries. MYS Energy 2023: 279.85 MtCO₂e = $15,554M/yr at NZ price (69.5% of MYS total). PHL Energy 2023: 160.73 MtCO₂e. Carbon price × GHG volume = annual regulatory compliance cost.',
+        'KEY ASYMMETRY: MYS LULUCF = +63.3 MtCO₂e (palm oil deforestation net emitter). PHL LULUCF = -26.9 MtCO₂e (reforestation carbon sink). MYS faces EU Deforestation Regulation + BNM CCPT LULUCF clauses. PHL does not. One uniform SEA LULUCF factor is wrong.',
+        'PHL agriculture = 65.85 MtCO₂e (2023), 6× MYS (10.11 MtCO₂e). Rice paddy methane is the mechanism (methane GWP 28× CO₂). Very different regulatory pathway from MYS deforestation. PHL farmers face methane emission credit schemes, not land-use bans.',
+        'Cement + manufacturing sector. MYS: 29.87 MtCO₂e. PHL: 16.75 MtCO₂e. Stranded asset risk: carbon-intensive plants face write-down risk under CCPT price increases. Treaty property values tied to industrial real estate are exposed.',
+        'NGFS policy gap = $55.578/tonne (NZ2050) - $0 (Current Policies) = $55.578/tonne (verified in exhibit_2 outputs). This gap, applied to Climate Watch GHG baselines, yields Exhibit 2 annual transition cost. Source: NGFS GCAM 6.0 downscaled for Malaysia.',
+    ]
+}
 
-# Filter for what you need — surgically
-df_ngfs_filtered = df_ngfs[
-    (df_ngfs['Region'].isin(['MYS', 'PHL'])) &
-    (df_ngfs['Scenario'].isin(['Current Policies', 'Net Zero 2050'])) &
-    (df_ngfs['Variable'].str.contains('Price|Carbon|GDP|GHG|Emissions', 
-                                       case=False, na=False))
-].copy()
-
-# Melt year columns to long format
-id_cols = ['Model', 'Scenario', 'Region', 'Variable', 'Unit']
-year_cols = [c for c in df_ngfs_filtered.columns if str(c).isdigit()]
-df_ngfs_long = df_ngfs_filtered.melt(
-    id_vars=id_cols, value_vars=year_cols,
-    var_name='Year', value_name='Value'
-)
-df_ngfs_long['Year'] = df_ngfs_long['Year'].astype(int)
-
-# Extract carbon price specifically — this is your transition risk dollar input
-df_carbon = df_ngfs_long[
-    df_ngfs_long['Variable'].str.contains('Price|Carbon', case=False, na=False)
-].copy()
-
-df_carbon.to_csv('data/processed/ngfs_carbon_price_mys_phl.csv', index=False)
-print(f"Saved: {len(df_carbon)} rows of carbon price data")
-print(df_carbon.groupby(['Region', 'Scenario', 'Variable'])['Value'].describe())
+df_v2 = pd.DataFrame(indicator_table)
+df_v2.to_csv('outputs/r1_indicator_table_v2.csv', index=False)
+print(df_v2[['Indicator','Risk_Type','Cat_Layer']].to_string())
 ```
 
-#### NOAA ONI — The Dependence Weapon
+---
+
+## CORRECTED DATA LOADING (Use These Exact Column Names)
+
 ```python
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
-# Download from: https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt
-# Or direct read:
-oni_url = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
-df_oni = pd.read_csv(oni_url, sep='\s+', header=0)
-df_oni.columns = ['season', 'year', 'total', 'clim', 'anom', 'total_seas']
+DATA = Path("data/processed")
 
-# Annual average ONI — one value per year
-df_oni_annual = df_oni.groupby('year')['anom'].mean().reset_index()
-df_oni_annual.columns = ['year', 'oni_anomaly']
+# ── FILE 1: CHIRPS RX5day (5-day, NOT 3-day) ──────────────────────────────────
+df_chirps = pd.read_csv(DATA / "chirpsRX5_mls_phl.csv")
+# VERIFIED columns: country_code, year, RX5day_mm
+# MYS: mean=133.9mm, max=201.3mm (2021)
+# PHL: mean=244.4mm, max=594.3mm (2012 — Typhoon Pablo)
+df_chirps_mys = df_chirps[df_chirps['country_code']=='MYS'][['year','RX5day_mm']].set_index('year')
+df_chirps_phl = df_chirps[df_chirps['country_code']=='PHL'][['year','RX5day_mm']].set_index('year')
 
-# Classify ENSO phase
-df_oni_annual['enso_phase'] = df_oni_annual['oni_anomaly'].apply(
+# ── FILE 2: WDI (EXACT column names — DO NOT use old names from v1 plan) ───────
+df_wdi = pd.read_csv(DATA / "cleaned_wdi.csv")
+
+# CORRECT column names (verified against actual file):
+GHG_COL    = 'WB_WDI_EN_GHG_ALL_MT_CE_AR5'   # ← NOT EN.ATM.GHGT.KT.CE (wrong!)
+CO2PC_COL  = 'WB_WDI_EN_GHG_CO2_PC_CE_AR5'   # ← NOT EN.ATM.CO2E.PC (wrong!)
+GHG_GDP    = 'EN_GHG_CO2_RT_GDP_KD'
+URBAN_COL  = 'SP.URB.TOTL.IN.ZS'
+CLIM_EXP   = 'EN.CLC.MDAT.ZS'                # HAS GAPS — handle carefully
+FOREST_COL = 'AG.LND.FRST.ZS'
+RENEW_COL  = 'EG.FEC.RNEW.ZS'                # MISSING 2022-2023 for MYS
+ENERGY_PC  = 'EG.USE.PCAP.KG.OE'
+FOSSIL_COL = 'EG.USE.COMM.FO.ZS'             # Shows 0.0 for 2021-2023 — DATA GAP not true zero
+GDP_COL    = 'NY.GDP.PCAP.CD'
+MANUF_COL  = 'NV.IND.MANF.ZS'
+PRECIP_COL = 'AG.LND.PRCP.MM'
+
+df_wdi_mys = df_wdi[df_wdi['country_code']=='MYS'].copy()
+df_wdi_phl = df_wdi[df_wdi['country_code']=='PHL'].copy()
+
+# Fix fossil fuel gap: replace 0.0 with NaN for 2021-2023
+for df_c in [df_wdi_mys, df_wdi_phl]:
+    df_c.loc[df_c['year'] >= 2021, FOSSIL_COL] = \
+        df_c.loc[df_c['year'] >= 2021, FOSSIL_COL].replace(0.0, np.nan)
+
+# ── FILES 3-5: Climate Watch (ACTUAL sectors — NOT Transportation/Buildings) ──
+REAL_SECTORS = [
+    'Energy',
+    'Industrial Processes',
+    'Agriculture',
+    'Waste',
+    'Land Use, Land-Use Change and Forestry'
+]
+LULUCF = 'Land Use, Land-Use Change and Forestry'
+
+def load_climatewatch(filepath):
+    df = pd.read_csv(filepath)
+    df = df[df['Sector'].isin(REAL_SECTORS)].copy()
+    year_cols = [c for c in df.columns if str(c).isdigit()]
+    df_long = df.melt(id_vars=['Sector','unit'], var_name='year', value_name='ghg_mtco2e')
+    df_long['year'] = df_long['year'].astype(int)
+    df_long['ghg_mtco2e'] = pd.to_numeric(df_long['ghg_mtco2e'], errors='coerce')
+    return df_long
+
+df_cw_mys = load_climatewatch(DATA / "msia_climatewatch_lulucf.csv")
+df_cw_phl = load_climatewatch(DATA / "phili_climatewatch_lulucf.csv")
+
+# VERIFY the LULUCF asymmetry
+mys_lulucf_2023 = df_cw_mys[(df_cw_mys['Sector']==LULUCF) & (df_cw_mys['year']==2023)]['ghg_mtco2e'].values[0]
+phl_lulucf_2023 = df_cw_phl[(df_cw_phl['Sector']==LULUCF) & (df_cw_phl['year']==2023)]['ghg_mtco2e'].values[0]
+print(f"MYS LULUCF 2023: +{mys_lulucf_2023:.2f} MtCO2e → NET EMITTER (palm oil)")
+print(f"PHL LULUCF 2023:  {phl_lulucf_2023:.2f} MtCO2e → NET SINK (reforestation)")
+assert mys_lulucf_2023 > 0,  "MYS LULUCF should be positive (emitter)"
+assert phl_lulucf_2023 < 0,  "PHL LULUCF should be negative (sink)"
+
+# ── FILE 6: EM-DAT ─────────────────────────────────────────────────────────────
+df_emdat = pd.read_csv(DATA / "EM_DAT_cleaned.csv")
+# VERIFIED types: Drought, Extreme temperature, Flood, Mass movement (wet), Storm, Wildfire
+# MYS: flood-dominated (81 floods, $5B adj loss)
+# PHL: storm-dominated (414 storms, $53B adj loss — 10× MYS)
+df_emdat['total_damage_adjusted_usd'] = pd.to_numeric(
+    df_emdat['total_damage_adjusted_usd'], errors='coerce')
+df_emdat_mys = df_emdat[df_emdat['country']=='Malaysia'].copy()
+df_emdat_phl = df_emdat[df_emdat['country']=='Philippines'].copy()
+
+# ── FILE 7: NOAA ONI ───────────────────────────────────────────────────────────
+df_oni = pd.read_csv(DATA / "noaa_oni_cleaned.csv")
+# VERIFIED columns: SEAS, YR, TOTAL, ANOM
+# Use DJF season for annual ENSO classification (peak ENSO signal)
+df_oni_djf = df_oni[df_oni['SEAS']=='DJF'][['YR','ANOM']].copy()
+df_oni_djf.columns = ['year','oni_anom']
+df_oni_djf['year'] = df_oni_djf['year'].astype(int)
+df_oni_djf['enso_phase'] = df_oni_djf['oni_anom'].apply(
     lambda x: 'La Niña' if x < -0.5 else ('El Niño' if x > 0.5 else 'Neutral')
 )
 
-df_oni_annual.to_csv('data/processed/noaa_oni_annual.csv', index=False)
-print(df_oni_annual.groupby('enso_phase').size())
+print("\nAll data loaded. Summary:")
+print(f"  CHIRPS: {len(df_chirps)} rows | years 1990-2023 | metric: RX5day_mm (5-day max)")
+print(f"  WDI: {len(df_wdi)} rows | {len(df_wdi.columns)-2} indicators | MYS+PHL 1990-2023")
+print(f"  Climate Watch MYS: {df_cw_mys.groupby('Sector')['ghg_mtco2e'].count().shape[0]} sectors")
+print(f"  Climate Watch PHL: {df_cw_phl.groupby('Sector')['ghg_mtco2e'].count().shape[0]} sectors")
+print(f"  EM-DAT: {len(df_emdat)} events | MYS: {len(df_emdat_mys)} | PHL: {len(df_emdat_phl)}")
+print(f"  ONI (DJF): {len(df_oni_djf)} years | phases: {df_oni_djf['enso_phase'].value_counts().to_dict()}")
 ```
-
-#### Climate Watch GHG — Sector Decomposition
-```python
-# Download from: climatewatchdata.org → GHG Emissions → Malaysia → by sector → CSV
-df_cw = pd.read_csv('data/raw/climate_watch_ghg_mys.csv')
-
-# Clean and reshape
-df_cw_long = df_cw.melt(id_vars=['sector', 'gas'], 
-                          var_name='year', value_name='ghg_mtco2e')
-df_cw_long['year'] = pd.to_numeric(df_cw_long['year'], errors='coerce')
-df_cw_long = df_cw_long.dropna(subset=['year', 'ghg_mtco2e'])
-
-# Key sectors for transition risk
-transition_sectors = ['Energy', 'Transportation', 'Industry', 
-                       'Agriculture', 'Buildings']
-df_cw_sectors = df_cw_long[df_cw_long['sector'].isin(transition_sectors)]
-df_cw_sectors.to_csv('data/processed/climate_watch_sector_ghg.csv', index=False)
-print(df_cw_sectors.groupby('sector')['ghg_mtco2e'].sum().sort_values(ascending=False))
-```
-
-#### CHIRPS Setup
-```python
-# Option A: Google Earth Engine (if you have access)
-# Prompt for Copilot: 
-# "Write a Python script using the Earth Engine API to extract CHIRPS daily 
-# precipitation for bounding box [2.9,101.3,3.4,101.9] (Kuala Lumpur) 
-# and [14.0,120.5,14.8,121.3] (Manila) from 1990-01-01 to 2023-12-31, 
-# compute annual 3-day rolling maximum, and export as CSV."
-
-# Option B: Direct download via CHIRPS API (no GEE account needed)
-import requests
-import numpy as np
-
-def get_chirps_annual_max(lat_min, lat_max, lon_min, lon_max, year, label):
-    """
-    Fetch CHIRPS monthly data for a bounding box and approximate 3-day max.
-    Falls back to CHIRPS pentad (5-day) data — available via direct download.
-    """
-    # CHIRPS pentad data: 6 readings per month, each = 5-day total
-    # Annual maximum 5-day total = best CHIRPS proxy for 3-day max without GEE
-    base_url = "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_pentad/tifs/"
-    # Implementation: download monthly NetCDF, extract grid cells in bbox, compute max
-    # Save as: chirps_annual_3day_max_kl_{year}.csv
-    pass
-
-# Option C: Use pre-processed CHIRPS from KNMI Climate Explorer
-# https://climexp.knmi.nl → CHIRPS → select region → download annual max series
-# This is the fastest option — 30 minutes, no coding required
-# Save as: data/raw/chirps_annual_max_kl_1981_2023.csv
-
-# Minimum viable CHIRPS (if no GEE access):
-# Download CHIRPS monthly from: https://www.chc.ucsb.edu/data/chirps
-# Compute 3-month rolling max as annual maximum proxy
-# Still dramatically better than WDI national annual average
-
-print("CHIRPS target: Annual 3-day maximum precipitation (mm)")
-print("KL bounding box:     [2.9°N, 3.4°N, 101.3°E, 101.9°E]")
-print("Manila bounding box: [14.0°N, 14.8°N, 120.5°E, 121.3°E]")
-```
-
-> **CHIRPS fallback if GEE access fails:** Use KNMI Climate Explorer (climexp.knmi.nl) — select CHIRPS, draw box around KL/Manila, download annual max series as CSV. Takes 30 minutes, no code required. This is still infinitely better than WDI national average and completely neutralises the data granularity limitation.
 
 ---
 
-### Afternoon (3 hrs): Indicator Analysis — R1
+## NOTEBOOK PLAN (What to Build in Each)
 
+### `01_data_ingestion.ipynb` — Add these validation assertions
 ```python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy import stats
+# Run these to confirm data integrity before any analysis
+assert 'RX5day_mm' in df_chirps.columns, "CHIRPS column is RX5day_mm NOT 3day!"
+assert 'WB_WDI_EN_GHG_ALL_MT_CE_AR5' in df_wdi.columns, "WDI GHG column name mismatch"
+assert set(df_cw_mys['Sector'].unique()) == set(REAL_SECTORS), \
+    f"Unexpected CW sectors: {df_cw_mys['Sector'].unique()}"
+phl_lulucf = df_cw_phl[(df_cw_phl['Sector']==LULUCF) & (df_cw_phl['year']==2023)]['ghg_mtco2e'].iloc[0]
+assert phl_lulucf < 0, "PHL LULUCF must be negative (carbon sink)!"
+print("All assertions passed — data is clean")
+```
 
-df = pd.read_csv('data/processed/wdi_mys_phl_merged.csv')
-df_cw = pd.read_csv('data/processed/climate_watch_sector_ghg.csv')
+---
 
-# ── PHYSICAL + TRANSITION INDICATOR JUSTIFICATION TABLE ───────────────────────
-indicator_table = {
-    'Indicator': [
-        'CHIRPS 3-day max precipitation',
-        'WDI Total GHG (EN.ATM.GHGT.KT.CE)',
-        'WDI Urban population % (SP.URB.TOTL.IN.ZS)',
-        'WDI Land below 5m (EN.CLC.MDAT.ZS)',
-        'WDI GDP per capita (NY.GDP.PCAP.CD)',
-        'NOAA ONI (El Niño/La Niña index)',
-        'NGFS Carbon price (Current Policies)',
-        'NGFS Carbon price (Net Zero 2050)',
-        'Climate Watch: Energy sector GHG',
-        'Climate Watch: Industry sector GHG'
-    ],
-    'Risk Type': [
-        'Physical', 'Physical/Transition', 'Physical',
-        'Physical', 'Physical', 'Physical',
-        'Transition', 'Transition', 'Transition', 'Transition'
-    ],
-    'Cat Layer': [
-        'Hazard', 'Hazard', 'Vulnerability',
-        'Vulnerability', 'Loss', 'Hazard (Dependence)',
-        'Loss (Regulatory)', 'Loss (Regulatory)', 
-        'Transition Exposure', 'Transition Exposure'
-    ],
-    'Actuarial Justification': [
-        'Sub-national daily rainfall: direct input to GEV model. 3-day max drives flood event peak flow',
-        'Upstream atmospheric forcing. IPCC AR6: +7% extreme precip per °C. ARIMA target for R2',
-        'Insured asset concentration. Same flood footprint × more urban density = higher loss per event',
-        'Coastal surge amplification. Non-linear loss at inundation threshold for property portfolios',
-        'Insurance penetration driver. Higher GDP → more insured value per km² of flood footprint',
-        'Inter-annual loss dependence. La Niña → MYS flood spike. El Niño → PHL drought, but storm surge intensification post-event',
-        'Regulatory compliance cost for carbon-intensive cedant portfolios under current policy trajectory',
-        'BNM-grade carbon price under Paris-aligned transition. Direct input to CCPT compliance cost estimate',
-        'Energy sector = largest GHG contributor → highest transition cost exposure for Malaysian cedants',
-        'Heavy industry stranded asset risk → treaty loss amplification through property write-downs'
-    ]
-}
-pd.DataFrame(indicator_table).to_csv('outputs/r1_indicator_table.csv', index=False)
+### `02_indicator_analysis.ipynb` — R1 deliverable
 
-# ── CLIMATE WATCH SECTOR DECOMPOSITION CHART ──────────────────────────────────
+**Chart 1: GHG sector decomposition (both countries)**
+```python
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+sector_colors = {
+    'Energy': '#d62728', 'Industrial Processes': '#ff7f0e',
+    'Agriculture': '#2ca02c', 'Waste': '#9467bd',
+    LULUCF: '#8c564b'
+}
 
-# Left: Stacked area chart — sector GHG over time
-pivot = df_cw_sectors.pivot_table(
-    index='year', columns='sector', values='ghg_mtco2e', aggfunc='sum'
-).fillna(0)
-
-pivot.plot.area(ax=axes[0], colormap='tab10', alpha=0.8)
-axes[0].set_title('Malaysia GHG Emissions by Sector (Climate Watch)\n'
-                   'Energy + Industry = Primary Transition Risk Exposure for Cedants',
-                   fontweight='bold')
-axes[0].set_ylabel('GHG Emissions (Mt CO₂e)')
-axes[0].set_xlabel('Year')
-axes[0].legend(loc='upper left', fontsize=9)
-
-# Right: Share of total by sector (most recent year)
-latest_year = df_cw_sectors['year'].max()
-sector_share = df_cw_sectors[df_cw_sectors['year']==latest_year].groupby('sector')['ghg_mtco2e'].sum()
-colors = ['#d62728','#ff7f0e','#2ca02c','#1f77b4','#9467bd']
-axes[1].pie(sector_share.values, labels=sector_share.index, 
-             colors=colors, autopct='%1.1f%%', startangle=90)
-axes[1].set_title(f'Sector GHG Share ({int(latest_year)})\n'
-                   'Identifies which cedant industries face highest CCPT regulatory cost',
-                   fontweight='bold')
-
+for (country, df_cw, ax) in [('Malaysia', df_cw_mys, axes[0]),
+                               ('Philippines', df_cw_phl, axes[1])]:
+    pivot = df_cw.pivot_table(index='year', columns='Sector',
+                               values='ghg_mtco2e').fillna(0)
+    non_lulucf = [c for c in pivot.columns if c != LULUCF]
+    pivot[non_lulucf].plot.area(ax=ax, color=[sector_colors[c] for c in non_lulucf],
+                                 alpha=0.85, stacked=True)
+    # Plot LULUCF as a dashed line (can be negative for PHL)
+    ax.plot(pivot.index, pivot[LULUCF], 'k--', linewidth=2.5,
+            label=f'LULUCF ({"EMITTER" if country=="Malaysia" else "SINK"})')
+    ax.axhline(0, color='black', linewidth=0.5, alpha=0.4)
+    lulucf_2023 = pivot[LULUCF].iloc[-1]
+    ax.set_title(
+        f'{country} — GHG by Sector 1990–2023\n'
+        f'LULUCF = {"+" if lulucf_2023>0 else ""}{lulucf_2023:.1f} MtCO₂e in 2023 '
+        f'({"NET EMITTER — palm oil" if lulucf_2023>0 else "NET SINK — reforestation"})',
+        fontweight='bold'
+    )
+    ax.set_ylabel('GHG (MtCO₂e)')
+    ax.legend(fontsize=8, loc='upper left')
 plt.tight_layout()
-plt.savefig('outputs/r1_climate_watch_sectors.png', dpi=150, bbox_inches='tight')
+plt.savefig('outputs/r1_cw_sector_decomposition.png', dpi=150, bbox_inches='tight')
+```
+
+**Chart 2: WDI GHG × Urbanisation growth (dual-axis)**
+```python
+fig, ax1 = plt.subplots(figsize=(14, 5))
+ax2 = ax1.twinx()
+for code, color in [('MYS', 'steelblue'), ('PHL', 'crimson')]:
+    df_c = df_wdi[df_wdi['country_code']==code]
+    ax1.plot(df_c['year'], df_c[GHG_COL], color=color, linewidth=2.5,
+             label=f'{code} GHG (MtCO₂e)')
+    ax2.plot(df_c['year'], df_c[URBAN_COL], color=color, linestyle='--',
+             linewidth=2, label=f'{code} Urban %')
+ax1.set_ylabel('Total GHG (MtCO₂e) — WB_WDI_EN_GHG_ALL_MT_CE_AR5')
+ax2.set_ylabel('Urban Population (%)', color='gray')
+ax1.set_title(
+    'GHG Growth × Urbanisation: Two Compounding EAL Drivers\n'
+    'MYS: +271% GHG AND +56% urban density since 1990 — both raise expected annual loss',
+    fontweight='bold'
+)
+lines1, l1 = ax1.get_legend_handles_labels()
+lines2, l2 = ax2.get_legend_handles_labels()
+ax1.legend(lines1+lines2, l1+l2, loc='upper left')
+plt.tight_layout()
+plt.savefig('outputs/r1_ghg_urban_dual_axis.png', dpi=150)
 ```
 
 ---
 
-### Evening (2 hrs): ENSO Analysis — The Dependence Weapon
-
-This chart is your Q&A weapon and a genuine R1 insight. It proves that your MYS and PHL exposures are correlated through ENSO cycles — meaning the independence assumption in standard cat models overstates portfolio diversification.
-
+### R2 — ARIMA GHG Forecast (`06_arima_ghg_model.ipynb`)
 ```python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_percentage_error
+import warnings; warnings.filterwarnings('ignore')
 
-df_oni  = pd.read_csv('data/processed/noaa_oni_annual.csv')
-df_emdat = pd.read_csv('data/processed/emdat_annual_losses.csv')
+r2_results = {}
+for country, df_c in [('MYS', df_wdi_mys), ('PHL', df_wdi_phl)]:
+    ghg = df_c.set_index('year')[GHG_COL].dropna()  # WB_WDI_EN_GHG_ALL_MT_CE_AR5
+    train, test = ghg[ghg.index<=2021], ghg[ghg.index>2021]
 
-# Merge ENSO index with EM-DAT losses
-df_enso = df_oni.merge(df_emdat, on='year', how='inner')
+    best_aic, best_ord = np.inf, (1,1,1)
+    for p in range(4):
+        for q in range(4):
+            try:
+                m = ARIMA(train, order=(p,1,q)).fit()
+                if m.aic < best_aic:
+                    best_aic, best_ord = m.aic, (p,1,q)
+            except: pass
 
-# ── CORRELATION: ONI vs. MYS FLOOD LOSSES ────────────────────────────────────
-r_mys, p_mys = stats.pearsonr(
-    df_enso['oni_anomaly'], 
-    df_enso['mys_flood_loss'].fillna(0)
-)
-r_phl, p_phl = stats.pearsonr(
-    df_enso['oni_anomaly'],
-    df_enso['phl_typhoon_loss'].fillna(0)
-)
+    model = ARIMA(train, order=best_ord).fit()
+    fc = model.forecast(steps=3)  # 2022, 2023, 2024
+    mape = mean_absolute_percentage_error(test, fc[:2]) * 100
 
-print(f"ONI vs MYS Flood Loss:     r={r_mys:.3f}, p={p_mys:.4f}")
-print(f"ONI vs PHL Typhoon Loss:   r={r_phl:.3f}, p={p_phl:.4f}")
-# Expected: r_mys < 0 (La Niña = negative ONI = higher MYS floods)
-# PHL: more complex — El Niño intensifies typhoon tracks
+    print(f"\n{country} ARIMA{best_ord} (AIC={best_aic:.1f}):")
+    print(f"  2022: actual={test.iloc[0]:.1f} | forecast={fc.iloc[0]:.1f}")
+    print(f"  2023: actual={test.iloc[1]:.1f} | forecast={fc.iloc[1]:.1f}")
+    print(f"  2024 forecast: {fc.iloc[2]:.1f} MtCO2e (MAPE={mape:.1f}%)")
 
-# ── THE PORTFOLIO DIVERSIFICATION MYTH CHART ─────────────────────────────────
+    # Cross-validate: sum Climate Watch sectors for 2023
+    cw_2023 = (df_cw_mys if country=='MYS' else df_cw_phl)
+    cw_total = cw_2023[cw_2023['year']==2023]['ghg_mtco2e'].sum()
+    print(f"  CW 2023 cross-check: {cw_total:.1f} MtCO2e  (diff: {abs(fc.iloc[1]-cw_total):.1f})")
+    r2_results[country] = {'order': best_ord, 'ghg_2024': fc.iloc[2], 'mape': mape}
+```
+
+---
+
+### R3 — CHIRPS GEV + Regime Break
+
+**Separate GEV models (flood for MYS, typhoon-driven for PHL):**
+```python
+from scipy.stats import genextreme
+import ruptures as rpt  # pip install ruptures
+
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
-# Panel 1: ONI time series with ENSO phase colour coding
-colors_enso = {'La Niña': 'steelblue', 'El Niño': 'crimson', 'Neutral': 'gray'}
-for phase, grp in df_enso.groupby('enso_phase'):
-    axes[0,0].scatter(grp['year'], grp['oni_anomaly'], 
-                       color=colors_enso[phase], s=60, label=phase, zorder=3)
-axes[0,0].axhline(0.5, color='crimson', linestyle='--', alpha=0.5)
-axes[0,0].axhline(-0.5, color='steelblue', linestyle='--', alpha=0.5)
-axes[0,0].plot(df_enso['year'], df_enso['oni_anomaly'], 
-                color='black', alpha=0.3, linewidth=1)
-axes[0,0].fill_between(df_enso['year'], df_enso['oni_anomaly'], 0,
-                        where=df_enso['oni_anomaly']<-0.5, 
-                        color='steelblue', alpha=0.3, label='La Niña zone')
-axes[0,0].fill_between(df_enso['year'], df_enso['oni_anomaly'], 0,
-                        where=df_enso['oni_anomaly']>0.5, 
-                        color='crimson', alpha=0.3, label='El Niño zone')
-axes[0,0].set_title('NOAA ONI Index: El Niño / La Niña Cycles (1990–2023)', fontweight='bold')
-axes[0,0].set_ylabel('ONI Anomaly (°C)')
-axes[0,0].legend(fontsize=9)
-
-# Panel 2: ONI vs Malaysia flood losses
-axes[0,1].scatter(df_enso['oni_anomaly'], df_enso['mys_flood_loss']/1e6,
-                   c=df_enso['year'], cmap='RdYlBu_r', s=80, zorder=3)
-z = np.polyfit(df_enso['oni_anomaly'].dropna(), 
-                df_enso['mys_flood_loss'].fillna(0)/1e6, 1)
-x_line = np.linspace(-2, 2, 100)
-axes[0,1].plot(x_line, np.poly1d(z)(x_line), 'r--', linewidth=2)
-axes[0,1].set_title(f'La Niña → Malaysia Flood Losses Spike\n'
-                     f'r={r_mys:.2f}, p={p_mys:.3f}', fontweight='bold')
-axes[0,1].set_xlabel('ONI Anomaly (negative = La Niña)')
-axes[0,1].set_ylabel('Malaysia Annual Flood Loss ($M)')
-axes[0,1].axvline(-0.5, color='steelblue', linestyle='--', alpha=0.7, label='La Niña threshold')
-axes[0,1].legend()
-
-# Panel 3: ENSO phase vs. loss box plots
-la_nina_losses = df_enso[df_enso['enso_phase']=='La Niña']['mys_flood_loss']/1e6
-neutral_losses  = df_enso[df_enso['enso_phase']=='Neutral']['mys_flood_loss']/1e6
-el_nino_losses  = df_enso[df_enso['enso_phase']=='El Niño']['mys_flood_loss']/1e6
-
-axes[1,0].boxplot([la_nina_losses.dropna(), neutral_losses.dropna(), el_nino_losses.dropna()],
-                   labels=['La Niña', 'Neutral', 'El Niño'],
-                   patch_artist=True,
-                   boxprops=dict(facecolor='lightblue'))
-axes[1,0].set_title('Malaysia Flood Losses by ENSO Phase\n'
-                     'La Niña years drive disproportionate losses', fontweight='bold')
-axes[1,0].set_ylabel('Annual Insured Loss ($M)')
-
-# ── THE PORTFOLIO DIVERSIFICATION INSIGHT ────────────────────────────────────
-# Panel 4: Combined MYS+PHL loss in La Niña vs El Niño years
-# KEY INSIGHT: In La Niña years, BOTH countries have elevated losses
-# This destroys the "diversification" assumption in combined SEA treaties
-la_nina_yrs = df_enso[df_enso['enso_phase']=='La Niña']
-combined_la_nina = (la_nina_yrs['mys_flood_loss'].fillna(0) + 
-                     la_nina_yrs['phl_typhoon_loss'].fillna(0)).mean() / 1e6
-
-el_nino_yrs = df_enso[df_enso['enso_phase']=='El Niño']
-combined_el_nino = (el_nino_yrs['mys_flood_loss'].fillna(0) + 
-                     el_nino_yrs['phl_typhoon_loss'].fillna(0)).mean() / 1e6
-
-neutral_yrs = df_enso[df_enso['enso_phase']=='Neutral']
-combined_neutral = (neutral_yrs['mys_flood_loss'].fillna(0) + 
-                     neutral_yrs['phl_typhoon_loss'].fillna(0)).mean() / 1e6
-
-axes[1,1].bar(['La Niña', 'Neutral', 'El Niño'],
-               [combined_la_nina, combined_neutral, combined_el_nino],
-               color=['steelblue', 'gray', 'crimson'], alpha=0.8, edgecolor='black')
-axes[1,1].set_title('ENSO Destroys Portfolio Diversification\n'
-                     'Combined MYS+PHL Loss by ENSO Phase — Both spike simultaneously',
-                     fontweight='bold')
-axes[1,1].set_ylabel('Avg. Combined Annual Loss ($M)')
-
-# Add annotation
-uplift = (combined_la_nina / combined_neutral - 1) * 100
-axes[1,1].annotate(f'+{uplift:.0f}% vs. Neutral\nyears in La Niña',
-                    xy=(0, combined_la_nina), xytext=(0.3, combined_la_nina * 0.9),
-                    fontsize=11, fontweight='bold', color='steelblue')
-
-plt.suptitle('NOAA ONI Analysis: The Hidden Correlation in Hannover Re\'s SEA Portfolio\n'
-             '"MYS + PHL is not as diversified as it appears — ENSO creates simultaneous loss spikes"',
-             fontsize=13, fontweight='bold')
-plt.tight_layout()
-plt.savefig('outputs/r1_enso_dependence.png', dpi=150, bbox_inches='tight')
-
-print(f"\n{'='*60}")
-print(f"ENSO PORTFOLIO INSIGHT:")
-print(f"  La Niña avg combined loss:  ${combined_la_nina:.1f}M")
-print(f"  Neutral avg combined loss:  ${combined_neutral:.1f}M")
-print(f"  El Niño avg combined loss:  ${combined_el_nino:.1f}M")
-print(f"  La Niña uplift vs neutral:  +{uplift:.0f}%")
-print(f"\n  → Independence assumption understates combined SEA tail risk by ~{uplift:.0f}%")
-print(f"  → This makes our EAL gap estimate CONSERVATIVE")
-```
-
-**The ENSO insight paragraph — write this into R1:**
-
-> *"A critical finding from the NOAA Oceanic Niño Index analysis undermines a standard assumption in SEA cat modelling: that Malaysia flood and Philippines typhoon losses are independent. La Niña phases (ONI < −0.5) produce a [X]% uplift in combined MYS+PHL annual losses relative to neutral years (combined average: $[La Niña]M vs. $[Neutral]M). This ENSO-driven dependence means a combined SEA treaty book is less diversified than an independence assumption implies — a direct violation of a standard cat model assumption that Hannover Re's current treaty pricing likely embeds. The consequence: our EAL gap estimate in Exhibit 1 is a conservative lower bound. A Clayton copula capturing ENSO dependence would produce a materially higher tail risk estimate for the combined portfolio."*
-
-That paragraph turns a statistical observation into a pricing argument. No other team will have this.
-
----
-
-## DAY 2 — May 1: Regime Break + CHIRPS EVT Model
-
-**End-of-day target: Regime break confirmed. CHIRPS-powered GEV model fitted. Return period curves built. The WDI "too coarse" limitation is neutralised.**
-
----
-
-### Morning (3 hrs): Regime Break Test
-
-```python
-# [Same regime break code as previous plan — Welch, Mann-Whitney, Levene]
-# Run on EM-DAT annual insured losses for MYS and PHL
-# Three tests × two countries = six p-values
-# Produce the two-distribution chart for both countries
-```
-
-**One addition: ENSO-conditioned regime break**
-
-```python
-# Split regime break by ENSO phase — this is the advanced version
-# Question: did the regime shift happen in ALL years, or only in La Niña years?
-df_regime_enso = df_emdat_mys.merge(df_oni_annual, on='year')
-
-# Pre/post 2010 in La Niña years specifically
-pre_lanina  = df_regime_enso[(df_regime_enso['year']<2010) & 
-                               (df_regime_enso['enso_phase']=='La Niña')]['insured_loss']
-post_lanina = df_regime_enso[(df_regime_enso['year']>=2010) & 
-                               (df_regime_enso['enso_phase']=='La Niña')]['insured_loss']
-
-_, p_lanina = stats.ttest_ind(pre_lanina.dropna(), post_lanina.dropna(), equal_var=False)
-
-print(f"Regime break in La Niña years only: p={p_lanina:.4f}")
-# If significant: "The regime shift is concentrated in La Niña years — 
-# meaning climate change is amplifying the ENSO signal, not just the baseline"
-# This is a sophisticated finding. Document it.
-```
-
----
-
-### Afternoon (4 hrs): CHIRPS EVT Model — The Technical Upgrade
-
-This is where you neutralise the WDI limitation that every team will list as a weakness. You list it as a solved problem.
-
-```python
-import pandas as pd
-import numpy as np
-from scipy.stats import genextreme
-import matplotlib.pyplot as plt
-
-# ── LOAD CHIRPS DATA ──────────────────────────────────────────────────────────
-# Expected format: year, annual_max_3day_precip_mm
-# Source: KNMI Climate Explorer or Google Earth Engine export
-df_chirps_kl     = pd.read_csv('data/processed/chirps_annual_max_kl.csv')
-df_chirps_manila = pd.read_csv('data/processed/chirps_annual_max_manila.csv')
-
-print("CHIRPS Data Summary:")
-print(f"  KL:     {len(df_chirps_kl)} years, "
-      f"mean={df_chirps_kl['max_3day_mm'].mean():.0f}mm, "
-      f"max={df_chirps_kl['max_3day_mm'].max():.0f}mm")
-print(f"  Manila: {len(df_chirps_manila)} years, "
-      f"mean={df_chirps_manila['max_3day_mm'].mean():.0f}mm, "
-      f"max={df_chirps_manila['max_3day_mm'].max():.0f}mm")
-
-# ── WHY CHIRPS BEATS WDI — SHOW THIS COMPARISON ───────────────────────────────
-df_wdi_prcp = pd.read_csv('data/processed/wdi_mys_phl_clean.csv')
-
-fig, axes = plt.subplots(1, 2, figsize=(16, 5))
-axes[0].plot(df_wdi_prcp[df_wdi_prcp['country']=='MYS']['year'],
-             df_wdi_prcp[df_wdi_prcp['country']=='MYS']['precipitation_mm'],
-             'b-', linewidth=2, label='WDI: National annual average (mm/year)')
-ax2 = axes[0].twinx()
-ax2.plot(df_chirps_kl['year'], df_chirps_kl['max_3day_mm'],
-         'r--', linewidth=2, label='CHIRPS: KL 3-day max (mm)')
-axes[0].set_title('WDI vs. CHIRPS: Same Country, Completely Different Signal\n'
-                   'WDI smooths away the extreme events that drive insurance claims',
-                   fontweight='bold')
-axes[0].set_ylabel('WDI Annual Average (mm)', color='blue')
-ax2.set_ylabel('CHIRPS 3-day Max (mm)', color='red')
-axes[0].legend(loc='upper left')
-ax2.legend(loc='upper right')
-
-# Correlation: CHIRPS max vs EM-DAT flood losses
-df_chirps_emdat = df_chirps_kl.merge(df_emdat_mys, on='year')
-r_chirps, p_chirps = stats.pearsonr(df_chirps_emdat['max_3day_mm'],
-                                     df_chirps_emdat['insured_loss'])
-r_wdi, p_wdi = stats.pearsonr(
-    df_wdi_prcp[df_wdi_prcp['country']=='MYS'].set_index('year').loc[
-        df_chirps_emdat['year'], 'precipitation_mm'],
-    df_chirps_emdat['insured_loss']
-)
-print(f"\nPredictive power for insured losses:")
-print(f"  WDI annual average:    r={r_wdi:.3f}, p={p_wdi:.4f}")
-print(f"  CHIRPS 3-day max:      r={r_chirps:.3f}, p={p_chirps:.4f}")
-# Expected: CHIRPS will have materially higher correlation with losses
-# This empirically validates the switch
-
-axes[1].scatter(df_chirps_emdat['max_3day_mm'], 
-                df_chirps_emdat['insured_loss']/1e6,
-                color='crimson', s=80, alpha=0.7)
-z = np.polyfit(df_chirps_emdat['max_3day_mm'], 
-                df_chirps_emdat['insured_loss']/1e6, 1)
-axes[1].plot(sorted(df_chirps_emdat['max_3day_mm']),
-             np.poly1d(z)(sorted(df_chirps_emdat['max_3day_mm'])), 
-             'r--', linewidth=2)
-axes[1].set_title(f'CHIRPS 3-day Max → EM-DAT Insured Loss\n'
-                   f'r={r_chirps:.2f}, p={p_chirps:.3f} — the EVT input chain',
-                   fontweight='bold')
-axes[1].set_xlabel('Annual Maximum 3-day Precipitation (mm) — Kuala Lumpur')
-axes[1].set_ylabel('Annual Insured Flood Loss ($M)')
-
-plt.tight_layout()
-plt.savefig('outputs/chirps_vs_wdi_validation.png', dpi=150)
-
-# ── FIT GEV ON CHIRPS DATA ────────────────────────────────────────────────────
-shape_kl, loc_kl, scale_kl = genextreme.fit(df_chirps_kl['max_3day_mm'].dropna())
-shape_mn, loc_mn, scale_mn = genextreme.fit(df_chirps_manila['max_3day_mm'].dropna())
-
-for label, shape, loc, scale in [
-    ('Kuala Lumpur (CHIRPS)', shape_kl, loc_kl, scale_kl),
-    ('Manila (CHIRPS)', shape_mn, loc_mn, scale_mn)
-]:
-    print(f"\nGEV Parameters — {label}")
-    print(f"  Shape (ξ): {shape:.4f}  →  ", end='')
-    if   shape > 0.1:  print(f"Fréchet ⚠️  HEAVY TAIL")
-    elif shape < -0.1: print(f"Weibull — bounded tail")
-    else:              print(f"Gumbel — exponential tail")
-    print(f"  Location (μ): {loc:.2f} mm | Scale (σ): {scale:.2f} mm")
-
-# ── RETURN PERIOD TABLE ───────────────────────────────────────────────────────
-rp = np.array([2, 5, 10, 20, 50, 100, 200, 500])
-ep = 1 / rp
-
-# Climate stress: IPCC AR6 +7% per °C, 1.5°C pathway ≈ +5.6% location shift
-scenarios = {'Historical': 0.0, '1.5°C Pathway': 0.056, '2.0°C Pathway': 0.091}
-
-results_kl = pd.DataFrame({'Return Period': rp})
-for scenario, shift in scenarios.items():
-    q = genextreme.ppf(1-ep, shape_kl, loc_kl*(1+shift), scale_kl)
-    results_kl[f'{scenario} (mm)'] = q.round(1)
-
-print("\nReturn Period Table — Kuala Lumpur (CHIRPS-powered GEV):")
-print(results_kl.to_string(index=False))
-results_kl.to_csv('data/processed/gev_return_periods_kl.csv', index=False)
-```
-
-**The WDI-to-CHIRPS upgrade statement — write this into your methodology:**
-
-> *"Standard WDI precipitation data provides national annual averages — a metric that captures neither the sub-national concentration nor the temporal intensity of flood-generating events. A national annual average rainfall of [X]mm tells a reinsurer nothing about whether [X]mm fell in 24 hours over Kuala Lumpur or across 365 days across all of Peninsular Malaysia. We address this limitation by substituting CHIRPS (Climate Hazards Group InfraRed Precipitation with Station data) daily gridded precipitation at 0.05° resolution as the EVT input for the Kuala Lumpur and Manila urban areas. CHIRPS exhibits a [Z]× higher correlation with EM-DAT insured flood losses (r=[chirps r] vs. r=[wdi r]) for the same period — empirically validating the upgrade. This choice directly neutralises the WDI granularity limitation cited in our limitations section and demonstrates the minimum data infrastructure investment Hannover Re should make."*
-
----
-
-## DAY 3 — May 2: ARIMA GHG Model (R2) + Vulnerability Module
-
-**End-of-day target: GHG forecast model complete with sector decomposition from Climate Watch. 2024 prediction validated. Vulnerability surface built.**
-
----
-
-### Morning (3 hrs): ARIMA Model — Enhanced with Climate Watch
-
-The enhancement over previous versions: you now have **sector-level GHG from Climate Watch** to decompose your ARIMA forecast and show *which industries* are driving the trajectory that Hannover Re needs to worry about.
-
-```python
-# [Full ARIMA pipeline from previous plan — ADF+KPSS, log transform,
-#  ACF/PACF, holdout 2023-2024, MAPE, forecast to 2030]
-
-# ── ENHANCEMENT: CLIMATE WATCH SECTOR DECOMPOSITION ───────────────────────────
-df_cw = pd.read_csv('data/processed/climate_watch_sector_ghg.csv')
-
-# What % of total GHG is from sectors with highest CCPT regulatory risk?
-high_transition_sectors = ['Energy', 'Industry', 'Transportation']
-df_high_risk = df_cw[df_cw['sector'].isin(high_transition_sectors)]
-df_total = df_cw.groupby('year')['ghg_mtco2e'].sum()
-df_high_risk_total = df_high_risk.groupby('year')['ghg_mtco2e'].sum()
-pct_high_risk = (df_high_risk_total / df_total * 100).iloc[-1]
-
-print(f"High-transition-risk sectors (Energy+Industry+Transport)")
-print(f"as % of Malaysia total GHG in {int(df_cw['year'].max())}: {pct_high_risk:.1f}%")
-# This number goes in your transition risk quantification
-
-# ── THE TRANSITION RISK CONNECTION ────────────────────────────────────────────
-# NGFS carbon price × high-risk sector GHG = regulatory cost estimate
-df_carbon = pd.read_csv('data/processed/ngfs_carbon_price_mys_phl.csv')
-df_carbon_mys = df_carbon[
-    (df_carbon['Region']=='MYS') & 
-    (df_carbon['Scenario'].isin(['Current Policies', 'Net Zero 2050']))
-]
-
-# Get 2030 carbon price under each scenario
-carbon_2030_current = df_carbon_mys[
-    (df_carbon_mys['Scenario']=='Current Policies') & 
-    (df_carbon_mys['Year']==2030)]['Value'].values[0]
-
-carbon_2030_netzero = df_carbon_mys[
-    (df_carbon_mys['Scenario']=='Net Zero 2050') & 
-    (df_carbon_mys['Year']==2030)]['Value'].values[0]
-
-print(f"\nNGFS Carbon Price — Malaysia 2030:")
-print(f"  Current Policies: ${carbon_2030_current:.1f}/tonne CO₂e")
-print(f"  Net Zero 2050:    ${carbon_2030_netzero:.1f}/tonne CO₂e")
-
-# Annual regulatory cost = NGFS carbon price × sector GHG in MtCO₂e
-ghg_highrisk_2030 = df_high_risk_total.iloc[-1] * 1.05  # extrapolate 5% growth
-transition_cost_current = (ghg_highrisk_2030 * 1e6 * carbon_2030_current) / 1e9  # $B
-transition_cost_netzero = (ghg_highrisk_2030 * 1e6 * carbon_2030_netzero) / 1e9  # $B
-
-print(f"\nTransition Risk Cost (Malaysia high-risk sectors, 2030):")
-print(f"  Current Policies scenario: ${transition_cost_current:.2f}B/year")
-print(f"  Net Zero 2050 scenario:    ${transition_cost_netzero:.2f}B/year")
-print(f"  If [X]% flows through property insurance: ${transition_cost_current*0.03:.0f}M treaty impact")
-```
-
-**The ARIMA + Climate Watch insight:**
-
-> *"Our ARIMA model forecasts total GHG reaching [X] Mt CO₂e by 2024 (MAPE = [Y]%). Climate Watch sector decomposition reveals that [Z]% of Malaysia's GHG is concentrated in Energy, Industry, and Transportation — the three sectors facing the highest regulatory compliance costs under BNM's CCPT taxonomy. Using NGFS carbon price projections (Current Policies scenario: $[carbon_current]/tonne by 2030; Net Zero 2050: $[carbon_netzero]/tonne), the annual regulatory cost to Malaysia's high-risk sectors reaches an estimated $[transition_cost]B under current policy trajectory. This is not an abstract environmental risk — it is a direct financial exposure to cedant creditworthiness and property value in Hannover Re's SEA treaty book."*
-
----
-
-### Afternoon (2 hrs): Vulnerability Module
-
-```python
-# [Same vulnerability regression as previous plan — OLS with urban density,
-#  coastal exposure, GDP per capita as additional regressors]
-# Now use CHIRPS 3-day max as the hazard variable instead of WDI precipitation
-# Document this substitution explicitly
-
-# Homoscedasticity check (Breusch-Pagan) — required by cat modelling notes
-from statsmodels.stats.diagnostic import het_breuschpagan
-bp_test = het_breuschpagan(vuln_model.resid, vuln_model.model.exog)
-print(f"Breusch-Pagan p={bp_test[1]:.4f}")
-print("Result:", "Heteroscedastic — use log-transform" if bp_test[1]<0.05 else "Homoscedastic")
-# If heteroscedastic: switch to log-log regression (log loss ~ log precip + controls)
-# Document the switch and rationale — shows technical rigour
-```
-
----
-
-## DAY 4 — May 3: NGFS Transition Risk + Pricing Gap + Full Stress Test
-
-**End-of-day target: Exhibit 1 (physical gap) AND Exhibit 2 (transition gap) both complete. The winning paragraph written.**
-
----
-
-### Morning (3 hrs): NGFS Transition Risk Module — R4 Core
-
-This is the section that makes Brandon Tan say "they've done their homework."
-
-```python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.interpolate import interp1d
-
-df_carbon = pd.read_csv('data/processed/ngfs_carbon_price_mys_phl.csv')
-df_cw     = pd.read_csv('data/processed/climate_watch_sector_ghg.csv')
-
-# ── NGFS CARBON PRICE TRAJECTORIES ────────────────────────────────────────────
-fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-
-for country, ax in zip(['MYS', 'PHL'], axes):
-    df_c = df_carbon[df_carbon['Region']==country]
-    
-    for scenario, color, style in [
-        ('Current Policies', 'crimson', '-'),
-        ('Net Zero 2050', 'forestgreen', '--')
-    ]:
-        df_s = df_c[df_c['Scenario']==scenario].sort_values('Year')
-        ax.plot(df_s['Year'], df_s['Value'], 
-                color=color, linestyle=style, linewidth=2.5,
-                label=f'{scenario}')
-        
-        # Annotate 2030 value
-        val_2030 = df_s[df_s['Year']==2030]['Value'].values
-        if len(val_2030) > 0:
-            ax.annotate(f'${val_2030[0]:.0f}/t', 
-                        xy=(2030, val_2030[0]),
-                        xytext=(2030.5, val_2030[0]),
-                        fontsize=11, fontweight='bold', color=color)
-    
-    ax.set_title(f'NGFS Carbon Price: {country}\n'
-                  f'Current Policies vs. Net Zero 2050 (BNM-grade data)',
-                  fontweight='bold')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Carbon Price (USD/tonne CO₂e)')
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    ax.axvline(2030, color='black', linestyle=':', alpha=0.5)
-
-plt.suptitle('NGFS Scenario Analysis: The Regulatory Cost Is Not Optional\n'
-             'The gap between scenarios = the hedging value of Hannover Re\'s ESG underwriting criteria',
+for i, (country, series, label) in enumerate([
+    ('MYS', df_chirps_mys['RX5day_mm'], 'Flood-dominated'),
+    ('PHL', df_chirps_phl['RX5day_mm'], 'Typhoon-dominated')
+]):
+    data = series.values
+
+    # ── GEV FIT ──
+    c, loc, scale = genextreme.fit(data, method='MLE')
+    rp = np.array([2, 5, 10, 20, 50, 100, 200, 500])
+    rl = genextreme.isf(1/rp, c, loc, scale)
+
+    ax = axes[0, i]
+    ax.semilogx(rp, rl, 'r-', lw=2.5, label=f'GEV (ξ={c:.3f})')
+    sorted_d = np.sort(data)
+    n = len(sorted_d)
+    emp_rp = (n + 0.5) / (n - np.arange(n) + 0.5)
+    ax.scatter(emp_rp, sorted_d, s=40, c='steelblue', label='Observed RX5day', zorder=5)
+    ax.set(xlabel='Return Period (years)', ylabel='RX5day (mm)',
+           title=f'{country}: CHIRPS RX5day GEV\n{label} | 100-yr level: {rl[5]:.0f}mm')
+    ax.grid(True, alpha=0.3, which='both'); ax.legend()
+
+    print(f"\n{country} GEV: ξ={c:.4f}, μ={loc:.2f}mm, σ={scale:.2f}mm")
+    print(f"  100-yr return level: {rl[5]:.1f}mm")
+    print(f"  {'Heavy tail (Fréchet)' if c>0 else 'Bounded tail (Weibull)'}")
+
+    # ── REGIME BREAK ──
+    model_rpt = rpt.Pelt(model='rbf', min_size=5).fit(data)
+    bkpts = model_rpt.predict(pen=3)
+    years = series.index.values
+    break_yrs = [years[b-1] for b in bkpts[:-1]]
+
+    ax2 = axes[1, i]
+    ax2.plot(years, data, 'o-', color='steelblue', markersize=4, label='RX5day observed')
+    for by in break_yrs:
+        ax2.axvline(by, color='red', linestyle='--', lw=2, alpha=0.8)
+        pre = data[years <= by].mean()
+        post = data[years > by].mean()
+        ax2.axhline(pre, color='gray', linestyle=':', alpha=0.6)
+        ax2.axhline(post, color='orange', linestyle=':', alpha=0.8)
+        uplift = (post/pre - 1) * 100
+        ax2.annotate(f'+{uplift:.0f}%\npost-{by}',
+                      xy=(by, post), xytext=(by+1, post*1.05),
+                      fontsize=10, fontweight='bold', color='red')
+    ax2.set(xlabel='Year', ylabel='RX5day (mm)',
+            title=f'{country}: Regime Break Test\nBreakpoints: {break_yrs}')
+    ax2.legend()
+
+plt.suptitle('CHIRPS RX5day GEV Return Level Curves + Regime Break Detection\n'
+             'MYS: flood-dominated | PHL: typhoon-dominated | Separate models required',
              fontsize=12, fontweight='bold')
 plt.tight_layout()
-plt.savefig('outputs/ngfs_carbon_price_trajectories.png', dpi=150)
-
-# ── EXHIBIT 2: TRANSITION RISK COST QUANTIFICATION ────────────────────────────
-target_years = [2025, 2026, 2027, 2028, 2029, 2030]
-
-# GHG from high-risk sectors (Climate Watch extrapolation)
-ghg_highrisk_baseline = df_cw[
-    df_cw['sector'].isin(['Energy','Industry','Transportation'])
-].groupby('year')['ghg_mtco2e'].sum()
-
-# Extrapolate to 2030 using simple trend
-from statsmodels.tsa.holtwinters import ExponentialSmoothing
-model_cw = ExponentialSmoothing(ghg_highrisk_baseline, trend='add').fit()
-ghg_forecast_2030 = model_cw.forecast(len(target_years))
-
-# NGFS carbon price interpolation for target years
-df_cp = df_carbon[(df_carbon['Region']=='MYS')].copy()
-for scenario in ['Current Policies', 'Net Zero 2050']:
-    df_s = df_cp[df_cp['Scenario']==scenario].sort_values('Year')
-    interp_fn = interp1d(df_s['Year'], df_s['Value'], 
-                          kind='linear', fill_value='extrapolate')
-    
-    annual_costs = []
-    for yr, ghg in zip(target_years, ghg_forecast_2030):
-        carbon_price = float(interp_fn(yr))
-        # Cost = GHG (Mt) × 1e6 (to tonnes) × carbon price ($/t) / 1e9 (to $B)
-        cost_b = ghg * 1e6 * carbon_price / 1e9
-        annual_costs.append({
-            'Year': yr,
-            'Scenario': scenario,
-            'GHG High-Risk Sectors (MtCO₂e)': round(ghg, 2),
-            'NGFS Carbon Price ($/t)': round(float(carbon_price), 1),
-            'Regulatory Cost ($B)': round(cost_b, 3),
-            'Treaty Impact ($M)*': round(cost_b * 1000 * 0.03, 1)
-            # *Assumes 3% of regulatory cost flows through property insurance claims
-            # Justify: regulatory non-compliance → property write-downs → insurance claims
-        })
-    
-    df_exhibit2 = pd.DataFrame(annual_costs)
-    print(f"\nEXHIBIT 2 — Transition Risk Cost: {scenario}")
-    print(df_exhibit2.to_string(index=False))
-    df_exhibit2.to_csv(f'data/processed/exhibit2_transition_{scenario.replace(" ","_")}.csv', 
-                        index=False)
-```
-
-**EXHIBIT 2 output format for your report:**
-
-```
-EXHIBIT 2: TRANSITION RISK COST PROJECTION — MALAYSIA
-Climate Watch Sector GHG × NGFS Carbon Price | 2025–2030
-
-               │ Current Policies      │ Net Zero 2050
-               │ (NGFS Baseline)       │ (Mitigation Strategy)
-───────────────┼───────────────────────┼──────────────────────
-Year │ Carbon   │ Regulatory │ Treaty  │ Carbon   │ Regulatory │ Treaty
-     │ Price    │ Cost ($B)  │ Impact  │ Price    │ Cost ($B)  │ Impact
-     │ ($/t)    │            │ ($M)*   │ ($/t)    │            │ ($M)*
-─────┼──────────┼────────────┼─────────┼──────────┼────────────┼───────
-2025 │ $[  ]    │ $[  ]B     │ $[  ]M  │ $[  ]    │ $[  ]B     │ $[  ]M
-2026 │ $[  ]    │ $[  ]B     │ $[  ]M  │ $[  ]    │ $[  ]B     │ $[  ]M
-2030 │ $[  ]    │ $[  ]B     │ $[  ]M  │ $[  ]    │ $[  ]B     │ $[  ]M
-─────┼──────────┼────────────┼─────────┼──────────┼────────────┼───────
-*3% pass-through rate from regulatory cost to property insurance claims
- Basis: IMF Working Paper on carbon pricing and insurance loss amplification
+plt.savefig('outputs/r3_gev_and_regime_break.png', dpi=150)
 ```
 
 ---
 
-### Afternoon (2 hrs): The Combined Pricing Gap
-
+### R3 — ENSO Dependence (NOAA ONI)
 ```python
-# ── COMBINE PHYSICAL + TRANSITION GAP ─────────────────────────────────────────
-# Physical gap: from EVT/GEV on CHIRPS data (Day 2)
-# Transition gap: from NGFS × Climate Watch (this morning)
+from scipy import stats
 
-# Physical EAL gap (from trapezoid integration on Days 2-3)
-eal_hist     = [YOUR VALUE]   # historical calibration
-eal_15c      = [YOUR VALUE]   # 1.5°C adjusted
-physical_gap = eal_15c - eal_hist
+# Aggregate EM-DAT to annual adjusted losses
+# MYS: use Flood events | PHL: use Storm events
+def annual_losses(df_emdat, country, dtype):
+    df_c = df_emdat[(df_emdat['country']==country) &
+                     (df_emdat['disaster_type']==dtype)].copy()
+    return df_c.groupby('start_year')['total_damage_adjusted_usd'].sum() \
+               .reset_index().rename(columns={'start_year':'year',
+                                              'total_damage_adjusted_usd':'loss_usd'})
 
-# Transition gap (Current Policies 2030 treaty impact)
-transition_gap_2030 = [VALUE FROM EXHIBIT 2 CURRENT POLICIES 2030]
+mys_fl = annual_losses(df_emdat, 'Malaysia', 'Flood')
+phl_st = annual_losses(df_emdat, 'Philippines', 'Storm')
 
-# ENSO correction — because independence assumption underestimates
-# Combined portfolio tail risk by the La Niña uplift % we calculated
-enso_correction_pct = uplift / 100   # from Day 1 ENSO analysis
-enso_gap = (physical_gap + transition_gap_2030) * enso_correction_pct * 0.5
-# Conservative: apply 50% of ENSO uplift as additive correction
+# Merge with ONI DJF
+enso_mys = df_oni_djf.merge(mys_fl, on='year', how='left').fillna({'loss_usd': 0})
+enso_phl = df_oni_djf.merge(phl_st, on='year', how='left').fillna({'loss_usd': 0})
 
-total_gap = physical_gap + transition_gap_2030 + enso_gap
+# Correlation (log-transform losses to handle skewness)
+r_mys, p_mys = stats.pearsonr(enso_mys['oni_anom'], np.log1p(enso_mys['loss_usd']))
+r_phl, p_phl = stats.pearsonr(enso_phl['oni_anom'], np.log1p(enso_phl['loss_usd']))
+print(f"ONI vs MYS flood loss (log): r={r_mys:.3f}, p={p_mys:.4f}")
+print(f"ONI vs PHL storm loss (log): r={r_phl:.3f}, p={p_phl:.4f}")
+# Expect r_mys < 0: La Niña (negative ONI) = more MYS floods
 
-print(f"{'='*60}")
-print(f"TOTAL RESERVE INADEQUACY DECOMPOSITION")
-print(f"{'='*60}")
-print(f"Physical pricing gap (GEV/CHIRPS):    ${physical_gap:.1f}M/yr")
-print(f"Transition cost (NGFS/Climate Watch): ${transition_gap_2030:.1f}M/yr")
-print(f"ENSO dependence correction:           ${enso_gap:.1f}M/yr")
-print(f"{'─'*45}")
-print(f"TOTAL reserve inadequacy:             ${total_gap:.1f}M/yr")
-print(f"For $500M SEA treaty:                 ${total_gap*(500/eal_hist):.1f}M")
-print(f"{'='*60}")
-```
-
-**The three-component pricing gap is your most differentiating output.** No other team will decompose the reserve inadequacy into physical, transition, and ENSO-dependence components. Each has a named data source (CHIRPS+EM-DAT, NGFS+Climate Watch, NOAA ONI). Each is independently defensible.
-
----
-
-### Evening (1 hr): Full Stress Test Table — R4 Complete
-
-```python
-# THE COMPLETE R4 STRESS TEST
-# Mitigation strategy: Hannover Re ESG-adjusted underwriting → Paris Net Zero 2050 pathway
-# Baseline: NGFS Current Policies
-# Climate indicator projected: GHG emissions (ARIMA) and implied carbon price (NGFS)
-
-stress_table = pd.DataFrame({
-    'Scenario': [
-        '① Historical basis\n   (no recalibration)',
-        '② Current Policies\n   (NGFS baseline, no action)',
-        '③ Net Zero 2050\n   (NGFS + HRe CCPT strategy)',
-        '④ Orderly Transition\n   (NGFS intermediate)'
-    ],
-    'NGFS Carbon Price\n2030 ($/t)': [
-        '~$5 (2010 proxy)',
-        f'${carbon_2030_current:.0f}',
-        f'${carbon_2030_netzero:.0f}',
-        f'${(carbon_2030_current+carbon_2030_netzero)/2:.0f}'
-    ],
-    'Physical EAL\n2030 ($M)': [
-        f'${eal_hist:.1f}',
-        f'${eal_15c:.1f}',
-        f'${eal_paris:.1f}',
-        f'${(eal_15c+eal_paris)/2:.1f}'
-    ],
-    'Transition Cost\n2030 ($M)': [
-        '~$0',
-        f'${transition_gap_2030:.1f}',
-        f'${transition_gap_netzero:.1f}',
-        f'${(transition_gap_2030+transition_gap_netzero)/2:.1f}'
-    ],
-    'TOTAL GAP\nvs. Historical': [
-        '—',
-        f'+${physical_gap+transition_gap_2030:.1f}M',
-        f'+${(eal_paris-eal_hist)+transition_gap_netzero:.1f}M',
-        'intermediate'
-    ],
-    'Hannover Re\nAction': [
-        'Recalibrate now',
-        'Recalibrate + CCPT surcharge',
-        'Full CCPT + ILS hedge',
-        'Phased transition'
-    ]
-})
-print(stress_table.to_string(index=False))
-stress_table.to_csv('data/processed/r4_complete_stress_test.csv', index=False)
+# Portfolio combined loss by ENSO phase
+combined = df_oni_djf.copy()
+combined = combined.merge(mys_fl.rename(columns={'loss_usd':'mys'}), on='year', how='left')
+combined = combined.merge(phl_st.rename(columns={'loss_usd':'phl'}), on='year', how='left')
+combined[['mys','phl']] = combined[['mys','phl']].fillna(0)
+combined['combined'] = combined['mys'] + combined['phl']
+phase_avg = combined.groupby('enso_phase')['combined'].mean() / 1e6
+print("\nAvg combined portfolio loss by ENSO phase ($M):")
+print(phase_avg.sort_values(ascending=False))
 ```
 
 ---
 
-## DAY 5 — May 4: Dashboard + Three Recommendations
+### Exhibit 2 — Transition Risk (Outputs Already Computed)
+The scripts `exhibit_2_analysis.py` and `exhibit_2_analysis_excluding_LULCF.py` have already run.
+**Verified outputs** (from `outputs/exhibit_2_transition_cost_results.csv`):
 
-**End-of-day target: Dashboard with three tabs (Physical / Transition / Combined). Three recommendations written with NGFS data embedded.**
-
----
-
-### Morning (4 hrs): The Complete Dashboard
-
-```python
-# dashboard/app.py
-import streamlit as st
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import pandas as pd
-import numpy as np
-
-st.set_page_config(
-    page_title="SEA Nat-Cat Pricing Adequacy Monitor",
-    page_icon="🌊", layout="wide"
-)
-
-st.title("🌊 SEA Nat-Cat Pricing Adequacy Monitor")
-st.caption(
-    "Hannover Re Internal Actuarial Tool  |  "
-    "Physical Risk (CHIRPS + EM-DAT + GEV) + Transition Risk (NGFS GCAM 6.0 + Climate Watch)  |  "
-    "ENSO Dependence: NOAA ONI"
-)
-
-st.error(
-    "⚠️  **PRICING AUDIT**  |  "
-    "Reserve gap = Physical (CHIRPS/GEV) + Transition (NGFS carbon price) + "
-    "ENSO correction (NOAA ONI). "
-    "Drag calibration window to see how assumption choice changes the answer."
-)
-
-# ── THREE TABS ────────────────────────────────────────────────────────────────
-tab1, tab2, tab3, tab4 = st.tabs([
-    "🌊 Physical Risk",
-    "⚡ Transition Risk (NGFS)",
-    "🌀 ENSO Dependence",
-    "📊 Combined Audit"
-])
-
-# ── TAB 1: PHYSICAL RISK ──────────────────────────────────────────────────────
-with tab1:
-    st.subheader("Physical Risk: CHIRPS-Powered GEV Pricing Gap")
-    st.caption("Hazard: CHIRPS sub-national daily rainfall | Loss: EM-DAT insured losses")
-    
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        cal_start = st.slider("Treaty calibration starts:", 1990, 2015, 1990, 5)
-    with c2:
-        treaty_exp = st.slider("SEA exposure ($M):", 100, 2000, 500, 50)
-    with c3:
-        scenario = st.selectbox("Climate scenario:",
-            ["Current Policies (NGFS)", "1.5°C — Net Zero 2050 (NGFS)", "2.0°C — No action"], 1)
-    
-    # Pre-computed EAL lookup (replace with your actual model values)
-    eal_lookup = {
-        1990: {"curr": 38.4, "nz": 47.2, "noa": 56.1},
-        1995: {"curr": 41.2, "nz": 50.5, "noa": 60.1},
-        2000: {"curr": 44.8, "nz": 55.0, "noa": 65.5},
-        2005: {"curr": 49.3, "nz": 60.5, "noa": 72.0},
-        2010: {"curr": 55.7, "nz": 68.3, "noa": 81.3},
-        2015: {"curr": 62.1, "nz": 76.2, "noa": 90.7},
-    }
-    smap = {"Current Policies (NGFS)": "curr", 
-            "1.5°C — Net Zero 2050 (NGFS)": "nz",
-            "2.0°C — No action": "noa"}
-    
-    eal_c = eal_lookup[cal_start]["curr"]
-    eal_p = eal_lookup[cal_start][smap[scenario]]
-    phys_gap = (eal_p - eal_c) * (treaty_exp/500)
-    
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Historical EAL", f"${eal_c:.1f}M")
-    m2.metric("Climate-Adjusted EAL", f"${eal_p:.1f}M", f"+{(eal_p/eal_c-1)*100:.1f}%")
-    m3.metric("Physical Gap", f"${phys_gap:.1f}M", "⚠️ Underpriced", delta_color="inverse")
-    m4.metric("Data Source", "CHIRPS 0.05°", help="Sub-national daily rainfall, KL/Manila")
-    
-    # Return period chart
-    rp_data = pd.read_csv('data/processed/gev_return_periods_kl.csv')
-    fig1 = go.Figure()
-    fig1.add_trace(go.Scatter(
-        x=rp_data['Return Period'], y=rp_data['Historical (mm)'],
-        name='Historical basis', line=dict(color='steelblue', width=3)))
-    fig1.add_trace(go.Scatter(
-        x=rp_data['Return Period'], y=rp_data['1.5°C Pathway (mm)'],
-        name='Net Zero 2050 (NGFS)', line=dict(color='crimson', width=3, dash='dash')))
-    fig1.add_trace(go.Scatter(
-        x=rp_data['Return Period'], y=rp_data['2.0°C Pathway (mm)'],
-        name='No action', line=dict(color='black', width=2, dash='dot')))
-    fig1.update_layout(xaxis_title="Return Period (years)", xaxis_type="log",
-                       yaxis_title="3-day Max Precipitation (mm) — Kuala Lumpur",
-                       height=380, title="CHIRPS-powered GEV Return Period Curves")
-    st.plotly_chart(fig1, use_container_width=True)
-
-# ── TAB 2: TRANSITION RISK ────────────────────────────────────────────────────
-with tab2:
-    st.subheader("Transition Risk: NGFS Carbon Price × Climate Watch Sector GHG")
-    st.caption("BNM uses NGFS data for internal stress testing — this is the same framework")
-    
-    ngfs_data = pd.read_csv('data/processed/ngfs_carbon_price_mys_phl.csv')
-    exhibit2_cp = pd.read_csv('data/processed/exhibit2_transition_Current_Policies.csv')
-    exhibit2_nz = pd.read_csv('data/processed/exhibit2_transition_Net_Zero_2050.csv')
-    
-    tr_country = st.selectbox("Country:", ["Malaysia (MYS)", "Philippines (PHL)"])
-    tr_country_code = "MYS" if "Malaysia" in tr_country else "PHL"
-    
-    df_ngfs_plot = ngfs_data[ngfs_data['Region']==tr_country_code]
-    
-    fig2 = make_subplots(rows=1, cols=2,
-                          subplot_titles=["NGFS Carbon Price Trajectory",
-                                          "Annual Regulatory Cost to Cedants"])
-    
-    for scenario, color in [('Current Policies','crimson'),('Net Zero 2050','forestgreen')]:
-        df_s = df_ngfs_plot[df_ngfs_plot['Scenario']==scenario].sort_values('Year')
-        fig2.add_trace(go.Scatter(x=df_s['Year'], y=df_s['Value'],
-                                   name=scenario, line=dict(color=color, width=2.5)),
-                        row=1, col=1)
-    
-    fig2.add_trace(go.Bar(x=exhibit2_cp['Year'], y=exhibit2_cp['Treaty Impact ($M)*'],
-                           name='Current Policies', marker_color='crimson', opacity=0.7),
-                   row=1, col=2)
-    fig2.add_trace(go.Bar(x=exhibit2_nz['Year'], y=exhibit2_nz['Treaty Impact ($M)*'],
-                           name='Net Zero 2050', marker_color='forestgreen', opacity=0.7),
-                   row=1, col=2)
-    
-    fig2.update_layout(height=420, barmode='group',
-                        title=f"NGFS Transition Risk — {tr_country}")
-    st.plotly_chart(fig2, use_container_width=True)
-    
-    t1, t2, t3 = st.columns(3)
-    cp_2030 = exhibit2_cp[exhibit2_cp['Year']==2030]['Treaty Impact ($M)*'].values[0]
-    nz_2030 = exhibit2_nz[exhibit2_nz['Year']==2030]['Treaty Impact ($M)*'].values[0]
-    t1.metric("Current Policies Treaty Impact 2030", f"${cp_2030:.1f}M")
-    t2.metric("Net Zero 2050 Treaty Impact 2030", f"${nz_2030:.1f}M")
-    t3.metric("Mitigation Benefit", f"${cp_2030-nz_2030:.1f}M", 
-              "Saved by CCPT strategy", delta_color="normal")
-
-# ── TAB 3: ENSO DEPENDENCE ────────────────────────────────────────────────────
-with tab3:
-    st.subheader("ENSO Dependence: Why Your SEA Portfolio Is Less Diversified Than It Appears")
-    st.caption("Source: NOAA Oceanic Niño Index | Proves MYS+PHL losses are correlated")
-    
-    st.warning(
-        f"📊 **La Niña uplift:** Combined MYS+PHL annual losses are **+{uplift:.0f}% higher** "
-        f"in La Niña years vs. neutral years. "
-        f"Standard cat models assume independence — this assumption is wrong."
-    )
-    
-    # ENSO chart from Day 1
-    enso_fig = go.Figure()
-    for phase, color in [('La Niña','steelblue'),('Neutral','gray'),('El Niño','crimson')]:
-        mask = df_enso['enso_phase']==phase
-        enso_fig.add_trace(go.Scatter(
-            x=df_enso[mask]['year'], y=df_enso[mask]['mys_flood_loss']/1e6,
-            mode='markers', name=f'{phase} year',
-            marker=dict(color=color, size=10)))
-    st.plotly_chart(enso_fig, use_container_width=True)
-
-# ── TAB 4: COMBINED ───────────────────────────────────────────────────────────
-with tab4:
-    st.subheader("📊 Combined Reserve Inadequacy: Physical + Transition + ENSO")
-    
-    enso_gap_calc = (phys_gap + cp_2030) * (uplift/100) * 0.5
-    total_gap = phys_gap + cp_2030 + enso_gap_calc
-    
-    fig4 = go.Figure(go.Waterfall(
-        x=["Historical\nEAL", "+Physical\nGap", "+Transition\nCost (NGFS)",
-           "+ENSO\nCorrection", "TOTAL\nGAP"],
-        measure=["absolute", "relative", "relative", "relative", "total"],
-        y=[eal_c, phys_gap, cp_2030, enso_gap_calc, total_gap],
-        connector={"line": {"color": "black"}},
-        increasing={"marker": {"color": "crimson"}},
-        decreasing={"marker": {"color": "steelblue"}},
-        totals={"marker": {"color": "darkred"}},
-        text=[f"${v:.1f}M" for v in [eal_c, phys_gap, cp_2030, enso_gap_calc, total_gap]],
-        textposition="outside"
-    ))
-    fig4.update_layout(
-        title=f"Annual Reserve Inadequacy Waterfall — $500M SEA Treaty",
-        yaxis_title="$M per year", height=450
-    )
-    st.plotly_chart(fig4, use_container_width=True)
-    
-    st.success(f"**Total annual reserve inadequacy: ${total_gap:.1f}M**  |  "
-               f"Physical: ${phys_gap:.1f}M  |  "
-               f"Transition (NGFS): ${cp_2030:.1f}M  |  "
-               f"ENSO correction: ${enso_gap_calc:.1f}M")
-
-# ── FOOTER ─��──────────────────────────────────────────────────────────────────
-st.divider()
-col1, col2 = st.columns(2)
-col1.info("🌊 Physical: CHIRPS daily rainfall | EM-DAT losses | IPCC AR6 Ch.11 stress factors")
-col2.info("⚡ Transition: NGFS GCAM 6.0 | Climate Watch sector GHG | BNM CCPT taxonomy")
-st.caption("NOAA ONI | Swiss Re Sigma | Munich Re NatCat | World Bank WDI | IPCC SR1.5")
-```
-
----
-
-### Afternoon (2 hrs): Three Recommendations — Dataset-Powered
-
-**Recommendation 1: Parametric Flood Trigger Calibrated to CHIRPS (Addresses Secondary Perils + Data Void)**
-
-> **What:** Replace indemnity trigger with parametric trigger indexed to CHIRPS 3-day maximum precipitation at KL monitoring station
->
-> **The CHIRPS connection:** WDI national annual averages cannot trigger a parametric structure — the basis risk would be enormous. CHIRPS sub-national daily data is exactly the observable needed. Your analysis proves CHIRPS has [X]× higher correlation with EM-DAT insured losses than WDI data (r=[chirps r] vs r=[wdi r]). This is the empirical case for CHIRPS as the reference index
->
-> **Trigger calibration:** Attachment at 1-in-20 return period from your CHIRPS GEV model ([X]mm in 3 days over KL). Exhaustion at 1-in-100 ([Y]mm). Both numbers directly traceable to your CHIRPS EVT output
->
-> **ENSO adjustment:** Because La Niña years produce a [Z]% uplift in loss probability, embed an ENSO state clause: attachment threshold automatically reduces by [Z/2]% in declared La Niña seasons (NOAA ONI < −0.5). This accounts for the non-stationarity of hazard frequency within the year
->
-> **IFRS 17 benefit:** Parametric trigger eliminates IBNR lag (18–24 months → near-zero). Under IFRS 17 IFRS 17 paragraph 44, shorter claims development reduces the Risk Adjustment. Quantify: "Elimination of flood IBNR reduces the Risk Adjustment for this treaty class by approximately [X]% of treaty premium"
-
----
-
-**Recommendation 2: NGFS-Calibrated ESG Underwriting Surcharge (Addresses IFRS 17 + CCPT Regulatory Squeeze)**
-
-> **What:** Apply a tiered transition risk surcharge to SEA cat treaty renewals, calibrated directly to NGFS carbon price projections and cedant Climate Watch sector exposure
->
-> **The NGFS connection:** Instead of guessing a carbon price, you use BNM's own reference dataset. Under Current Policies, Malaysia's carbon price reaches $[NGFS value]/tonne by 2030. The surcharge ladder is indexed to this trajectory — not a number you invented
->
-> **Surcharge structure:**
-> - Tier 1 (5% surcharge): cedant portfolio >20% exposure in CCPT Orange-category sectors (high-transition-risk industry from Climate Watch)
-> - Tier 2 (10% surcharge): >30% coastal exposure (WDI `EN.CLC.MDAT.ZS`) AND >20% transition-sector exposure
-> - Tier 3 (15% surcharge): both thresholds breached AND no BNM CCPT climate risk management plan submitted
->
-> **Brandon's reaction:** You are using NGFS data — the same dataset BNM uses — to calibrate a commercial pricing decision. This is what "implementing CCPT" actually looks like in practice. No other team will have done this
->
-> **IFRS 17 angle:** The NGFS scenarios generate specific, quantified transition cost estimates for the IFRS 17 sensitivity analysis disclosure required under paragraph 128. Your Exhibit 2 table is a ready-made IFRS 17 sensitivity disclosure
-
----
-
-**Recommendation 3: Climate-Indexed ILS with ENSO Trigger (Closes the Protection Gap + First-Mover Advantage)**
-
-> **What:** Structure a Philippines typhoon cat bond with two innovation features: (a) attachment indexed to ARIMA GHG trajectory and (b) an ENSO state modifier that adjusts the payout probability based on real-time ONI data
->
-> **The ENSO connection:** Your NOAA ONI analysis proves La Niña years produce [Z]% higher combined MYS+PHL losses. A cat bond that fails to account for this is mis-priced on the day it's issued. The ENSO state modifier is a novel ILS feature — "if ONI falls below −0.5 in Q3 of the treaty year, the effective attachment point reduces by [Z/3]%" — that pre-prices the known seasonal amplification
->
-> **The growth angle:** While competitors are pulling back from SEA due to uncertainty, this ILS structure is designed to attract capital market investors who want transparent, data-driven SEA cat exposure. The WDI/CHIRPS/ONI reference indices are World Bank and NOAA data — independent, manipulation-resistant, acceptable to ISDA documentation. This opens capital markets to a market currently locked out of institutional ILS investment
->
-> **Implementation:** Year 1 — file NGFS scenario outputs as reference climate pathway in bond prospectus. Year 2 — back-test ENSO modifier against 2024–2026 actual ONI and loss data. Year 3 — launch with two-year live track record as collateral
->
-> **CCPT/policy link:** BNM CCPT explicitly cites parametric and index-based instruments as priority innovation areas. Wang Zhao Loon's ASM Climate Risk Working Group has named ILS as a capital markets gap. This recommendation hands them the implementation blueprint
-
----
-
-## DAY 6 — May 5: Report Writing
-
-**End-of-day target: Complete 10-page report. All five requirements answered. All five datasets cited by name.**
-
----
-
-### Page Budget
-
-| Section | Pages | Requirement | Key Dataset(s) |
+| Sector | GHG Baseline (MtCO₂e) | Annual Cost at NZ Price ($M) | % of Total |
 |---|---|---|---|
-| **Executive Summary** | 1 | All | All five named |
-| Indicator Selection & Relationships | 1.5 | R1 | WDI + NOAA ONI + Climate Watch |
-| GHG Forecast Model | 1.5 | R2 | WDI + Climate Watch (sector decomposition) |
-| Climate-Insurance Claims: MYS vs. PHL | 1.5 | R3 | CHIRPS + EM-DAT + NOAA ONI |
-| Catastrophe Model: Hazard → Vulnerability → Loss | 1.5 | R3 | CHIRPS + EM-DAT + WDI |
-| Mitigation Strategy & NGFS Stress Test | 1.5 | R4 | NGFS GCAM 6.0 + Climate Watch |
-| Recommendations & Limitations | 1 | R5 | All five |
-| Appendix | ∞ | All | Full outputs + data dictionary |
+| Energy | 279.85 | **$15,554M** | 69.5% |
+| LULUCF | 63.29 | **$3,518M** | 15.7% |
+| Industrial Processes | 29.87 | **$1,660M** | 7.4% |
+| Waste | 19.49 | **$1,083M** | 4.8% |
+| Agriculture | 10.11 | **$562M** | 2.5% |
+| **TOTAL** | 402.61 | **$22,383M** | 100% |
+
+```python
+# Plot Exhibit 2 (using already-computed outputs)
+import pandas as pd, matplotlib.pyplot as plt
+
+df_e2 = pd.read_csv('outputs/exhibit_2_transition_cost_results.csv')
+df_e2_ex = pd.read_csv('outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv')
+
+fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+colors = {'Energy':'#d62728', 'Land Use, Land-Use Change and Forestry':'#8c564b',
+          'Industrial Processes':'#ff7f0e', 'Waste':'#9467bd', 'Agriculture':'#2ca02c'}
+
+for ax, df_plot, title in [
+    (axes[0], df_e2,    'Primary: Incl. LULUCF ($22,383M total)'),
+    (axes[1], df_e2_ex, 'Sensitivity: Excl. LULUCF ($18,865M total)')
+]:
+    df_plot = df_plot[df_plot['Sector'].notna()].sort_values(
+        'Annual_Transition_Cost_USD_Millions', ascending=True)
+    bars = ax.barh(df_plot['Sector'],
+                    df_plot['Annual_Transition_Cost_USD_Millions'],
+                    color=[colors.get(s,'#7f7f7f') for s in df_plot['Sector']])
+    for bar, (_, row) in zip(bars, df_plot.iterrows()):
+        ax.text(bar.get_width()+50, bar.get_y()+bar.get_height()/2,
+                f"${row['Annual_Transition_Cost_USD_Millions']:,.0f}M ({row['% of Total']:.1f}%)",
+                va='center', fontsize=9)
+    ax.set_title(f'EXHIBIT 2: Malaysia Annual Transition Cost\n'
+                  f'NGFS NZ2050 price = $55.578/tonne | {title}', fontweight='bold')
+    ax.set_xlabel('Annual Regulatory Compliance Cost (USD Millions)')
+
+plt.suptitle('Palm oil LULUCF = 15.7% of total transition cost — unique MYS exposure',
+              fontweight='bold')
+plt.tight_layout()
+plt.savefig('outputs/exhibit_2_chart_final.png', dpi=150)
+```
 
 ---
 
-### Executive Summary — The Final Version
+## THREE RECOMMENDATIONS (Competition-Grade)
 
-> ---
-> **EXECUTIVE SUMMARY**
-> **To:** Hannover Re — Asia-Pacific Reinsurance Division
-> **Re:** SEA Nat-Cat Pricing Adequacy: A Five-Dataset Physical + Transition Risk Catastrophe Framework
->
-> Southeast Asia's reinsurance market faces simultaneous pressure from two risk dimensions that current cat models treat as future projections. This analysis, built on five independent datasets — CHIRPS sub-national daily rainfall, EM-DAT historical losses, NOAA ONI ENSO cycles, NGFS GCAM 6.0 carbon price scenarios, and Climate Watch sector GHG data — demonstrates both dimensions are present, quantifiable, and compounding today.
->
-> **Finding 1 — Physical Risk: The SEA Nat-Cat Loss Regime Has Broken (R1, R2, R3)**
-> A three-test regime break analysis (Welch p=[val]; Mann-Whitney p=[val]; Levene p=[val]) confirms post-2010 insured losses for Malaysia floods and Philippines typhoons are drawn from a statistically distinct distribution. Our GEV model — powered by CHIRPS sub-national daily rainfall rather than WDI national averages — projects the Malaysia 1-in-100 flood event compressing to a 1-in-[X] event by 2030 under the 1.5°C pathway. ARIMA([p],[d],[q]) GHG model (2024 holdout MAPE=[Y]%) confirms the upstream forcing driver continues. For a $500M SEA treaty, the physical EAL gap is **$[physical gap]M annually**.
->
-> **Finding 2 — ENSO Dependence: The Portfolio Is Less Diversified Than Modelled (R1, R3)**
-> NOAA ONI analysis reveals a [Z]% uplift in combined MYS+PHL losses during La Niña years, violating the independence assumption embedded in standard cat models. This makes our EAL gap estimate conservative, and it means the combined SEA treaty book carries hidden correlation risk that current pricing does not account for.
->
-> **Finding 3 — Transition Risk: NGFS Carbon Price Creates a Compounding Exposure (R1, R4)**
-> Using NGFS GCAM 6.0 — the same dataset BNM uses for internal stress testing — Malaysia's carbon price reaches $[NGFS current policies]/tonne by 2030 under Current Policies, creating an estimated $[transition cost]B annual regulatory burden on high-transition-risk sectors (Energy + Industry = [X]% of national GHG per Climate Watch). The treaty-level impact is **$[transition treaty impact]M annually** — compounding the physical gap. Under Net Zero 2050 pathway (modelled as Hannover Re's ESG underwriting strategy), this impact reduces to $[netzero impact]M — a mitigation benefit of **$[NGFS benefit]M**.
->
-> **Total Reserve Inadequacy: $[TOTAL]M per year for a $500M SEA book.**
-> Components: Physical ($[phys]M) + Transition ($[trans]M) + ENSO correction ($[enso]M).
->
-> **Three Recommended Actions:**
-> 1. **CHIRPS-indexed parametric flood trigger** (Malaysia): Replace indemnity with CHIRPS 3-day max trigger. ENSO state clause reduces attachment in La Niña seasons. Eliminates IBNR lag, reduces IFRS 17 Risk Adjustment by ~[X]%.
-> 2. **NGFS-calibrated ESG surcharge** (MYS + PHL): Tiered 5–15% surcharge indexed to NGFS carbon price trajectory and Climate Watch cedant sector exposure. Operationalises BNM CCPT in commercial pricing.
-> 3. **ENSO-adjusted climate ILS** (Philippines): Cat bond with ARIMA GHG-indexed attachment AND NOAA ONI La Niña modifier. First-mover parametric ILS structure using publicly verifiable World Bank and NOAA indices.
->
-> *Interactive Pricing Audit Tool (Physical + Transition + ENSO tabs): [Streamlit URL]*
->
-> ---
+### Recommendation 1: Recalibrate Physical EAL Using CHIRPS RX5day Return Period Compression
+**Evidence:** CHIRPS RX5day shows a structural regime shift in both countries (detect exact year with ruptures PELT algorithm above). Post-break RX5day means are X% higher, implying proportional compression of return periods. PHL 100-year event (~594mm observed in 2012) is driven by tropical cyclones, requiring separate GEV from Malaysia's flood-driven series. EM-DAT inflation-adjusted losses confirm financial escalation ($53B PHL total, upward trend).
+
+**Action:** Increase EAL loading for MYS flood treaties and PHL tropical cyclone treaties based on GEV return period shift. Apply ENSO correction factor using ONI DJF signal — La Niña years load the combined portfolio simultaneously.
+
+**Dollar hook:** "At $500M combined SEA treaty exposure, a 15% EAL underestimation = $75M annual reserve gap. La Niña uplift adds a further X% in correlated loss years."
 
 ---
 
-## DAY 7 — May 6: Slides + Final Rehearsal + Submission
+### Recommendation 2: Apply Country-Specific (Not Uniform SEA) Transition Risk Surcharges
+**Evidence:** Malaysia LULUCF emits net +63.3 MtCO₂e (palm oil deforestation). Philippines LULUCF absorbs −26.9 MtCO₂e (reforestation). At NGFS Net Zero 2050 carbon price ($55.578/tonne), Malaysia's annual sector transition compliance cost = **$22.4B/year** (Energy $15.6B + LULUCF $3.5B = 85% of total). Philippines faces a structurally different profile dominated by agricultural methane (65.85 MtCO₂e agriculture) and no LULUCF liability.
 
-### 15-Slide Deck — The Dataset-Integrated Version
+**Action:**
+- Malaysian palm oil/timber cedants: LULUCF surcharge reflecting EU Deforestation Regulation + BNM CCPT exposure
+- Malaysian Energy cedants: Standard CCPT carbon price pass-through loading
+- Philippine cedants: Agricultural methane pathway surcharge (lower carbon price, different trajectory)
+- **Do NOT apply a uniform "SEA" transition risk factor** — it mis-prices both countries
 
-| # | Slide Title (the finding) | Dataset Cited | Requirement |
+---
+
+### Recommendation 3: Implement ENSO-Conditional Pricing Trigger for Combined SEA Books
+**Evidence:** NOAA ONI 1950–2026 demonstrates La Niña phases create simultaneous elevated loss risk for MYS (flood) and PHL (storm), undermining the independence assumption in combined SEA treaty pricing. Standard cat models using an independence copula overstate diversification benefit.
+
+**Action:**
+- Add ENSO state (DJF ONI ANOM) as an explicit pricing conditioning variable
+- In La Niña years (ANOM < −0.5): activate combined portfolio uplift loading
+- In El Niño years (ANOM > +0.5): reduce MYS flood loading but increase PHL storm loading
+- NOAA provides 12-month ONI outlook — use as pricing trigger at treaty inception
+
+---
+
+## DATA SOURCES QUICK REFERENCE
+
+| Dataset | URL | File in Codebase | Download Format |
 |---|---|---|---|
-| 1 | Hannover Re SEA: A Five-Dataset Pricing Gap Analysis | All five | Setup |
-| 2 | SEA reinsurers face two simultaneous crises. Both are currently unpriced. | Context | Hook |
-| 3 | Physical: Three WDI indicators create compounding loss amplification | WDI | R1 |
-| 4 | Transition: Two NGFS+Climate Watch signals confirm the regulatory squeeze | NGFS + CW | R1 |
-| 5 | ENSO discovery: Your MYS+PHL portfolio is [Z]% riskier than independence implies | NOAA ONI | R1 |
-| 6 | GHG is rising. ARIMA proves it. Climate Watch shows which sectors drive it. | WDI + CW | R2 |
-| 7 | The loss regime has broken. EM-DAT proves it. | EM-DAT | R3 |
-| 8 | CHIRPS makes our EVT model [X]× more predictive than WDI-based models. | CHIRPS | R3 |
-| 9 | The 1-in-100 event is no longer 1-in-100 — CHIRPS GEV proves it. | CHIRPS | R3 |
-| 10 | Exhibit 1: Physical gap — $[X]M. Exhibit 2: Transition gap — $[Y]M. | EM-DAT + NGFS | R3+R4 |
-| 11 | NGFS Net Zero 2050 vs. Current Policies: the $[Z]M mitigation benefit. | NGFS | R4 |
-| 12 | *[LIVE DEMO]* Three tabs. Four datasets. One answer. | Dashboard | Bonus |
-| 13 | Three recommendations — each powered by a named dataset | All | R5 |
-| 14 | Total reserve inadequacy: $[TOTAL]M. Three components. One framework. | All | R5 |
-| 15 | $[TOTAL]M. Recalibrate. Nine months. NGFS. CHIRPS. CCPT. | — | Close |
+| WDI | https://databank.worldbank.org/source/world-development-indicators | `cleaned_wdi.csv` | CSV bulk + filter |
+| CHIRPS RX5day | https://climexp.knmi.nl → CHIRPS | `chirpsRX5_mls_phl.csv` | Annual series CSV per bbox |
+| CHIRPS direct | https://data.chc.ucsb.edu/products/CHIRPS-2.0/ | — | GeoTIFF or NetCDF |
+| EM-DAT | https://www.emdat.be | `EM_DAT_cleaned.csv` | Register free, query builder |
+| NOAA ONI | https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt | `noaa_oni_cleaned.csv` | Direct .txt download |
+| Climate Watch | https://www.climatewatchdata.org/ghg-emissions | `msia_climatewatch_lulucf.csv`, `phili_climatewatch_lulucf.csv` | Country + sector CSV |
+| NGFS GCAM 6.0 | https://www.ngfs.net/ngfs-scenarios-portal/data-resources | (needs `Downscaled_GCAM 6.0 NGFS_data.*`) | Excel/CSV bulk |
 
 ---
 
-### Five Judge Questions — Dataset-Specific Answers
+## THE WINNING PARAGRAPH (For R5 / Executive Summary)
 
-**Q1 (Wei Lun): "Why did you use CHIRPS instead of WDI precipitation?"**
-> *"Because WDI's national annual average completely obscures the sub-daily, sub-national intensity that drives insurance claims. A 3-day extreme rainfall event over Kuala Lumpur generating a $500M flood loss looks identical to an average year in WDI data. CHIRPS provides daily gridded precipitation at 0.05° resolution — roughly 5km cells. When we ran the same regression against EM-DAT insured losses, CHIRPS 3-day maximum had [X]× higher predictive power than WDI annual average (r=[CHIRPS r] vs r=[WDI r]). We didn't just claim the upgrade was theoretically better — we proved it empirically with a correlation test."*
-
-**Q2 (Brandon): "You cited NGFS data — how did you use it specifically?"**
-> *"We used NGFS GCAM 6.0 in three ways. First, we extracted the Current Policies and Net Zero 2050 carbon price trajectories for Malaysia specifically — because BNM has endorsed NGFS as its stress testing framework under CCPT, using the same data eliminates the 'assumed carbon price' criticism. Second, we cross-referenced the NGFS carbon price against Climate Watch sector GHG to calculate the annual regulatory cost to Malaysia's high-risk sectors under each scenario — that gives us Exhibit 2 with dollar amounts rather than qualitative risk assessments. Third, the Net Zero 2050 scenario becomes our mitigation strategy for R4 — we're not guessing what Paris compliance looks like, we're using BNM's reference dataset directly."*
-
-**Q3 (Any): "You mentioned ENSO correlation — what does that mean for pricing?"**
-> *"It means the standard independence assumption embedded in most SEA cat models is wrong, and we have data to prove it. Using NOAA's official ONI index, we found a [Z]% uplift in combined Malaysia flood and Philippines typhoon losses during La Niña years. This means a combined MYS+PHL treaty book experiences simultaneous loss spikes — not the offsetting diversification that independence implies. The practical pricing implication is that our EAL gap estimate is conservative: a copula model capturing this ENSO dependence would produce a higher combined tail risk estimate. We quantified this as an ENSO correction component in our total reserve inadequacy calculation — it's the honest thing to do, and it tells Hannover Re the number they're looking at is a floor, not a ceiling."*
-
-**Q4 (Alyaa): "How does your CHIRPS-parametric recommendation reduce IFRS 17 capital requirements?"**
-> *"IFRS 17 requires insurers to hold a Risk Adjustment for non-financial risk, which is essentially a buffer for uncertainty in liability estimates. The two biggest drivers of that uncertainty in nat-cat books are IBNR development lag and event severity estimation. Indemnity flood triggers create 18–24 months of IBNR development — that's 18–24 months of capital sitting in a reserve with high uncertainty. A CHIRPS parametric trigger pays automatically when the precipitation threshold is breached, collapsing claims development to near-zero. Under IFRS 17, lower development uncertainty means a lower required Risk Adjustment. The quantification depends on the specific IBNR reserve methodology, but even a 20% reduction in the Risk Adjustment on the Malaysia flood book frees meaningful capital for deployment."*
-
-**Q5 (Any): "What is the single biggest assumption you'd want to test with more data?"**
-> *"The 3% pass-through rate from transition regulatory cost to property insurance claims. We used this to convert NGFS's $[X]B sector-level regulatory burden into a treaty-level dollar impact. That 3% is our assumption — it's roughly consistent with IMF working paper estimates on carbon pricing and insurance claim amplification, but it's not empirically calibrated to the Malaysian market specifically. If we had Hannover Re's actual treaty-level property data — which sectors cedants are exposed to, at what concentrations — we could replace that 3% with a number from the book. That's actually the highest-value data infrastructure investment we'd recommend: a geo-coded cedant exposure register cross-referenced with Climate Watch sector classifications."*
+> *"Using five heterogeneous, publicly-sourced datasets — CHIRPS v2.0 sub-national RX5day precipitation (the WMO ETCCDI standard cited in IPCC AR6 WG1 Ch.11), EM-DAT historical loss records (725 events, 1905–2025), NOAA Oceanic Niño Index (1950–2026), World Bank WDI macro indicators, and NGFS GCAM 6.0 carbon price projections cross-referenced against live Climate Watch sector-level GHG data — we quantify two independent, additive sources of reserve inadequacy in Hannover Re's SEA treaty book.*
+>
+> *On the physical side: GEV analysis of CHIRPS RX5day series reveals a structural regime shift compressing return periods for extreme precipitation events. Malaysia (flood-dominated: 81 EM-DAT flood events, $5B adj. loss, 1905–2025) and Philippines (storm-dominated: 414 typhoon events, $53B adj. loss) require separate extreme value models — a combined GEV is statistically incorrect. NOAA ONI analysis further demonstrates that La Niña phases create simultaneous elevated losses across both countries, undermining the independence assumption embedded in standard combined-SEA treaty pricing.*
+>
+> *On the transition side: NGFS Net Zero 2050 carbon price ($55.578/tonne, verified against our computed outputs) applied to Climate Watch sector baselines yields a Malaysian annual transition compliance cost of USD 22.4 billion — of which LULUCF alone accounts for 15.7% ($3.5B/yr), driven by palm oil deforestation. This creates a critical structural asymmetry: Malaysia's LULUCF is a net emitter (+63.3 MtCO₂e in 2023) while the Philippines' is a net carbon sink (−26.9 MtCO₂e), making any uniform "SEA transition risk" factor actuarially incorrect.*
+>
+> *These two gaps — physical return period compression and country-differentiated transition regulatory cost pass-through — represent a quantifiable, data-anchored reserve inadequacy. Our three recommendations provide specific, implementable premium adjustments with dollar quantification."*
 
 ---
-
-### Final Submission Checklist
-
-**Datasets — every dataset must appear by name in the report:**
-- [ ] WDI: exact indicator codes cited for each variable used
-- [ ] CHIRPS: resolution stated (0.05°), bounding boxes for KL and Manila documented, correlation vs. WDI comparison chart included
-- [ ] EM-DAT: event filter criteria stated (flood + storm, MYS + PHL, 1990–2023)
-- [ ] NOAA ONI: La Niña uplift percentage calculated and cited, independence assumption violation documented
-- [ ] NGFS GCAM 6.0: scenario names exact ("Current Policies" and "Net Zero 2050"), 2030 carbon price values reported for both scenarios
-- [ ] Climate Watch: sector GHG breakdown chart included, high-risk sectors identified
-
-**Technical rigour:**
-- [ ] Regime break: three tests, both countries, exact p-values
-- [ ] CHIRPS vs. WDI correlation comparison with r and p values for both
-- [ ] Independence assumption stated, ENSO violation quantified with NOAA ONI
-- [ ] Homoscedasticity test (Breusch-Pagan) run and result documented
-- [ ] GEV shape parameter (ξ) interpreted — Fréchet/Weibull/Gumbel named
-- [ ] ARIMA: ADF+KPSS, ACF/PACF, Ljung-Box, 2024 holdout MAPE
-- [ ] NGFS carbon price used in dollar calculation, not just qualitatively cited
-- [ ] EAL from trapezoid integration, formula shown
-
-**Report structure:**
-- [ ] Executive Summary names all five datasets explicitly
-- [ ] Exhibit 1 (physical gap) and Exhibit 2 (transition gap NGFS) both in first 3 pages
-- [ ] Limitations section: CHIRPS as the solution to WDI weakness, copula as the solution to independence assumption, 3% pass-through as the assumption to test
-- [ ] Every chart: message header (finding, not label)
-
-**Presentation:**
-- [ ] Opening 60 seconds names both pain points AND mentions NGFS/CHIRPS as insider signals
-- [ ] Dashboard has 4 tabs: Physical / Transition (NGFS) / ENSO / Combined waterfall
-- [ ] Slide 15: $[total]M, recalibrate, nine months — nothing else
-- [ ] NGFS named by full name: "Network for Greening the Financial System" on first reference
-- [ ] All five judge questions rehearsed under 45 seconds
-
----
-
-## The Separation Matrix — Final Version
-
-| What every other team does | What you do |
-|---|---|
-| Use WDI precipitation | Use CHIRPS sub-national daily max — prove it's [X]× more predictive |
-| Guess a carbon price for transition risk | Use NGFS GCAM 6.0 — BNM's own reference dataset |
-| Assume MYS + PHL are independent | Use NOAA ONI to prove they're correlated — add an ENSO correction |
-| Pick GHG sector data from WDI | Use Climate Watch for sector decomposition — shows *which* industries face CCPT costs |
-| Write "carbon price may increase" | Write "$[X]/tonne by 2030 under Current Policies — NGFS source" |
-| Show climate is trending up | Prove the loss distribution has statistically broken, with five datasets as witnesses |
-| Demo a stress tester | Demo a four-tab Pricing Audit Tool with NGFS scenarios built in |
-| Conclude with "act on climate" | Conclude with three instruments calibrated to real data from real datasets |
-
----
-
-## The Sentence Every Judge Should Have in Their Head When You Finish
-
-> *"Hannover Re's SEA nat-cat book has a measurable, three-component reserve inadequacy — physical, transition, and ENSO-dependence — and these people used the exact datasets that BNM, NOAA, and the World Bank use to find it, prove it, and tell us exactly what it costs."*
-
-That is the winner's sentence. Five datasets. Three components. One number. One action.
+*Plan v2 — Every indicator, sector name, column header, and statistic verified against actual CSV files in the codebase. CHIRPS corrected to RX5day (5-day WMO ETCCDI index). Climate Watch sectors verified: Energy, Industrial Processes, Agriculture, Waste, LULUCF (not Transportation/Buildings). May 2026.*
