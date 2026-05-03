@@ -1,0 +1,5 @@
+Rank,Sector,GHG_Baseline_MtCO2e,Current_Pol_Price_USD_per_ton,Net_Zero_Price_USD_per_ton,Price_Diff_USD_per_ton,Annual_Transition_Cost_USD_Millions,% of Total
+1,Energy,279.85,0.0,55.578,55.578,15553.503300000002,82.5
+2,Industrial Processes,29.87,0.0,55.578,55.578,1660.1148600000001,8.8
+3,Waste,19.49,0.0,55.578,55.578,1083.21522,5.7
+4,Agriculture,10.11,0.0,55.578,55.578,561.89358,3.0
