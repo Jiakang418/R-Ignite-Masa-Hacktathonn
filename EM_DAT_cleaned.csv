@@ -1,0 +1,726 @@
+country,location,disaster_type,disaster_subtype,start_year,start_month,total_deaths,no_affected,total_affected,total_damage_usd,total_damage_adjusted_usd
+Malaysia,Peninsular East coast,Flood,Flood (General),1965,12,6,300000,300000,1000000.0,9956000.0
+Malaysia,"Kelantan, Trengganu",Flood,Flood (General),1967,1,50,125000,140000,25600000.0,240732000.0
+Malaysia,"Johore, S. Lowlands",Storm,Storm (General),1968,1,21,10000,10000,,
+Malaysia,"West Malaysia, Capital",Flood,Flood (General),1970,12,61,243000,243000,37000000.0,298944000.0
+Malaysia,Johore Bahru,Flood,Flood (General),1978,12,,3000,3000,,
+Malaysia,East coast,Flood,Flood (General),1983,12,10,15000,15000,,
+Malaysia,East Coast States of Trengganu and Kelantan,Flood,Flood (General),1986,11,11,25000,25000,11500000.0,32912000.0
+Malaysia,East coast states,Flood,Flood (General),1987,12,3,2576,2576,,
+Malaysia,Kelantan + East cost states,Flood,Riverine flood,1988,11,27,60000,60000,,
+Malaysia,"Kelantan, Trengganu, Pahang, Perak, Johore and Sabah states",Flood,Riverine flood,1993,12,30,20000,25000,,
+Malaysia,Palau Gaya (Borneo),Wildfire,Forest fire,1995,5,,,3000,,
+Malaysia,Genting Highlands (Near Kuala Lumpur),Mass movement (wet),Landslide (wet),1995,6,20,,23,,
+Malaysia,"Maradu, Long Lama (Northern Sarawak",Flood,Riverine flood,1996,2,,418,418,,
+Malaysia,Pos Dipang (Perak State),Mass movement (wet),Mudslide,1996,8,50,,262,,
+Malaysia,"Keningau, Sulaman, Tamparuli, Kiulu, Kota Kinabalu (Sabah state)",Storm,Tropical cyclone,1996,12,270,1150,4176,52000000.0,103996000.0
+Malaysia,,Wildfire,Forest fire,1997,8,,,,300000000.0,586274000.0
+Malaysia,"Kedah, Perlis, Pennang states",Storm,Tropical cyclone,1997,8,2,2115,2115,1000000.0,1954000.0
+Malaysia,Sabah,Drought,Drought,1998,3,,5000,5000,,
+Malaysia,,Wildfire,Forest fire,1998,3,,,,2000000.0,3849000.0
+Malaysia,Penang & Kedah,Flood,Flood (General),1998,11,,2500,2500,,
+Malaysia,"Pekan (Pahang State), Johor, Terengganu states",Flood,Riverine flood,1999,1,1,2000,2000,,
+Malaysia,Pulau Pinang province,Storm,Storm (General),2000,9,,500,500,,
+Malaysia,"Kuala Krai, Pasir Puteh, Kota Bharu, Pasir Mas, Tumpat districts (Kelantan province), Kubang Pasu, Kota Setar, Padang Terap districts (Kedah province), Besut district (Terengganu province)",Flood,Flash flood,2000,11,12,8000,8000,1000000.0,1822000.0
+Malaysia,"Teluk Ipil area (Seberang Perai Selatan district, Pulau Pinang province)",Flood,Flash flood,2001,8,,10000,10000,,
+Malaysia,"Inanam borough (Kota Kinabalu district, Sabah province), Beaufort, Papar, Penampang, Tuaran districts (Sabah province)",Flood,Flood (General),2001,10,,5000,5000,,
+Malaysia,Kuala Lumpur province,Flood,Flood (General),2001,10,,200,200,,
+Malaysia,"Pahang, Kelantan, Terengganu provinces",Flood,Riverine flood,2001,12,11,18000,18000,,
+Malaysia,Simunjan district (Sarawak province),Mass movement (wet),Landslide (wet),2002,1,10,,,,
+Malaysia,"Klang Valley area (Sepang district, Selangor province), Setapak Jaya, Jalan Pinang, Jalan Semarak, Jalan Tun Razak, Pudu boroughs (Kuala Lumpur district, Kuala Lumpu province), Petaling district (Selangor province)",Storm,Lightning/Thunderstorms,2002,3,2,155,155,,
+Malaysia,"Kedah, Pahang, Perak provinces",Flood,Riverine flood,2003,10,3,13800,13800,,
+Malaysia,"Kuala Terengganu, Kemaman, Marang, Dungun districts (Terengganu province), Kota Bharu district (Kelantan province), Kuantan district (Pahang province)",Flood,Flash flood,2003,11,5,3000,3000,,
+Malaysia,"Kampung Pengkalan, Buang Sayang, Muhibbah Hujung, Muhibbah Baru, Sinar Baru, Lokan, Sri Tanjung areas (Kinabatangan district, Sabah province), Beluran area (Labuk & Sugut district, Sabah province), Kota Marud district (Sabah province)",Flood,Riverine flood,2003,12,,2000,2000,,
+Malaysia,"Kuching, Bau, Mukah, Sibu, Samarahan districts (Sarawak province), Johor Baru, Pontian, Kota Tinggi districts (Johor province)",Flood,Riverine flood,2004,1,3,6900,6900,,
+Malaysia,Johor province,Flood,Riverine flood,2004,3,,9138,9138,,
+Malaysia,Kedah province,Storm,Storm (General),2004,7,,1000,1000,,
+Malaysia,Kuala Lumpur province,Storm,Storm (General),2004,11,1,40000,40000,,
+Malaysia,"Bera area (Temerluh district, Pahang province), Kuantan, Pekan districts (Pahang province), Kota Bharu, Gua Musang, Kuala Krai, Tanah Merah, Pasir Mas, Machang, Tumpat districts (Kelantan province), Dungun, Kemaman, Hulu Terengganu, Besut, Setiu districts (Terengganu province),",Flood,Riverine flood,2004,12,13,,15000,10000000.0,16608000.0
+Malaysia,"Telipok village (Tuaran district, Sabah province), Menggatal area (Kota Kinabalu district, Sabah province)",Flood,Flash flood,2005,7,4,600,600,,
+Malaysia,"Port Klang city (Kelang district, Selangor province), Kuala Selangor district (Selangor province)",Wildfire,Forest fire,2005,8,,,,,
+Malaysia,"Kelantan, Terengganu, Kedah, Perlis, Perak provinces",Flood,Flash flood,2005,11,9,30000,30000,,
+Malaysia,Johor province,Flood,Riverine flood,2006,1,,1112,1112,,
+Malaysia,"Terengganu, Pahang, Kelantan provinces",Flood,Riverine flood,2006,2,,4906,4906,,
+Malaysia,"Kampung Manjoi borough (Ipoh city, Kinta district, Perak province)",Flood,Riverine flood,2006,4,,500,500,,
+Malaysia,"Melaka, Negeri Sembilan, Pahang, Johor provinces",Flood,Flash flood,2006,12,6,100000,100000,22000000.0,34233000.0
+Malaysia,"Johor, Pahang provinces",Flood,Riverine flood,2007,1,17,137533,137533,605000000.0,915306000.0
+Malaysia,"Johor, Kelantan, Pahang, Terengganu provinces",Flood,Riverine flood,2007,12,29,,29000,363000000.0,549184000.0
+Malaysia,"Cherating area (Kuantan district, Pahang province), Kelantan, Terengganu provinces",Flood,Riverine flood,2008,12,,2000,2000,,
+Malaysia,"Pahang, Kelantan, Terengganu, Sarawak provinces",Flood,Flash flood,2008,12,,6000,6000,,
+Malaysia,"Hulu Terengganu, Besut, Setiu, Dungun, Marang, Kemaman districts (Terengganu province)",Flood,Riverine flood,2009,11,,9082,9082,,
+Malaysia,"Kedah, Terengganu, Kelantan, Perak provinces",Flood,Riverine flood,2009,11,,1793,1793,,
+Malaysia,Johor province,Flood,Riverine flood,2011,1,2,20000,20000,,
+Malaysia,Ulu Langat district (Selangor province),Mass movement (wet),Landslide (wet),2011,5,16,,6,,
+Malaysia,"Kuala Lumpur, Pahang, Terengganu, Johor, Kelantan provinces",Flood,Riverine flood,2013,12,4,75000,75000,2000000.0,2693000.0
+Malaysia,"Kedah, Perak, Perlis, Pulau Pinang, Selangor provinces",Drought,Drought,2014,3,,2200000,2200000,,
+Malaysia,"Sabah, Kelantan, Pahang, Terengganu, Perak, Johor, Selangor, Perlis provinces",Flood,Riverine flood,2014,12,17,230000,230000,284000000.0,376316000.0
+Malaysia,Sarawak province,Flood,Riverine flood,2015,1,1,3000,3000,,
+Malaysia,"Johor, Melaka, Negri Sembilan, Sarawak province",Flood,Flood (General),2016,2,,6000,6000,,
+Malaysia,"Yan, Baling districts (Kedah province), Penang city (Timur Laut district, Pulau Pinang province)",Flood,Flood (General),2016,7,,441,441,,
+Malaysia,Terengganu province,Flood,Flood (General),2016,11,,400,400,,
+Malaysia,"Bachok, Gua Musang, Jeli, Kota Bahru, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai districts (Kelantan state); Besut, Setiu, Hulu Terengganu, Marang, Dungun, Kemaman (Terengganu state); Kuala Kangsar (Perak state); Pahang; Johor; Sabah; Selangor",Flood,Flood (General),2016,12,,25000,25000,132000000.0,172524000.0
+Malaysia,"7 states in Peninsular Malaysia (Kelantan, Terengganu, Johor, Pahang, Malacca, Selangor, Perak, Sabah)",Flood,Flood (General),2017,1,,5481,5481,,
+Malaysia,"Penang, Kedah, Perak",Flood,Flood (General),2017,11,7,3500,3500,,
+Malaysia,"Kelantan (Kota Bharu, Pasir Mas, Tumpat, Bachok, Tanah Merah, Pasir Puteh, Kuala Krai, Machang, Jeli) and Terengganu (Besut, Kuala Terengganu, Marang, Dungun, Setiu, Kuala Nerus)",Flood,Riverine flood,2017,11,2,13000,13000,,
+Malaysia,"Sarawak (Miri and Limbang), Sabah (Penampang, Kota Belud)",Storm,Storm (General),2017,12,,426,426,,
+Malaysia,"Kuantan, Rompin, Pekan, Jerantut, Lipis, Bera districts (Pahang state), Johor, Terengganu states",Flood,Flood (General),2018,1,2,12000,12000,,
+Malaysia,"Samarahan, Bintulu, Serian, Mukah, Limbang, Sarikei (Sarawak State)",Flood,Flash flood,2018,2,,4900,4900,,
+Malaysia,"Belaga district (Kapit division, Northern and central Sarawak State)",Flood,Flood (General),2019,6,,1000,1000,,
+Malaysia,Peninsular malaysia,Flood,Flood (General),2019,10,,2412,2412,,
+Malaysia,"Johor state; Kota Bharu, Pasir Mas, Tumpat, Bachok, Tanah Merah, Pasir Puteh, Kuala Krai, Machang, Jeli districts (Kelantan state); Pahang state; Marang, Dungun, Kemaman, Hulu Terengganu, Setiu, Besut, Kuala Nerus districts (Terengganu state)",Flood,Flood (General),2019,11,2,15000,15000,,
+Malaysia,"Terengganu, Kelantan",Flood,Flood (General),2019,12,,4065,4065,,
+Malaysia,Sarawak State (north-west Borneo Island),Flood,Flood (General),2020,4,,2000,2000,,
+Malaysia,"Pontian, Batu Pahat, Muar, Kluang,Tangkak Districts (Johor State)",Flood,Flood (General),2020,6,,1210,1210,,
+Malaysia,"Tenom, Kota Belud, Papar, Beaufort, Penampang Districts (Sabah State); Baram, Marudi, Long Lama, Lawas, Limbang districts (Sarawak State)",Flood,Flood (General),2020,6,,9000,9000,6800000.0,8242000.0
+Malaysia,"Kota Kinabalu, Kota Belud, Tuaran, Telipok Districts (Sabah State)",Flood,Flood (General),2020,10,,400,400,,
+Malaysia,"Terengganu, Kelantan, Pahang",Flood,Riverine flood,2020,12,,9273,9273,,
+Malaysia,"Johor, Pahang, Terengganu, Sabah, Kelantan, Selangor, Perak states",Flood,Flood (General),2021,1,8,23776,23776,,
+Malaysia,"Beaufort, Kota Marudu, Kudat, Pitas (Sabah State, Borneo's East Malaysia); Serian, Samarahan, Miri, Kuching (Sarawak state)",Flood,Flood (General),2021,1,,6000,6000,,
+Malaysia,"Serian, Samarahan, Miri, Kuching districts (Sarawak State)",Flood,Flood (General),2021,1,6,3000,3000,,
+Malaysia,Beaufort and Tenom districts (Sabah state); Sarawak state; Melaka state,Flood,Flood (General),2021,5,,5782,5782,,
+Malaysia,"Yan, Kuala Muda and Bandar Baharu districts (Kedah state)",Flood,Flash flood,2021,8,7,4825,4828,,
+Malaysia,"Kota Kinabalu, Penampang and Putatan Districts (Sabah state) ; Johor, Sarawak states",Flood,Flood (General),2021,9,2,255,255,,
+Malaysia,"Kedah, Malacca, Negeri Sembilan, Selangor States, Kuala Lumpur Federal Territory",Flood,Flash flood,2021,10,,1000,1000,,
+Malaysia,"Pahang, Selangor, Terengganu, Kelantan, Johor, Malacca, Negeri Sembilan, Sabah, Perak and the Federal Territory of Kuala Lumpur",Flood,Flash flood,2021,12,56,120000,120000,1460000000.0,1690174000.0
+Malaysia,"Kelantan, Pahang, and Terengganu",Flood,Flood (General),2022,2,6,26000,26000,240000.0,257000.0
+Malaysia,"Kuala Lumpur, Melaka, Negeri Sembilan; Gombak, Hulu Langat, Kuala Langat, Petaling and Sepang (Selangor)",Flood,Flood (General),2022,3,,1290,1290,,
+Malaysia,Baling District (eastern Kedah State),Flood,Flood (General),2022,7,3,210,228,,
+Malaysia,"Kelantan, Pahang, Pulau Pinang, Perak, Selangor, Melaka, and Johor in the Malay Peninsula and Sabah State on Borneo Island",Flood,Flood (General),2022,11,,3107,3107,,
+Malaysia,Batang Kali (near Kuala Lumpur),Mass movement (wet),Landslide (wet),2022,12,33,94,94,,
+Malaysia,"Kelantan, Terengganu, Pahang, Johor, Perak states",Flood,Flood (General),2022,12,8,60000,60000,,
+Malaysia,"Johor, Pahang, and Sabah States",Flood,Flood (General),2023,1,,11000,11000,,
+Malaysia,"Johor, Pahang, Malacca, and Negeri Sembilan",Flood,Flood (General),2023,2,4,46630,46630,,
+Malaysia,"Selangor, Perak, and Pahang states",Flood,Flood (General),2023,11,,881,881,,
+Malaysia,"Johor, Kelantan, Pahang, Sabah, and Terengganu states",Flood,Flood (General),2023,12,2,25676,25676,,
+Malaysia,Sabah and Sarawak states,Flood,Flood (General),2025,1,5,12500,12500,,
+Malaysia,Pahang and Negeri Sembilan states,Flood,Flood (General),2025,2,,251,251,,
+Malaysia,"Tenom, Beaufort, Membakut, and Soo (Sabah, northern Borneo Island)",Flood,Flood (General),2025,3,,4555,4555,,
+Malaysia,"Johor Bahru, Kulai, Pontian, Kota Tinggi, Kluang, Batu Pahat, and Iskandar Puteri (Johor state); Sabah and Sarawak states",Flood,Flood (General),2025,3,,11071,11071,,
+Malaysia,Sarawak and Sabah states (Borneo Island),Flood,Flash flood,2025,9,13,3134,3134,,
+Malaysia,"Sabah, Sarawak Kelantan, Perlis, Perak, Selangor, Kedah, Penang, Terengganu, and Pahang states",Flood,Flash flood,2025,11,3,18700,18700,,
+Malaysia,Terengganu and Pahang,Flood,Flood (General),2025,12,,2103,2103,,
+Philippines,Central,Storm,Tropical cyclone,1905,9,240,,,,
+Philippines,Cebu,Storm,Tropical cyclone,1912,10,,,,10000000.0,325036000.0
+Philippines,West Luzon,Storm,Tropical cyclone,1931,8,,,,,
+Philippines,Sulu,Storm,Tropical cyclone,1932,4,147,,2500,,
+Philippines,"Manila, Bulcan",Storm,Tropical cyclone,1934,10,,,,,
+Philippines,"Samar, Tayabas",Storm,Tropical cyclone,1934,11,85,,,,
+Philippines,Luzon,Storm,Tropical cyclone,1936,10,517,,,,
+Philippines,"Leyte, Mindoro",Storm,Tropical cyclone,1937,11,231,,,,
+Philippines,"Samar, South Luzon",Storm,Tropical cyclone,1938,12,305,,,,
+Philippines,"Cantanduanes, Bondoc",Storm,Tropical cyclone,1940,12,73,,,,
+Philippines,,Storm,Tropical cyclone,1946,11,260,,,,
+Philippines,"Cebu City, Negros, Panay",Storm,Tropical cyclone,1949,10,1000,,,,
+Philippines,"Samar, South Luzon",Storm,Tropical cyclone,1951,4,156,,,,
+Philippines,"Visayas, Bicol",Storm,Tropical cyclone,1951,11,87,,,,
+Philippines,"Yap, Palau",Storm,Tropical cyclone,1951,12,773,50000,50000,30000000.0,362005000.0
+Philippines,Central,Storm,Tropical cyclone,1952,6,19,,103,,
+Philippines,Visayas and southern Luzon,Storm,Tropical cyclone,1952,10,995,,500349,60000000.0,707678000.0
+Philippines,,Storm,Storm (General),1955,1,51,,,,
+Philippines,,Storm,Storm (General),1955,11,93,,,,
+Philippines,,Storm,Storm (General),1956,7,50,,,,
+Philippines,,Storm,Tropical cyclone,1956,12,79,,,,
+Philippines,,Storm,Tropical cyclone,1957,7,89,,,,
+Philippines,,Storm,Tropical cyclone,1959,8,,,,,
+Philippines,,Storm,Tropical cyclone,1959,12,23,,,1500000.0,16142000.0
+Philippines,,Mass movement (wet),Landslide (wet),1960,1,40,,,,
+Philippines,South Wet of Manilla,Storm,Tropical cyclone,1960,4,56,,,2000000.0,21213000.0
+Philippines,Luzon,Storm,Tropical cyclone,1960,5,234,,20000,2000000.0,21213000.0
+Philippines,South Luzon,Storm,Tropical cyclone,1960,6,100,50000,50000,,
+Philippines,,Storm,Storm (General),1960,8,33,,,,
+Philippines,"Central, South Luzon",Storm,Tropical cyclone,1960,10,150,375000,375000,,
+Philippines,Luzon,Storm,Tropical cyclone,1960,10,58,,,30000000.0,318197000.0
+Philippines,,Storm,Tropical cyclone,1962,7,41,,,,
+Philippines,,Storm,Tropical cyclone,1962,8,156,,,,
+Philippines,North Luzon,Storm,Tropical cyclone,1963,8,1,,2000,,
+Philippines,"South, Central Luzon",Storm,Tropical cyclone,1964,6,56,924125,924288,8000000.0,80908000.0
+Philippines,"North Mindanao, South Luzon",Storm,Tropical cyclone,1964,11,580,300000,301258,35000000.0,353975000.0
+Philippines,"Cotabato, Luzon",Storm,Tropical cyclone,1965,7,37,,,,
+Philippines,"Visayas, South Luzon",Storm,Tropical cyclone,1966,12,18,196000,286000,1000000.0,9664000.0
+Philippines,"Samar Island, Visayas, Bicol, Southern Tagalog, Central Luzon",Storm,Tropical cyclone,1967,11,107,137000,137000,26500000.0,249196000.0
+Philippines,Mindanao,Flood,Flood (General),1968,1,29,,,,
+Philippines,Luzon,Storm,Tropical cyclone,1968,8,,,,,
+Philippines,"South Visayas, Samar, Luzon",Storm,Tropical cyclone,1968,11,50,187330,226643,9600000.0,86576000.0
+Philippines,North,Storm,Tropical cyclone,1969,7,11,,,,
+Philippines,"(1) Bulacan, Pampg (Manila) - (2) Aurora (Quezon province)",Storm,Tropical cyclone,1970,8,137,78000,145200,2353000.0,19011000.0
+Philippines,,Storm,Tropical cyclone,1970,9,42,,,,
+Philippines,,Storm,Tropical cyclone,1970,9,,1326,1326,598000.0,4832000.0
+Philippines,,Storm,Tropical cyclone,1970,9,575,,1593,12110000.0,97843000.0
+Philippines,,Storm,Tropical cyclone,1970,9,631,,76,47397000.0,382947000.0
+Philippines,"(1) Bicol area, (2) Mindanao",Storm,Tropical cyclone,1970,10,1551,1214000,1214985,85500000.0,690802000.0
+Philippines,,Storm,Tropical cyclone,1970,11,80,17044,17292,12785000.0,103297000.0
+Philippines,Manila (Quezon province),Storm,Tropical cyclone,1970,11,786,430000,432075,97656000.0,789018000.0
+Philippines,"Visayas, Palawan",Storm,Tropical cyclone,1971,4,95,,,700000.0,5423000.0
+Philippines,Central,Storm,Tropical cyclone,1971,5,57,,32503,590000.0,4571000.0
+Philippines,Central,Storm,Tropical cyclone,1971,10,37,,12000,,
+Philippines,North Luzon,Storm,Tropical cyclone,1971,10,57,,2008,,
+Philippines,"Mindanao, Visayas, Palawan",Storm,Tropical cyclone,1971,10,6,,,,
+Philippines,Visayan Islands,Storm,Tropical cyclone,1972,1,204,,28,23000000.0,172535000.0
+Philippines,South Luzon,Storm,Tropical cyclone,1972,6,131,385000,385000,15000000.0,112523000.0
+Philippines,"Central, NorthLuzon",Flood,Flood (General),1972,7,653,2400000,2770647,220000000.0,1650336000.0
+Philippines,"South, Misamis province",Storm,Tropical cyclone,1972,12,100,80000,107650,10000000.0,75015000.0
+Philippines,Cotabato,Flood,Flood (General),1973,9,3,5000,5000,493000.0,3483000.0
+Philippines,Northern Luzon,Storm,Tropical cyclone,1973,10,24,,1000000,2000000.0,14130000.0
+Philippines,Central Luzon,Storm,Tropical cyclone,1973,10,50,,45000,5000000.0,35325000.0
+Philippines,"(1) Central, (2) Capiz province",Storm,Tropical cyclone,1973,11,270,3400000,3400024,,
+Philippines,Agusan Del Norte,Flood,Flood (General),1974,2,,1823,1823,,
+Philippines,Luzon,Storm,Tropical cyclone,1974,6,106,1367,1367,1000000.0,6362000.0
+Philippines,Luzon,Storm,Tropical cyclone,1974,7,21,2400,2556,2000000.0,12724000.0
+Philippines,Central Luzon,Flood,Flood (General),1974,8,94,1200000,1200000,17800000.0,113240000.0
+Philippines,North Luzon,Storm,Tropical cyclone,1974,10,29,31562,35602,9200000.0,58528000.0
+Philippines,Luzon,Storm,Tropical cyclone,1974,10,13,7776,7785,11600000.0,73797000.0
+Philippines,Luzon,Storm,Tropical cyclone,1974,10,23,55575,55625,21000000.0,133597000.0
+Philippines,North Luzon,Storm,Tropical cyclone,1974,11,3,22835,24138,3200000.0,20358000.0
+Philippines,South Luzon,Storm,Tropical cyclone,1974,11,11,,5000,7300000.0,46441000.0
+Philippines,Mindanao,Storm,Tropical cyclone,1975,1,39,4518,5224,2161000.0,12596000.0
+Philippines,Davao Del Norte,Flood,Flood (General),1975,3,,99,99,,
+Philippines,Misamis Oriental,Flood,Flash flood,1976,1,8,1565,1565,,
+Philippines,"Luzon, Manila",Storm,Tropical cyclone,1976,5,274,2700000,2700000,85000000.0,468535000.0
+Philippines,,Storm,Tropical cyclone,1976,6,3,2702,2812,84100000.0,463574000.0
+Philippines,"Capz, Aklan",Flood,Flash flood,1976,11,10,14313,14313,1553000.0,8560000.0
+Philippines,,Storm,Tropical cyclone,1976,12,110,1741,1758,9326000.0,51407000.0
+Philippines,Mindanao,Flood,Flood (General),1977,2,14,1499,1499,1913000.0,9901000.0
+Philippines,,Storm,Tropical cyclone,1977,7,4,860,863,,
+Philippines,"Central, North",Storm,Storm (General),1977,7,,2500,2500,,
+Philippines,Manila,Flood,Flood (General),1977,8,10,4300,4300,,
+Philippines,Mindanao,Flood,Flood (General),1977,8,,1500,1500,,
+Philippines,,Storm,Tropical cyclone,1977,8,,921,921,25000.0,129000.0
+Philippines,Northern,Storm,Tropical cyclone,1977,9,60,5000,5000,800000.0,4141000.0
+Philippines,North Luzon,Storm,Tropical cyclone,1977,11,40,133141,148935,3600000.0,18632000.0
+Philippines,Santos City,Drought,Drought,1978,2,,3665,3665,,
+Philippines,Jipapad (Eastern Samar),Flood,Flood (General),1978,2,,1500,1500,,
+Philippines,,Storm,Tropical cyclone,1978,4,111,370000,373547,33254000.0,159909000.0
+Philippines,Central,Storm,Tropical cyclone,1978,4,,2500,2500,,
+Philippines,Northern,Flood,Flood (General),1978,8,53,1000,1000,,
+Philippines,Luzon (including Manila),Storm,Tropical cyclone,1978,8,49,42402,42414,3515000.0,16903000.0
+Philippines,Subic,Mass movement (wet),Landslide (wet),1978,8,22,,7,,
+Philippines,,Storm,Tropical cyclone,1978,8,47,150331,150943,11809000.0,56786000.0
+Philippines,,Storm,Tropical cyclone,1978,9,32,18735,23901,13989000.0,67269000.0
+Philippines,,Storm,Tropical cyclone,1978,10,24,6182,6184,11893000.0,57190000.0
+Philippines,Manila,Storm,Tropical cyclone,1978,10,59,50000,50000,,
+Philippines,"Central Luzon, Manilla",Storm,Tropical cyclone,1978,10,340,1500000,1500749,115000000.0,553003000.0
+Philippines,,Storm,Tropical cyclone,1978,12,,381,381,624000.0,3001000.0
+Philippines,Leyte,Storm,Tropical cyclone,1979,4,18,480000,524549,10000000.0,43223000.0
+Philippines,Cotabato,Flood,Flash flood,1979,7,,16000,16000,6983000.0,30182000.0
+Philippines,,Storm,Tropical cyclone,1979,8,24,34098,41138,6100000.0,26366000.0
+Philippines,Northern,Storm,Tropical cyclone,1979,8,6,,10001,,
+Philippines,,Storm,Tropical cyclone,1979,9,8,3722,3722,9733000.0,42069000.0
+Philippines,,Storm,Tropical cyclone,1979,11,6,6110,6111,617000.0,2667000.0
+Philippines,Mindanao,Flood,Flash flood,1980,1,2,25980,25980,,
+Philippines,Mindanao,Drought,Drought,1980,1,,1002100,1002100,,
+Philippines,,Storm,Tropical cyclone,1980,3,4,565,665,402000.0,1530000.0
+Philippines,,Storm,Tropical cyclone,1980,5,,2535,3063,289000.0,1100000.0
+Philippines,,Storm,Tropical cyclone,1980,7,36,58731,69237,,
+Philippines,Northern,Storm,Tropical cyclone,1980,7,31,300000,600000,15400000.0,58620000.0
+Philippines,Cagayan Valley (Northwestern),Storm,Tropical cyclone,1980,7,40,190000,190000,,
+Philippines,North and Central Luzon,Storm,Tropical cyclone,1980,11,101,775000,1004000,102300000.0,389407000.0
+Philippines,,Flood,Flood (General),1981,1,228,300000,300000,27000000.0,93149000.0
+Philippines,,Storm,Tropical cyclone,1981,6,210,12086,15478,7609000.0,26251000.0
+Philippines,Albay province,Storm,Storm (General),1981,7,214,,32,2000000.0,6900000.0
+Philippines,Oriental Mindoro,Storm,Tropical cyclone,1981,7,,25000,28500,,
+Philippines,,Storm,Tropical cyclone,1981,8,5,8526,9721,12908000.0,44532000.0
+Philippines,Northern Luzon,Storm,Tropical cyclone,1981,9,55,18565,21905,6700000.0,23115000.0
+Philippines,,Mass movement (wet),Landslide (wet),1981,10,200,,,,
+Philippines,"Maco, Davao del Norte",Flood,Flash flood,1981,10,94,2100,2195,,
+Philippines,Lucena,Flood,Flood (General),1981,11,,7500,7500,,
+Philippines,,Storm,Tropical cyclone,1981,11,4,5663,5736,167000.0,576000.0
+Philippines,,Storm,Tropical cyclone,1981,11,261,840078,840173,35000000.0,120749000.0
+Philippines,"Samar, Mindoro, Luzon",Storm,Tropical cyclone,1981,12,250,180000,180000,26000000.0,89699000.0
+Philippines,Region X,Flood,Flash flood,1982,1,18,35,35,,
+Philippines,South,Flood,Flood (General),1982,2,13,200000,200000,,
+Philippines,,Storm,Tropical cyclone,1982,3,25,23911,25099,2400000.0,7802000.0
+Philippines,S.E./N. Mindanao,Storm,Tropical cyclone,1982,3,117,16000,16000,,
+Philippines,Central province,Storm,Tropical cyclone,1982,3,151,485000,789031,69000000.0,224296000.0
+Philippines,"Maguindanao, Sultan Kudarat",Flood,Flood (General),1982,6,2,95915,96147,,
+Philippines,"Davao Del Norte, Sur & Oriental",Flood,Coastal flood,1982,6,,818,818,60000.0,195000.0
+Philippines,,Storm,Tropical cyclone,1982,7,10,11883,12319,4500000.0,14628000.0
+Philippines,,Storm,Tropical cyclone,1982,8,29,31522,36927,4200000.0,13653000.0
+Philippines,West,Storm,Tropical cyclone,1982,8,70,25900,25967,6500000.0,21129000.0
+Philippines,C./S. Luzon,Storm,Tropical cyclone,1982,9,65,44383,50008,,
+Philippines,North Luzon,Storm,Tropical cyclone,1982,10,96,51532,64179,32000000.0,104021000.0
+Philippines,Visayan Sea region,Storm,Tropical cyclone,1982,12,,41,85,5000.0,16000.0
+Philippines,Misamis Oriental,Drought,Drought,1983,,,1691060,1691060,,
+Philippines,Southeast Luzon,Storm,Tropical cyclone,1983,7,115,120811,149892,1640000.0,5165000.0
+Philippines,,Storm,Tropical cyclone,1983,9,3,1489,1684,430000.0,1354000.0
+Philippines,Bohol,Storm,Tornado,1983,9,2,100,100,,
+Philippines,Lanao del Sur,Flood,Flood (General),1983,9,11,1835,1835,3000.0,9000.0
+Philippines,,Storm,Tropical cyclone,1983,11,8,18242,18854,2250000.0,7086000.0
+Philippines,"Northern Luzon, Pangasinan province",Storm,Tropical cyclone,1984,8,138,475899,483747,23000000.0,69451000.0
+Philippines,"Surigao del Norte, Bohol Isl, Mindanao, Negros Occidental, Cebu provinces",Storm,Tropical cyclone,1984,9,1399,1237224,1786865,216700000.0,654353000.0
+Philippines,,Storm,Tropical cyclone,1984,10,63,1954,2694,190000.0,574000.0
+Philippines,"Capiz, Ilailo, Aklau, Antique, Leyte, Eastern Samar, Roxas, Tacloban",Storm,Tropical cyclone,1984,11,1079,1495738,2261900,96600000.0,291696000.0
+Philippines,"Tanjay, Pamplona",Flood,Riverine flood,1985,1,54,444,444,,
+Philippines,"Luzon, Ilocos Sur, Ilocos Norte, Benguet, Nueva Ecija, Bataan, Zambales, Vigan, Bantay, San Esteban, Laoag, Bagio city, Pampanga",Storm,Tropical cyclone,1985,6,100,420000,420200,20000000.0,58325000.0
+Philippines,,Storm,Tropical cyclone,1985,9,5,85,148,660000.0,1925000.0
+Philippines,Southern,Flood,Flood (General),1985,10,25,5000,5000,,
+Philippines,"Aurora, Nueva Ecija, Tarlac, Bur Lacan provinces (Central Luzon)",Storm,Tropical cyclone,1985,10,81,1183602,1183626,62373000.0,181894000.0
+Philippines,Davao Oriental,Flood,Flood (General),1986,6,3,612,615,56000.0,160000.0
+Philippines,"Ilocos, centra Luzon, Southern Tagalos, Metro Manilla",Storm,Tropical cyclone,1986,7,109,644608,647313,30710000.0,87889000.0
+Philippines,"Pangasinan, Bataan, Bulacan, Pampanga, Benguet, Abra, Zambales, Metro Manila",Storm,Tropical cyclone,1986,9,23,482700,482704,13150000.0,37634000.0
+Philippines,"Muntinlupa, Metro Manila, Bulacan",Storm,Tropical cyclone,1986,10,22,82529,82555,1200000.0,3434000.0
+Philippines,,Storm,Tropical cyclone,1986,10,4,3082,3134,1400000.0,4007000.0
+Philippines,,Storm,Tropical cyclone,1986,10,2,259,308,36000000.0,103029000.0
+Philippines,,Storm,Tropical cyclone,1986,12,16,22771,26722,4000000.0,11448000.0
+Philippines,,Drought,Drought,1987,,,1002100,1002100,,
+Philippines,"Batangas, Laguna, Bicol, Mindoro, Cavite, Luzon",Storm,Tropical cyclone,1987,8,85,971500,1269825,98600000.0,272209000.0
+Philippines,,Storm,Tropical cyclone,1987,8,5,13247,13336,5600000.0,15460000.0
+Philippines,"Cagayan, Ilocos Norte, Kalin-Aapayo province",Storm,Tropical cyclone,1987,10,100,60504,78979,25000000.0,69018000.0
+Philippines,"Region IV, Marinduque, Quezon, Laguna, Batangas, Region V, Sorgoson, Albay, Battan, Cavite, Masbaten Camarines Sur, Leyte, Northern Samar",Storm,Tropical cyclone,1987,11,882,1818185,1819112,56000000.0,154601000.0
+Philippines,,Storm,Tropical cyclone,1987,12,22,47591,56380,8500000.0,23466000.0
+Philippines,Davao Oriental,Mass movement (wet),Landslide (wet),1988,4,24,,,,
+Philippines,Davao del Sur,Mass movement (wet),Landslide (wet),1988,5,30,,,,
+Philippines,,Storm,Tropical cyclone,1988,5,36,56000,56000,1000000.0,2653000.0
+Philippines,Northern Luzon,Storm,Tropical cyclone,1988,7,6,96120,117355,11516000.0,30547000.0
+Philippines,Mindanao/Misamis Oriental,Storm,Tornado,1988,10,,20000,20000,,
+Philippines,"Tarlac, Southern Tagalog, Metro Manila, Albay, Cebu, Cagayan de Oro provinces",Storm,Tropical cyclone,1988,10,416,3250000,3250208,240500000.0,637944000.0
+Philippines,,Storm,Tropical cyclone,1988,11,41,28826,28913,940000.0,2493000.0
+Philippines,"Manilla, Tagalog, Bicol, western Visayas",Storm,Tropical cyclone,1988,11,289,1000000,1045029,149060000.0,395393000.0
+Philippines,,Mass movement (wet),Landslide (wet),1989,,72,,,,
+Philippines,"Sorgoson, Camatines Sur, Samar",Flood,Flood (General),1989,2,44,260000,260011,6000000.0,15183000.0
+Philippines,Mindanao/Monkayo,Mass movement (wet),Landslide (wet),1989,5,13,1000,1200,,
+Philippines,,Storm,Tropical cyclone,1989,5,13,12282,12937,2860000.0,7237000.0
+Philippines,"Ilocos Sur, Ilocos Norte, Cagayan, Isabela, Nueva Vizcaya, La Union",Storm,Tropical cyclone,1989,7,97,486000,486382,61000000.0,154356000.0
+Philippines,Metro Manila,Flood,Riverine flood,1989,8,,47500,47500,,
+Philippines,"Benguet, Ilocos Norte, Ilocos Sur, Kalinga Apayao, La Union, Zambales",Storm,Tropical cyclone,1989,9,22,140000,140021,4300000.0,10881000.0
+Philippines,Muntinlupa,Mass movement (wet),Landslide (wet),1989,9,14,67,77,,
+Philippines,"Cagayan, Ilocos Norte, Kalinga-Apayao, Nueva Viscayas provinces",Storm,Tropical cyclone,1989,10,147,205000,289191,8000000.0,20243000.0
+Philippines,"Albay, Bataan, Batangas, Bulacan, Camarines norte, Camarnies Sur, Cavite, Esatern Samar, Laguna, Marinduque, Masbate, Northern Leyte, Northern Samar, Nueva Ecija, Pampanga, Quezon, Rizal, Samar, Sorgoson, southern Leyte, Zambales, national capital region",Storm,Tropical cyclone,1989,10,58,660000,736605,59200000.0,149801000.0
+Philippines,"Bataan, Benguet, Ifugao, Isabela, Kalinga-Apayao, La Union, Nueva Vizcaya, Pangasinan, Cagayan, Ilocios Sur, Neava Ecija, Quirino provinces, National capital region",Storm,Tropical cyclone,1989,10,30,458400,458679,35400000.0,89577000.0
+Philippines,"Battan, Bulacan, Pampanga, North Metro Manila, Calauag Popillio Isl., northern Samar, Neava Ecija, Quezon, Rizal, Tarlac provinces",Storm,Tropical cyclone,1989,11,11,12837,13050,325000.0,822000.0
+Philippines,"Manukan, Bacungan, Zamboanga city (Zamboanga Del Norte province)",Flood,Flash flood,1990,6,98,236,236,43000.0,103000.0
+Philippines,North and Eastern Luzon,Storm,Tropical cyclone,1990,6,64,160000,160014,,
+Philippines,Capital region Manila and Northern Luzon.,Flood,Coastal flood,1990,8,28,50000,50000,,
+Philippines,,Storm,Tropical cyclone,1990,8,85,,,,
+Philippines,North,Storm,Tropical cyclone,1990,8,85,,,,
+Philippines,,Flood,Flood (General),1990,9,50,662500,662500,,
+Philippines,,Storm,Tropical cyclone,1990,9,,,,,
+Philippines,"Samar, Masbate provinces, Palwan, Iloilo, Negros occidental, Cebu",Storm,Tropical cyclone,1990,11,503,5048275,6159569,388500000.0,932724000.0
+Philippines,"Regions VI, IX, X, XI and XII",Drought,Drought,1990,12,,254282,254282,64000000.0,153653000.0
+Philippines,Tangag (Surigao del Sur),Flood,Flash flood,1991,3,10,,823,1300000.0,2994000.0
+Philippines,"Catanduanes, Albay, Quezon Provinces (Southern Luzon Isl.)",Storm,Tropical cyclone,1991,7,47,505756,505777,85000000.0,195780000.0
+Philippines,"Pampanga, Tarlac provinces",Storm,Tropical cyclone,1991,7,4,,2500,,
+Philippines,Near Tuguegaro (Pinatubo region),Storm,Tropical cyclone,1991,7,2,,10000,,
+Philippines,"Concepcion, Floridablanca, Manila",Storm,Tropical cyclone,1991,7,9,90296,90296,,
+Philippines,Luzon Isl.,Flood,Coastal flood,1991,8,50,,,,
+Philippines,Luzon Isl.,Storm,Tropical cyclone,1991,10,65,300000,316038,90000000.0,207296000.0
+Philippines,"Bago, La Cariota, Bacalod (Negros) and Leyte",Storm,Tropical cyclone,1991,11,5956,598454,647254,100000000.0,230329000.0
+Philippines,Near Leyte (Samar Isl.),Flood,Coastal flood,1991,11,10,,,,
+Philippines,"Abra, Benguet, Mt. Province, Ilocos Norte, Ilocos Sur, Bataan, Bulacan, Pampanga, Zambales, Pangasinan, Tarlac, Cavite, La Union, National Capital region",Flood,Flood (General),1992,7,60,942764,942777,74200000.0,165880000.0
+Philippines,"Aurora, Zambales, Nueva Ecija, Nueva Vizcaya, Pangasinan, La Union, Benguet, Ifugao, Isabela, Tarlac provinces",Storm,Tropical cyclone,1992,7,22,5135,5135,,
+Philippines,Regions III and NCR,Storm,Tropical cyclone,1992,7,42,134417,134494,,
+Philippines,"Regions III, IV and NCR",Storm,Storm (General),1992,8,26,725956,733096,,
+Philippines,Luzon Isl.,Storm,Tropical cyclone,1992,8,11,171603,173569,,
+Philippines,,Flood,Flood (General),1992,10,,52800,52800,,
+Philippines,Region XI,Flood,Flood (General),1992,12,19,58093,58255,,
+Philippines,Leyte,Storm,Storm (General),1993,2,28,,70000,40000000.0,86859000.0
+Philippines,"Agusan, Surigao, Davao del Norte provinces (Mindanao Island)",Flood,Riverine flood,1993,2,23,90000,90000,37000000.0,80345000.0
+Philippines,"Cordillera autonomous region (including Bagio city), Regions I-IV (including Metro Manilla)",Storm,Tropical cyclone,1993,6,2,29413,43735,442000.0,960000.0
+Philippines,"Metro Manilla, Region I, Region III",Flood,Flood (General),1993,8,5,258080,258080,2600000.0,5646000.0
+Philippines,Kimatu,Mass movement (wet),Landslide (wet),1993,9,21,,,,
+Philippines,"Pampanga, Nueva Viscaya, Tarlac, Cagayan, Cavite, Bataan, Bulacan, Pangasinan, Nueva Ecija, Metro Manilla provinces",Storm,Tropical cyclone,1993,10,124,1941531,1941566,188000000.0,408239000.0
+Philippines,,Storm,Tropical cyclone,1993,11,1,,,2000000.0,4343000.0
+Philippines,Abuyog town (Leyte province),Flood,Riverine flood,1993,11,25,,4,,
+Philippines,"Catanduanes, Camarines Sur, Camarines Norte, Albay, Marinduque, Mindoro Oriental, Quezon, Laguna, Batangas, Rizal provinces (Bicol peninsula, Luzon) Visayas, Masbate, Sorgoson, Occidental Mindoro, Romblon",Storm,Tropical cyclone,1993,12,311,994478,1159802,50000000.0,108574000.0
+Philippines,"Capiz, iloilo, Negros Oriental, Bohol, Cebu, Agusan del Norte, Cagayan de Oro, Caniguin, Southern Leyte, Surigao del Norte, Davao del Norte, Misamis Oriental",Storm,Tropical cyclone,1993,12,52,366217,366224,17000000.0,36915000.0
+Philippines,"Albay, Sorsogon, Palawan, Marinduque Provinces",Storm,Storm (General),1994,1,62,59710,73558,2400000.0,5079000.0
+Philippines,Davao Del Norte Province,Mass movement (wet),Landslide (wet),1994,2,4,5100,5103,,
+Philippines,Extesive agricultural and infrastructure damage,Flood,Riverine flood,1994,3,9,16821,16821,855000.0,1809000.0
+Philippines,"Negros Occidental, Cebu, Surigao del Sur, Palawan, Calaian",Storm,Tropical cyclone,1994,4,15,46500,105746,,
+Philippines,Davao,Flood,Coastal flood,1994,5,1,2708,2762,37000.0,78000.0
+Philippines,"Pampanga, Tarlac, Zambales",Flood,Flood (General),1994,6,50,757000,774000,1650000.0,3492000.0
+Philippines,"Metro Manila, Aurora, Nueva Ecija, Pampanga, Tarlac, Zambales provinces (Luzon)",Storm,Tropical cyclone,1994,6,2,23952,23952,,
+Philippines,Kalinga-Apayao province,Storm,Tropical cyclone,1994,7,3,5300,5300,,
+Philippines,"La Union, Pangasinan, Ilocos Sur, Ilocos Norte provinces, Laoag city (Luzon)",Storm,Tropical cyclone,1994,7,17,166564,166585,1000000.0,2116000.0
+Philippines,"Pinatubo, Luzon",Storm,Tropical cyclone,1994,7,39,,,1700000.0,3598000.0
+Philippines,"Pampanga, Bulacan, Bataan, Zambales, Tarlac, Ilocos Sur, Olongapo, Angeles",Storm,Tropical cyclone,1994,7,11,420721,420728,37600000.0,79573000.0
+Philippines,"Panay, Negros Isl.",Flood,Riverine flood,1994,7,2,18000,18000,1600000.0,3386000.0
+Philippines,"Pampanga, Zambales, Metro Manila (Luzon)",Storm,Tropical cyclone,1994,8,11,14000,14000,,
+Philippines,"Papoay, San Nicolas, Pasuquin municipalities (locos Norte province), Cagayan province",Storm,Tropical cyclone,1994,9,7,54674,54674,3900000.0,8254000.0
+Philippines,Mont Pinatubo area (Luzon),Mass movement (wet),Landslide (wet),1994,9,23,45762,68740,24000000.0,50791000.0
+Philippines,"Arora, Quezon, Laguna, Batangas, Rizal, Cavite, Bulacan, Bataan, Oriental Mindoro, Occidental Mindoro provinces (Luzon)",Storm,Tropical cyclone,1994,10,32,,258751,67400000.0,142639000.0
+Philippines,"Leyte, Cebu Isl., Surigao, Luzon, Iloilo, Bacolod",Storm,Tropical cyclone,1994,12,49,867837,867923,26813000.0,56744000.0
+Philippines,Pampanga Province,Flood,Flood (General),1995,7,,25000,25000,,
+Philippines,"Pampanga, Zambales, Tarlac (Luzon province)",Storm,Tropical cyclone,1995,7,,20000,20000,5000000.0,10293000.0
+Philippines,"Regions I, II, III, IV, V, Metro Manilla",Storm,Tropical cyclone,1995,8,6,195886,195886,,
+Philippines,"Pampanga, Sultan Kudarat provinces",Storm,Storm (General),1995,9,20,19655,19655,394000.0,811000.0
+Philippines,"South Cotabato, Sultan Kudarat (Mindanao)",Flood,Flash flood,1995,9,416,24478,24485,700300000.0,1441604000.0
+Philippines,"Pampanga, Pangasinan, Bulacan, Laguna, Marinduque, Quezon, Barangas, Cavite, Albay, Antique, Cebu, Leyte, Siquijor, Bukidnon provinces and National Capital region",Storm,Tropical cyclone,1995,10,184,758423,864437,38100000.0,78431000.0
+Philippines,"Leyte, Samar, Central Visayas, Panays Islands, Palawan",Storm,Tropical cyclone,1995,10,146,347998,348053,30000000.0,61757000.0
+Philippines,"Luzon, Visayas, Calauag",Storm,Tropical cyclone,1995,11,882,1597219,1599588,244000000.0,502287000.0
+Philippines,Negros Occidental,Flood,Flood (General),1995,11,18,,10000,,
+Philippines,Davao City,Flood,Flood (General),1995,12,12,4500,4500,,
+Philippines,"Albay, Catanduanes, Sorsogon",Flood,Flood (General),1995,12,17,17500,17500,142000.0,292000.0
+Philippines,"Cagayan, Isabela, Quirino, Nueva Viscaya, Aurora provinces",Flood,Riverine flood,1995,12,13,47700,47700,500000.0,1029000.0
+Philippines,"Agusan, Surigao, Leyte, Samar",Storm,Storm (General),1995,12,11,229191,229193,,
+Philippines,Davao Del Norte,Flood,Flood (General),1996,6,,,96000,,
+Philippines,"Quzeon, Aurora, Quirino, Nueva Vizcaya, Isabela, Cagayan, Batanes, La Union, Ilocos Norte, Ilocos Sur (Luzon Isl.)",Storm,Tropical cyclone,1996,7,26,36815,36828,38000000.0,75997000.0
+Philippines,South,Mass movement (wet),Landslide (wet),1996,9,12,,,,
+Philippines,"Cebu, Bocolod",Storm,Storm (General),1996,11,12,800,800,4150000.0,8300000.0
+Philippines,Catanduanes (Mindanao),Mass movement (wet),Landslide (wet),1996,11,33,,8,,
+Philippines,"Surigao del Sur, Surigao del NOrte, Agusan del Sur (Mindanao province)",Flood,Riverine flood,1997,3,18,105000,105000,76000.0,149000.0
+Philippines,"Manilla, Luzon",Storm,Tropical cyclone,1997,5,30,309111,309111,2500000.0,4886000.0
+Philippines,All country,Storm,Tropical cyclone,1997,8,18,53654,53659,5000000.0,9771000.0
+Philippines,Cagayan Prov.,Storm,Tropical cyclone,1997,10,1,4000,4000,,
+Philippines,All country,Drought,Drought,1998,4,8,2600000,2600000,,
+Philippines,Quezeon & Rizal,Wildfire,Forest fire,1998,4,2,300,300,,
+Philippines,"North and Central Luzon Isl., cordillera Autonomous Region, central Visayas Isl., National Capital Region",Storm,Tropical cyclone,1998,9,118,1749414,1749436,87038000.0,167494000.0
+Philippines,Town Of Tabuk Level 2 = Kalinga-Apayao (from GENAME),Storm,Tropical cyclone,1998,10,75,1344556,1344619,50000000.0,96219000.0
+Philippines,Albay,Storm,Tropical cyclone,1998,10,332,3901673,3902424,71000000.0,136631000.0
+Philippines,"E and W Samar, Cagayan, Pampanga, Bulacan, Isabela, Quenzon, W Mindoro, Palawan, Masbate, Albay, Sorsogon, Catanduanes, Aklan, Capiz, Antique, Iloilo, Leyte",Storm,Tropical cyclone,1998,12,69,326490,326520,27399000.0,52726000.0
+Philippines,"Iligan city, towns of Kauswagan, Linamon and Bacolod (Lanao del Norte Province, Mindanao islands)",Flood,Flash flood,1999,2,34,2609,3703,6000000.0,11299000.0
+Philippines,Surigao del Sur Province,Flood,Flash flood,1999,3,,,250,,
+Philippines,Gingoog,Flood,Flood (General),1999,3,,1300,1300,,
+Philippines,South of Philippines,Mass movement (wet),Landslide (wet),1999,4,19,,,,
+Philippines,Compostela Valley (Mindanao Isl.),Mass movement (wet),Landslide (wet),1999,5,10,,45,,
+Philippines,Regions II - Batanes,Storm,Storm (General),1999,6,,1601,1601,,
+Philippines,Region III - Zambales,Storm,Storm (General),1999,6,,755,1135,2210000.0,4162000.0
+Philippines,Region III,Storm,Storm (General),1999,7,47,1245917,1245919,33795000.0,63642000.0
+Philippines,"Rizal, Pangasinan, Pampanga and Bulacan Provinces",Flood,Flash flood,1999,7,130,2096341,2099763,18000000.0,33897000.0
+Philippines,Manilla,Mass movement (wet),Landslide (wet),1999,8,58,,,,
+Philippines,"Regions I, II, III and CAR",Storm,Storm (General),1999,8,11,35222,35245,4007000.0,7546000.0
+Philippines,Region III,Storm,Storm (General),1999,9,1,1505,1507,,
+Philippines,Nord du pays,Mass movement (wet),Landslide (wet),1999,9,13,,,,
+Philippines,"Provinces Of Cagayan, Ilocos, Sur, Pangasinan, La Union",Storm,Tropical cyclone,1999,10,7,37200,41933,1800000.0,3390000.0
+Philippines,"Regions V, VIII",Storm,Storm (General),1999,10,1,5791,5791,,
+Philippines,"Regions V, VI, VII",Storm,Storm (General),1999,11,33,54152,54159,14675000.0,27636000.0
+Philippines,Tawi-Tawi district (ARMM province),Flood,Coastal flood,2000,1,,,5250,,
+Philippines,"Agusan del Sur, Agusan del Norte, Surigao del Sur districts (Region XIII province), Davao Oriental, Davao del Norte, Compostela districts (Region XI province)",Flood,Flash flood,2000,1,50,153885,153885,4080000.0,7432000.0
+Philippines,"National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2000,5,12,235885,235889,1201000.0,2188000.0
+Philippines,National Capital region (NCR) province,Storm,Tropical cyclone,2000,7,11,,120000,7500000.0,13662000.0
+Philippines,"Caloocan, Manioma, Quezon cities (Metropolitan Manila district, National Capital region (NCR) province), Mindoro Oriental district (Region IV (Southern Tagalog) province), Cavite, Rizal districts (Region IV-A (Calabarzon) province), Iloilo, Negros Occidental districts (Region VI (Western Visayas) province), Region I (Ilocos region), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2000,7,75,1483310,1483321,25763000.0,46931000.0
+Philippines,Metropolitan Manila district (National Capital region (NCR) province),Mass movement (wet),Sudden Subsidence (wet),2000,7,287,2800,2838,,
+Philippines,Metropolitan Manila district (NCR province),Flood,Coastal flood,2000,9,5,6508,6508,,
+Philippines,"Cavite district (Region IV-A (Calabarzon) province), Sorsogon, Catanduanes, Albay districts (Region V (Bicol region) province), Metropolitan Manila district (National Capital region (NCR) province), Samar districts (Region VIII (Eastern Visayas) province)",Storm,Tropical cyclone,2000,10,154,2435942,2436256,17000000.0,30968000.0
+Philippines,"Metropolitan Manila district (National Capital region (NCR) province), Rizal, Laguna districts (Region IV-A (Calabarzon) province), Cagayan, Nueva Vizcaya districts (Region II (Cagayan Valley) province)",Storm,Tropical cyclone,2000,11,94,1747872,1747872,31000000.0,56471000.0
+Philippines,"Autonomous region in Muslim Mindanao (ARMM), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces Central Philippines",Storm,Tropical cyclone,2000,11,48,164067,164093,1000000.0,1822000.0
+Philippines,"Silay City area (Negros Occidental district, Region VI province)",Flood,Riverine flood,2001,1,2,12000,12000,,
+Philippines,"Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2001,2,55,,100084,6000000.0,10630000.0
+Philippines,"Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV (Southern Tagalog), Region VIII (Eastern Visayas), Cordillera Administrative region (CAR), National Capital region (NCR) provinces",Storm,Tropical cyclone,2001,7,232,1902413,1902654,68565000.0,121469000.0
+Philippines,"Zamboanga del Sur, Zamboanga del Norte, Zamboanga Sibugay districts (Region IX province), Maguindanao district (ARMM province), Sultan Kudarat, North Cotabato districts (Region XII province), Misamis Occidental district (Region X province),",Flood,Flash flood,2001,8,37,79000,79000,8000000.0,14173000.0
+Philippines,Region III (Central Luzon) province,Storm,Storm (General),2001,8,,295355,295355,293000.0,519000.0
+Philippines,"Region I (Ilocos region), Region II (Cagayan Valley), Cordillera Administrative region (CAR) province",Storm,Storm (General),2001,9,4,37357,37357,1407000.0,2493000.0
+Philippines,"Zamboanga City area (Zamboanga Del Sur district, Region IX province)",Flood,Flash flood,2001,10,4,300,300,,
+Philippines,"Camiguin, Misamis Oriental districts (Region X (Northern Mindanao) province)",Storm,Tropical cyclone,2001,11,290,1060000,1060147,22700000.0,40215000.0
+Philippines,"Cebu district (Region VII (Central Visayas) province), Leyte district (Region VIII (Eastern Visayas) province)",Storm,Tropical cyclone,2001,12,6,54832,54840,96000.0,170000.0
+Philippines,"Surigao del Sur, Agusan del Sur districts (Region XIII province), Davao del Sur, Davao del Norte, Davao Oriental, Compostella district (Region XI province)",Flood,Riverine flood,2002,1,11,95000,95008,392000.0,684000.0
+Philippines,"Pangasinan, La Union, Ilocos Norte, Ilocos Sur districts (Region I (Ilocos region) province)",Drought,Drought,2002,3,,,,453000.0,790000.0
+Philippines,"Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Region XIII (Caraga) provinces",Storm,Storm (General),2002,3,42,54629,54631,3292000.0,5741000.0
+Philippines,"Surigao del Norte, Surigao del Sur districts (Region XIII province)",Flood,Riverine flood,2002,3,35,50000,50000,1450000.0,2529000.0
+Philippines,National Capital region (NCR) province,Storm,Tropical cyclone,2002,6,7,,3000,,
+Philippines,National Capital region (NCR) province,Storm,Tropical cyclone,2002,7,33,700000,700041,1000000.0,1744000.0
+Philippines,"Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV (Southern Tagalog), Region IV-A (Calabarzon), Region V (Bicol region) provinces",Storm,Tropical cyclone,2002,7,62,11000,11000,5664000.0,9878000.0
+Philippines,"Region IV (Southern Tagalog), Region VI (Western Visayas) provinces",Storm,Storm (General),2002,7,14,19048,19050,238000.0,415000.0
+Philippines,"San Pablo City area (Laguna district, Region IV-A province), Metropolitan Manila district (NCR province), Bulacan, Pampanga districts (Region III province), Pangasinan district (Region I province), Maguindanao district (ARMM province), Negros Occidental district (Region VI province), Negros Oriental district (Region VII province), Cavite district (Region IV-A province)",Flood,Coastal flood,2002,7,18,7000,7000,,
+Philippines,"Region III (Central Luzon), Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Region X (Northern Mindanao), Region XIII (Caraga) provinces",Storm,Storm (General),2002,8,57,194451,194472,3340000.0,5825000.0
+Philippines,"Negros Occidental district (Region VI province), Metropolitan Manila district (NCR province), Rizal district (Region IV-A province),",Flood,Coastal flood,2002,8,26,3500,3559,,
+Philippines,Cebu district (Region VII province),Flood,Flash flood,2003,5,,3500,3500,,
+Philippines,"Benguet district (Cordillera Administrative region (CAR) province), Bataan, Bulacan, Zambales districts (Region III (Central Luzon) province), Mindoro Occidental, Romblon districts (Region IV (Southern Tagalog) province), Batangas, Cavite, Rizal districts (Region IV-A (Calabarzon) province), Iloilo district (Region VI (Western Visayas) province), National Capital region (NCR), Region I (Ilocos region) provinces",Storm,Tropical cyclone,2003,5,51,11345,13909,4000000.0,6821000.0
+Philippines,"Sorsogon, Albay, Catanduanes, Camarines Sur districts (Region V (Bicol region) province), Biliran, Leyte districts (Region VIII (Eastern Visayas) province)",Storm,Tropical cyclone,2003,6,13,46472,127130,2455000.0,4186000.0
+Philippines,"Region IV (Southern Tagalog), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2003,7,8,116601,116602,1499000.0,2556000.0
+Philippines,"Maguindanao district (Autonomous region in Muslim Mindanao (ARMM) province), North Cotabato, Sultan Kudarat districts (Region XII (Soccsksargen) province), Isabela district (Region II (Cagayan Valley) province), Ilocos Norte district (Region I (Ilocos region) province), Romblon district (Region IV (Southern Tagalog) province)",Storm,Tropical cyclone,2003,7,21,14280,14280,26468000.0,45134000.0
+Philippines,"Region V (Bicol region), Region VIII (Eastern Visayas), Region X (Northern Mindanao) provinces",Storm,Tropical cyclone,2003,7,,3748,3748,146000.0,249000.0
+Philippines,Region III (Central Luzon) province,Storm,Tropical cyclone,2003,8,,155147,155147,661000.0,1127000.0
+Philippines,Region I (Ilocos region) province,Storm,Storm (General),2003,8,1,1156,1156,73000.0,124000.0
+Philippines,"National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Storm (General),2003,8,1,34288,34289,,
+Philippines,"Liloan, San Francisco, Maasin, Punta, San Ricardo areas (Southern Leyte district, Region VIII (Easter, Visayas) province), Bohol district (Region VII (Central Visayas) province), Misamis Oriental district (Region X (Northern Mindanao), Compostela district (Region XI (Davao Region) province), South Cotabato district (Region XII (Soccsksargen) province), Agusan del Sur, Agusan del Norte, Surigao del Sur, Surigao de Norte districts (Region XIII (Caraga) province)",Mass movement (wet),Landslide (wet),2003,12,255,217934,217988,7000000.0,11937000.0
+Philippines,La Union district (Region I province),Flood,Riverine flood,2004,1,27,194,194,,
+Philippines,"Davao del Norte, Compostela, Davao Oriental districts (Region XI province), Agusan del Sur, Agusan del Norte, Surigao Del Sur districts (Region XIII province), Misamis Oriental district (Region X province)",Flood,Riverine flood,2004,2,7,20000,20000,,
+Philippines,Region V (Bicol region) province,Storm,Tropical cyclone,2004,5,31,,714,1000000.0,1661000.0
+Philippines,Leyte district (Region VIII (Eastern Visayas) province),Storm,Tornado,2004,6,7,,4504,,
+Philippines,"Cagayan district (Region II (Cagayan Valley) province), Ilocos Norte, La Union districts (Region I (Ilocos region) province), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2004,6,28,385000,385012,19667000.0,32662000.0
+Philippines,"Libungan, Alamada, Pigcawayan areas (North Cotabato district, Region XII province)",Flood,Flash flood,2004,6,15,,1500,,
+Philippines,"Benguet, Ifugao districts (Cordillera Administrative region (CAR) province), La Union, Pangasinan districts (Region I (Ilocos region) province), Nueva Vizcaya district (Region II (Cagayan Valley) province), Bataan, Bulacan, Nueva Ecija, Pampanga, Tarlac, Zambales districts (Region III (Central Luzon) province), Rizal district (Region IV-A (Calabarzon) province)",Storm,Tropical cyclone,2004,8,35,1058849,1058849,,
+Philippines,"Mindoro Occidental, Mindoro Oriental districts (Region IV (Southern Tagalog) province), Region IV-A (Calabarzon), Region V (Bicol region) provinces",Storm,Tropical cyclone,2004,11,104,838434,838674,6000000.0,9965000.0
+Philippines,Aurora district (Region III (Central Luzon) province),Storm,Tropical cyclone,2004,11,29,,2014,,
+Philippines,"Real, Infanta, General Nakar areas (Quezon district, Region IV-A (Calabarzon) province), Isabela district (Region II (Cagayan Valley) province), Bulacan, Nueva Ecija, Aurora districts (Region III (Central Luzon) province), Rizal district (Region IV-A (Calabarzon) province), Camarines Sur district (Region V (Bicol region) province)",Storm,Tropical cyclone,2004,11,1619,880000,881023,78200000.0,129871000.0
+Philippines,Region V (Bicol region) province,Storm,Tropical cyclone,2004,11,8,70480,70488,34000000.0,56466000.0
+Philippines,"Tinambac area (Camarines Sur district, Region V (Bicol region) province)",Mass movement (wet),Landslide (wet),2004,12,8,,6,,
+Philippines,Leyte district (Region VIII (Eastern Visayas) province),Storm,Tropical cyclone,2005,3,18,11,11,,
+Philippines,"Cotabato City, Dinaig, Kabuntalen, Parang, Sultan Kudarat areas (Shariff Kabunsuan district, ARMM province)",Flood,Flood (General),2005,5,1,100,100,,
+Philippines,"Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV (Southern Tagalog), Region IV-A (Calabarzon), Region V (Bicol region) provinces",Storm,Tropical cyclone,2005,9,16,20000,20000,2000000.0,3213000.0
+Philippines,"Naujan, Calapan, Victoria, Pola, Pinamalayn, Baco, Puerto Princesa, Barangay Biga, Barangay Malabo areas (Mindoro Oriental district, Region IV province), Aborlan, Dumaran, Taytay, Barangay Sta. Maria, Roxas, San Vicente areas (Palawan district, Region IV province), Victoria, Capalonga, Labo areas (Camarines Norte districts Region V province), Bato area (Catanduanes district, Region V province), Pagbilao, Mauban, Lucena, Candelaria areas (Quezon district, Region IV-A province), Palo area (Leyte district, Region VIII province), Dipaculao, Casiguran, Tinib areas (Aurora district, Region III province), Albay, Camarines Sur, Masbate, Sorsogon district (Region V province), Negros Occidental, Aklan, Iloilo districts (Region VI province)",Flood,Riverine flood,2005,12,4,192946,192946,515000.0,827000.0
+Philippines,"Nueva Ecija, Aurora districts (Region III province), Kalinga, Abra districts (CAR province), Cagayan, Isabela districts (Region II province), Quezon district (Region IV-A province)",Flood,Flash flood,2006,1,4,256641,256641,9600000.0,14938000.0
+Philippines,"Sogod area (Southern Leyte district, Region VIII (Eastern Visayas) province)",Mass movement (wet),Landslide (wet),2006,2,11,7500,7525,,
+Philippines,"Guinsaugon village (Southern Leyte, Region VIII (Eastern Visayas) province)",Mass movement (wet),Landslide (wet),2006,2,1126,5907,5926,2203000.0,3428000.0
+Philippines,"Carmen area (Bohol district, Region VII province)",Flood,Flash flood,2006,3,1,1000,1000,,
+Philippines,"Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2006,5,41,42000,42000,3328000.0,5179000.0
+Philippines,"Tarlac, Zambales, Nueva Ecija districts (Region III (Central Luzon) provinces)",Storm,Tropical cyclone,2006,6,8,476027,476027,645000.0,1004000.0
+Philippines,"Cordillera Administrative region (CAR), Region I (Ilocos region), Region II (Cagayan Valley) provinces",Storm,Tropical cyclone,2006,7,37,51680,51680,3000000.0,4668000.0
+Philippines,Region III (Central Luzon) province,Storm,Tropical cyclone,2006,7,4,200355,200355,471000.0,733000.0
+Philippines,"Anonan village (Misamis Occidental district, Region X province), Upper Koronel village (Davao Oriental district, Region XI province), Kapatagan area (Lanao Del Norte district, Region X province)",Flood,Flood (General),2006,8,26,15000,15000,,
+Philippines,Quirino district (Region II (Cagayan Valley) province),Storm,Tropical cyclone,2006,8,6,15000,15000,135000000.0,210068000.0
+Philippines,"Kapatagan area (Lanao Del Norte district, Region X (Northern Mindanao) province), Pagadian area (Zamboanga Del Sur district, Rgion IX (Zamboanga Peninsula) province)",Mass movement (wet),Avalanche (wet),2006,8,6,1200,1200,,
+Philippines,"Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV (Southern Tagalog), Region IV-A (Calabarzon), Region V (Bicol region), Region VI (Western Visayas) provinces",Storm,Tropical cyclone,2006,9,228,3842000,3842406,113000000.0,175835000.0
+Philippines,"Pasonanca, Tugbungan, Tumaga, Putik, Guiwan, Baliwasan, San Jose Gusu, Tetuan areas (Zamboanga Del Sur district, Region IX province)",Flood,Riverine flood,2006,10,3,4250,4250,399000.0,621000.0
+Philippines,Davao del Norte district (Region XI province),Flood,Riverine flood,2006,10,2,40000,40000,763000.0,1187000.0
+Philippines,"Cagayan, Quirino, Isabela, Nueva Vizcaya districts (Region II (Cagayan Valley) province), Benguet, Kalinga districts (Cordillera Administrative region (CAR) province), Aurora district (Region III (Central Luzon) province), La Union district (Region I (Ilocos region) province)",Storm,Tropical cyclone,2006,10,34,282963,283021,9077000.0,14124000.0
+Philippines,"Isabela district (Region II (Cagayan Valley) province), Aurora, Nueva Ecija districts (Region III (Central Luzon) province)",Storm,Tropical cyclone,2006,11,6,21250,21260,,
+Philippines,"Albay, Catanduanes, Camarines Norte, Camarines Sur, Sorsogon districts (Region V (Bicol region) province), Mindoro Occidental, Mindoro Oriental, Marinduque districts (Region IV (Southern Tagalog) province), Batangas, Laguna districts (Region IV-A (Calabarzon) province)",Storm,Tropical cyclone,2006,11,1399,2560374,2562517,66400000.0,103322000.0
+Philippines,"Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2006,12,42,327500,327542,,
+Philippines,"Kapalong area (Davao del Norte district, Region XI province), Tago area (Surigao del Sur district, Region XIII province), Sta. Josefa area (Agusan del Sur district, Region XIII province), Mondragon, Catarman, Pambujan, San Roque, Catubig, Silvino Lobos areas (Northern Samar district, Region VIII province)",Flood,Riverine flood,2006,12,,415618,415618,3395000.0,5283000.0
+Philippines,"Agusan del Norte, Agusan del Sur districts (Region XIII province), Davao del Norte, Davao del Sur districts (Region XI province), Region VI, Region VII, Region VIII provinces",Flood,Riverine flood,2007,1,9,24508,24508,4080000.0,6173000.0
+Philippines,"La Union, Pangasinan, Ilocos Sur districts (Region I (Ilocos region) province), Isabela, Nueva Vizcaya, Quirino districts (Region II (Cagayan Valley) province)",Drought,Drought,2007,8,,,,,
+Philippines,"National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2007,8,7,921455,921462,492000.0,744000.0
+Philippines,"Region III (Central Luzon), Region IV-A (Calabarzon), Region V (Bicol region) provinces",Storm,Tropical cyclone,2007,8,3,380000,380000,492000.0,744000.0
+Philippines,Negros Occidental district (Region VI (Western Visayas) province),Storm,Tropical cyclone,2007,9,2,30000,30000,,
+Philippines,"Region IV (Southern Tagalog), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2007,9,1,64000,64000,,
+Philippines,"Ifugao, Kalinga districts (Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2007,9,8,2000,2000,,
+Philippines,"Baao, Bato, Nabua, Buhi, Bula, Pili, Bombon, Cabusao, Calabanga, Camaligan, Canaman, Gainza, Libmanan, Magarao, Milaor, Minalabac, San Fernando, Iriga City and Naga City areas (Camarines Sur district, Region V province), Libon, Ligao City, Oas, Polangui. Ligao City areas (Albay district, Region V province), Baras, Bato, San Miguel, San Andres, Caramoran areas (Catanduanes district, Region V province)",Flood,Riverine flood,2007,10,20,,,,
+Philippines,"Isabela, Cagayan districts (Region II (Cagayan Valley) province)",Storm,Tropical cyclone,2007,11,8,33884,33884,2971000.0,4495000.0
+Philippines,"Iligan City area (Lanao Del Norte district, Region X province), Lugait area (Misamis Oriental district, Region X province), Surigao, Tagana-an, Placer areas (Surigao del Norte district, Region XIII province), Polomolok area (South Cotabato district, Region XIII province), Region VII (Central Visayas) province",Flood,Coastal flood,2007,11,11,16463,16463,2520000.0,3813000.0
+Philippines,"Region VII (Central Visayas), Region X (Northern Mindanao) provinces",Storm,Tropical cyclone,2007,11,20,35322,35333,1000000.0,1513000.0
+Philippines,"Isabela district (Region II (Cagayan Valley) province), Camarines Sur, Camarines Norte districts (Region V (Bicol region) province)",Storm,Tropical cyclone,2007,11,29,443109,443115,5000000.0,7565000.0
+Philippines,"Sulu, Tawi-tawi districts (ARMM province), Ilocos Norte, La Union, Pangasinan districts (Region I province), Zamboanga Del Sur, Zamboanga del Norte districts (Region IX province), Antique, Negros Occidental districts (Region VI province), Negros Oriental district (Region VII province), Misamis Oriental, Camiguin districts (Region X province)",Flood,Coastal flood,2007,11,,33571,33571,,
+Philippines,"Naujan, Victoria areas (Oriental Mindoro district, Region IV province)",Flood,Riverine flood,2007,12,,12205,12205,,
+Philippines,"Asucion area (Davao del Norte district, Region XI province), Initao, Gitagum areas (Misamis Oriental district, Region X province)",Flood,Riverine flood,2008,1,,29184,29184,446000.0,650000.0
+Philippines,"Naujan, Baco areas (Mindoro Oriental district, Region IV province), Albay, Camarines Sur, Camarines Norte, Sorgoson, Catanduanes districts (Region V province), Capiz district (Region VI province), Eastern Samar, Northern Samar, Samar, Leyte districts (Region VIII province), Misamis Oriental, Lanao del Norte districts (Region X province), Sultan Kudarat district (Region XII province)",Flood,Riverine flood,2008,2,63,875306,875343,30733000.0,44777000.0
+Philippines,"Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2008,4,1,,,16000000.0,23311000.0
+Philippines,"Lambayong, Esperanza areas (Sultan Kudarat district, Region XII (Soccsksargen) province)",Storm,Tropical cyclone,2008,5,1,8350,8390,280000.0,408000.0
+Philippines,"Pangasinan, La Union districts (Region I (Ilocos region) province), Zambales district (Region III (Central Luzon) province)",Storm,Tropical cyclone,2008,5,64,1496635,1496668,99174000.0,144493000.0
+Philippines,"Bansalan area (Davao del Sur district, Region XI province)",Flood,Flash flood,2008,6,1,1000,1000,,
+Philippines,"Manay area (Davao Oriental district, Region XI province), Braulio E. Dujali area (Davao del Norte district, Region XI province)",Flood,Riverine flood,2008,6,7,2390,2391,173000.0,252000.0
+Philippines,"Aklan, Antique, Capiz, Iloilo, Negros Occidental districts (Region VI (Western Visayas) province), Cebu district (Region VII (Central Visayas) province), Leyte, Eastern Samar, Samar districts (Region VIII (Eastern Visayas) province), Marinduque, Mindoro Oriental, Romblon districts (Region IV (Southern Tagalog) province), Masbate district (Region V (Bicol region) province), North Cotabato, South Cotabato districts (Region XII (Soccsksargen) province)",Storm,Tropical cyclone,2008,6,644,4784634,4785460,284694000.0,414790000.0
+Philippines,"Nueva Era, Paoay, San Nicolas, Bangui, Batac city, Dingras, Pasuquin, Marcos, Piddig, Laoag city, Bacarra, Sarrat, Currimao, Pagudpud areas (Ilocos Norte district, Region I (Ilocos region) province), Luna area (La Union district, Region I (Ilocos region) province), Santa Terisita area (Cagayan district, Region II (Cagayan Valley) province)",Storm,Tropical cyclone,2008,7,2,31129,31130,147000.0,214000.0
+Philippines,"Piddig, Pasuquin areas (Metropolitan Manila district, National Capital region (NCR) province), Ilocos Norte, Ilocos Sur districts (Region I (Ilocos region) province), Abra district (Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2008,7,10,22079,22081,40000.0,58000.0
+Philippines,"Quezon city (Metropolitan Manila district, National Capital region (NCR) province), Cordillera Administrative region (CAR), Region I (Ilocos region), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2008,8,2,4498,4498,,
+Philippines,"Nueva Ecija, Tarlac, Pampanga, Bulacan districts (Region III province)",Flood,Riverine flood,2008,8,,39530,39530,,
+Philippines,"Region I (Ilocos region), Region II (Cagayan Valley), Cordillera Administrative region (CAR) provinces",Storm,Tropical cyclone,2008,8,38,429450,429463,33870000.0,49348000.0
+Philippines,"Pigcawayan, Midsayap, Pikit areas (North Cotabato district, Region XII province), Sultan Kudarat, Mother Kabuntalan, Northern Kabuntalan, Datu Odin Sinsuat areas (Shariff Kabunsuan district, ARMM province), Sultan Sabarongis, Rajah Buauan, Mamasapano, Datu Piang, Datu Anggal Midtimbang, Datu Saudi Ampatuan areas (Maguindanao district, ARMM province)",Flood,Riverine flood,2008,9,6,365675,365678,4137000.0,6027000.0
+Philippines,"Maco city (Compostela district, Region XI (Davao Region) province)",Mass movement (wet),Landslide (wet),2008,9,24,5000,5028,,
+Philippines,"Itogon area (Benguet district, Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2008,9,37,41630,46132,7420000.0,10811000.0
+Philippines,"Nueva Ecija, Pampanga districts (Region III (Central Luzon) province)",Storm,Tropical cyclone,2008,9,1,27683,27683,,
+Philippines,"Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2008,11,19,300,474,,
+Philippines,"Alcala, Amulung, Enrile, Gattaran, Iguig, Lasam, Claveria, Peablanca, Solana, Tuguegarao city, Tuao, Camalaniugan, Lallo, Baggao areas (Cagayan district, Region II province), Cauayan city, Quezon, Cabagan, Delfin Albano, Ilagan, Mallig, Tumauni, San Pablo, Sta. Maria, Sto. Thomas areas (Isabela district, Region II province), Casiguran, Dinalungan, Dilasag areas (Aurora district, Region III province), Rizal, Lubuagan areas (Kalinga district, CAR province)",Flood,Flash flood,2008,11,10,239763,239763,4088000.0,5956000.0
+Philippines,"Region II (Cagayan Valley), Region V (Bicol region), Region XIII (Caraga), Region XI (Davao Region), Region III (Central Luzon), Region IV-A (Calabarzon), Region IV (Southern Tagalog) provinces",Flood,Riverine flood,2008,12,29,,50000,,
+Philippines,"Aringay area (La Union district, Region I province), Brroke's Point, Bataraza, Balabac areas (Palawan district, Region IV province), Labo area (Camarines Norte district, Region V province), Bagamanoc, Baras, Bato, Caramoran, Gigmoto, Pandan, Panganiban, San Andres, San Miguel, Viga, Virac areas (Catanduanes district, Region V province), Pontevedra, Panitan, Sigma, Dao, Cuartero areas (Capiz district, Region VI province), Amlan area (Negros Oriental district, Region VII province), Bobon, Catarman, Lavesares, Lope de Vega, Mondragon, Palapag, San Roque areas (Northern Samar district, Region VIII province), Cayagan de Oro City area (Misamis Oriental district, Region X province), Region XIII (Caraga) province",Flood,Riverine flood,2009,1,33,537976,537991,6354000.0,9291000.0
+Philippines,"Poblacion, Mago-ong, Samburon baranguays villages (Linamon area, Labao del Norte district, Region X province)",Flood,Flash flood,2009,1,,1345,1345,,
+Philippines,"Malibago, Gumamela, Anahaw, Bagacay, Santa Cruz villages (Labo area, Camarines Norte district, Region V province)",Flood,Riverine flood,2009,1,,1300,1300,,
+Philippines,Region V (Bicol region) province,Storm,Tropical cyclone,2009,4,29,383457,383465,25810000.0,37739000.0
+Philippines,"Aringay, Agoo, Bacnotan, Bagulin, Bauang, Burgos, Caba, Naguillian Pugo, Rosario, San Gabriel, San Juan, Sto Thomas, Tubao, San Fernando areas (La Union district, Region I (Ilocos region) province), Anda, Agno, Bani, Bolinao, Dasol, Infanta, Lingayan, Mabini, Sta Barbara, Sual, Alaminos city, Dagupan areas (Pangasinan district, Region I (Ilocos region) province), Ambaguio, Bagabag, Bambang, Bayombong, Dupax del Sur, Solano, Sta Fe areas (Nueva Vizcaya district, Region II (Cagayan Valley) province), Aurora, Cabaruan, Cordon, Delfin Albano, Ilagan, Luna, Quirino, Ramon, Reina Mercedes, Cauayan city, Santiago areas (Isabela district, Region II (Cagayan Valley) province), Cabarroguis, Saguiday areas (Quirino district, Region II (Cagayan Valley) province), Rizal area (Cagayan district, Region II (Cagayan Valley) province), Sta Cruz, Olongapo areas (Zambales district, Region III (Central Luzon) province), Guagua area (Pampanga district, Region III (Central Luzon) province), Kiangan, Asipulo, Lamut, Lagawe, Hingyon, Hungduan, Tinoc, Aguinaldo, Alfonso Lista areas (Ifugao district, Cordillera Administrative region (CAR) province), Pinukpuk, Lubuagan areas (Kalinga district, Cordillera Administrative region (CAR) province), Baguio city (Benguet district, Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2009,5,77,400954,401007,30342000.0,44365000.0
+Philippines,"Shariff Kabunsuan, Maguindanao districts (Autonomous region in Muslim Mindanao (ARMM) province)",Storm,Tornado,2009,5,,,100,5000.0,7000.0
+Philippines,"Magapispis, Sitio Boringot, Brgy Napnapan, Sitio Gumayan, Brgy Kingking villages (Compostela district, Region XI (Davao Region) province)",Mass movement (wet),Landslide (wet),2009,5,10,,16,,
+Philippines,"Sultan Kudarat district (Region XII province) Maguindanao, Shariff Kabunsuan districts (ARMM province)",Flood,Flash flood,2009,5,,34325,34325,,
+Philippines,"Brgys Mahayahay, Pugaan, Tambacan, Ubaldo Laya, Pala-o, Tipanoy, Tubod barangays villages (Iligan city area, Lanao del Norte district, Region X province)",Flood,Riverine flood,2009,5,,715,715,,
+Philippines,"ARMM province (Maguindanao, Shariff Kabunsuan, Lanao del Sur (Malabang, Kapatagan, Balabagan, Pualas, Calanugas areas) districts)), Region XII province (North Cotabato district (Kabacan, Midsayap, Libungan, Pigcawayan, Alamada, Aleosan, Pikit areas), Saranggani district (Kiamba , Maasim, Malapatan, Maitum, Alabel, Glan), South Cotabato district (Banga, Tupi, Norala, Polomolok, General Santos City (Barangay West, Baranguay Bawing villages) areas), Sultan Kudarat district (Lambayong, Isulan, Esperanza, Bagumbayan, Sen Ninoy Aquino, Kalamasig areas)), Region XI province (Davao del Sur district (Jose Abad Santos, Sarangani areas))",Flood,Flash flood,2009,7,22,505102,505102,22960000.0,33571000.0
+Philippines,"Valencia City area (Bukidnon district, Region X province)",Flood,Flash flood,2009,7,,920,920,,
+Philippines,"Dingras, Nueva Era, Paoay, Batac, Adams, Pinili, Piddig, San Nicolas, Banna, Marcos, Solsona, Sarrat, Pasuqion areas (Ilocos Norte district, Region I (Ilocos region) province), Naic, Kawit, Noveleta, Bacoor, Cavite areas (Cavite district, Region IV-A (Calabarzon) province), San Mateo, Rodriguez areas (Rizal district, Region IV-A (Calabarzon) province), Passig, Las Pinas, Marikina, Quezon, Taguig areas (Metropolitan Manila district, National Capital region (NCR) province)",Storm,Tropical cyclone,2009,7,5,248057,248058,,
+Philippines,"Metropolitan Manila district (National Capital region (NCR) province), Pampanga district (Region III (Central Luzon) province), Batangas, Cavite, Quezon districts (Region IV-A (Calabarzon) province), Romblon, Mindoro Oriental, Mindoro Occidental, Marinduque districts (Region IV (Southern Tagalog) province), Albay, Camarines Sur, Masbate districts (Region V (Bicol region) province), Antique district (Region VI (Western Visayas) province), Cebu district (Region VII (Central Visayas) province), Region VIII (Eastern Visayas) province",Storm,Tropical cyclone,2009,7,16,110400,110405,4281000.0,6260000.0
+Philippines,"Panay area (Capiz district, Region VI (Western Visayas) province), Negros Occidental, Negros Oriental districts (Region VII (Central Visayas) province), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2009,8,14,221412,221422,2888000.0,4223000.0
+Philippines,"Benguet district (Cordillera Administrative region (CAR) province), Tarlac, Zambales districts (Region III (Central Luzon) province), Pangasinan district (Region I (Ilocos region) province)",Storm,Tropical cyclone,2009,8,26,94211,94229,25000000.0,36554000.0
+Philippines,"Santolan, Sta Lucia, Maybunga baranguays villages (Pasig City area, Metropolitan Manila district, NCR province), Malanday village (Marikina City area, Metropolitan Manila district, NCR province)",Flood,Riverine flood,2009,8,,1578,1578,,
+Philippines,"Botolan area (Zambales district, Region III (Central Luzon) province), Pilar, Morong, Hermosa, Dinalupihan areas (Bataan district, Region III (Central Luzon) province), Sibalom area (Antique district, Region VI (Western Visayas) province), San Erique, Pontevedra, La Carlota City, Valladolid, Hinigaran areas (Negros Occidental district, Region VI (Western Visayas) province), Bayawan city (Negros Oriental district, Region VII (Central Visayas) province)",Storm,Tropical cyclone,2009,9,1,95700,95700,,
+Philippines,"Botolan, Iba, San Antonio, San Felipe, San Marcelino areas (Zambales district, Region III (Central Luzon) province), Abucay, Bagac, Dinalupihan, Hermosa, Morong, Pilar, Samal areas (Bataan district, Region III (Central Luzon) province), Apalit, Arayat, Bacolor, Floridabanca, Guagua, Lubao, Masantol, Mexico, Minalin, San Luis, Sasmuan, Stanta Ana, Santo Thomas areas (Pampanga district, Region III (Central Luzon) province), Balagtas, Calumpit, Guiguinto, Marilao, Meycauayan, San Miguel areas (Bulacan district, Region III (Central Luzon) province), Calamba city (Laguna district, Region IV-A (Calabarzon) province)",Storm,Tropical cyclone,2009,9,15,388373,388373,6303000.0,9216000.0
+Philippines,"Santa Teresita area (Cagayan district, Region II (Cagayan Valley) province), Silang area (Cavite district, Region IV-A (Calabarzon) province), Santa Cruz, Bay, Los Banos, Santa Rosa, Calamba, Banan, San Pedro areas (Laguna district, Region IV-A (Calabarzon) province), Pasil area (Kalinga district, Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2009,9,3,48330,48333,,
+Philippines,"Bolinao, Sual, Dagupan areas (Pangasinan district, Region I (Ilocos region) province), Rizal, Cabarroguis areas (Quirino district, Region II (Cagayan Valley) province), Mandaluyong, Manila, Marikina, Muntinlupa, Navotas, Paranaque, Pasig, Las Pinas, Caloocan, Makati, Valenzuela, Malabon, Pateros, Quezon, Taguig, San Juan, Pasay areas (Metropolitan Manila district, National Capital region (NCR) province), Balanga, Orani, Mariveles, Hermosa areas (Bataan district, Region III (Central Luzon) province), Angat, Balagtas, Baliwag, Bocaue, Bulacan, Bustos, Calumpit, Guiguinto, Hagonoy, Malolos, Marilao, Meycauayan, Plaridel, San Miguel areas (Bulacan district, Region III (Central Luzon) province), Arayal, Bacolor, Lubao, Mabelacat, San Simon, San Luis, San Fernando city, Sto.Tomas, Floridablanca, Sta.Rita areas (Pampanga district, Region III (Central Luzon) province), Licab area (Nueva Ecija district, Region III (Central Luzon) province), Magsaysay, San Jose areas (Mindoro Occidental district, Region IV (Southern Tagalog) province), Naga City, Sangay, Pasacao areas (Camarines Sur district, Region V (Bicol region) province), San Pascuan area (Masbate district, Region V (Bicol region) province), Pioduran area (Albay district, Region V (Bicol region) province), Pilar area (Sorsogon district, Region V (Bicol region) province), Zamboanga city (Zamboanga Del Sur district, Region IX (Zamboanga Peninsula) province), Kalamasig area (Sultan Kudarat district, Region XII (Soccsksargen) province), Kabugao area (Apayao district, Cordillera Administrative region (CAR) province), Kabayan area (Benguet district, Cordillera Administrative region (CAR) province), Region IV-A (Calabarzon) province",Storm,Tropical cyclone,2009,9,501,4901234,4901763,237489000.0,347249000.0
+Philippines,"Isabela, Nueva Vizcaya, Cagayan districts (Region II (Cagayan Valley) province), Quezon district (Region IV-A (Calabarzon) province), Albay, Camarines Sur, Catanduanes, Sorsogon districts (Region V (Bicol region) province), Negros Occidental district (Region VI (Western Visayas) province), Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2009,9,512,4478284,4478491,585379000.0,855922000.0
+Philippines,"Aurora, Bataan, Bulacan districts (Region III (Central Luzon) province), Mindoro Occidental, Mindoro Oriental districts (Region IV (Southern Tagalog) province), Albay, Camarines Norte, Camarines Sur districts (Region V (Bicol region) province), National Capital region (NCR), Region IV-A (Calabarzon) province",Storm,Tropical cyclone,2009,10,39,802155,802175,15194000.0,22216000.0
+Philippines,"Agusan del Norte district (Region XIII (Caraga) province), Region VII (Central Visayas), Region X (Northern Mindanao) provinces",Storm,Tropical cyclone,2009,11,4,48129,48142,12000.0,18000.0
+Philippines,"Cagdiana area (Dinagat district, Region XIII (Caraga) province)",Mass movement (wet),Landslide (wet),2010,1,2,925,927,78000.0,112000.0
+Philippines,"Jabonga, Las Nieves, Santiago areas (Agusan del Norte district, Region XIII province), Mainit area (Surigao Del Norte district, Region XIII province), Prosperidad, San Francisco areas (Agusan del Sur district, Region XIII province), Cagdianao, Loreto areas (Dinagat district, Region XIII province)",Flood,Flash flood,2010,1,2,40198,40198,22000.0,32000.0
+Philippines,"Naujan, Baco areas (Mindoro Oriental district, Region IV province)",Flood,Riverine flood,2010,1,1,15480,15480,,
+Philippines,Sultan Kudarat district (Region XII province),Flood,Riverine flood,2010,5,27,40000,40000,,
+Philippines,"Sultan Kudarat district (Region XII province), Shariff Kabunsuan, Maguindanao districts (ARMM province)",Flood,Riverine flood,2010,6,,200000,200000,,
+Philippines,"Manila City, Muntinlupa City, Pateros areas (Metropolitan Manila district, National Capital region (NCR) province), Dingalan area (Aurora district, Region III (Central Luzon) province), Abucay, Bagac, Balanga, Limay, Mariveles, Morong, Orani, Orion, Samal (Bataan district, Region III (Central Luzon) province), Malolos city (Bulacan district, Region III (Central Luzon) province), Masantol area (Pampanga district, Region III (Central Luzon) province), Basud, Capalonga, Daet, Jose Panganiban, Labo, Mercedes, Paracale, San Lorenzo Ruiz, Santa Elena, Talisay, Vinzons areas (Camarines Norte district, Region V (Bicol region) province), Bombon, Caramoan, Lagonoy, Pasacao, Siruma areas (Camarines Sur district, Region V (Bicol region) province), Bagamanoc, Caramoran, Gigmoto, Pandan areas (Catanduanes district, Region V (Bicol region) province), Region IV-A (Calabarzon) province",Storm,Tropical cyclone,2010,7,146,585383,585474,8675000.0,12480000.0
+Philippines,"Sultan Kudarat, Pagalundan, Datu Montawal areas (Maguindanao district, ARMM province), Lambayong area (Sultan Kudarat district, Region XII province), Kabacan area (North Cotabato district, Region XII province)",Flood,Riverine flood,2010,7,,80920,80920,,
+Philippines,"Sitio Sabitan area (Santo Rosario borough, Malolos city, Bulacan district, Region III (Central Luzon) province), Navostas area (Metropolitan Manila district, National Capital region (NCR) province), Region IV (Southern Tagalog) province",Storm,Tropical cyclone,2010,8,31,1045,1045,,
+Philippines,"Brgys Putik, Tugbungan, Boalan barangays villages (Zamboanga City area, Zamboanga Del Sur district, Region IX province)",Flood,Flash flood,2010,8,,505,505,,
+Philippines,"Polomok, Koronadal City, Banga, Tupi areas (South Cotabato district, Region XII province), Lambayong, Tacurong City areas (Sultan Kudarat district, Region XII province), Marilog, Davao City areas (Davao Del Sur district, Region XI province), Kalilangan areas (Bukidnon Region X province), Cagayan de Oro City area (Misamis Oriental district, Region X province)",Flood,Flash flood,2010,9,6,46704,46713,3156000.0,4540000.0
+Philippines,"Aringuay, Bangar areas (La Union district, Region I (Ilocos region) province), Bolinao areas (Pangasinan district, Region I (Ilocos region) province), Aparri, Claveria, Gonzaga, Iguig, Lasam, Rizal, Santa Aba, Santa Praxedes, Santa Teresita, Santo Nino, Tiao areas (Cagayan district, Region II (Cagayan Valley) province), Dinapigue, Divilacan, San Mariano, Santa Maria (Isabela district, Region II (Cagayan Valley) province), Casiguran, Dilasag, Dinalungan areas (Aurora district, Region III (Central Luzon) province), Bagio City, Itogon, La Trinidad, Tublay areas (Benguet district, Cordillera Administrative region (CAR) province), Pinukbuk, Tabuk areas (Kalinga district, Cordillera Administrative region (CAR) province), Tadian area (Mountain Province district, Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2010,10,35,2008984,2009026,275745000.0,396680000.0
+Philippines,"Isabela, Cagayan, Quirino districts (Region II province), Kalinga district (CAR province), Aurora district (Region III province)",Flood,Riverine flood,2010,11,16,450673,450673,,
+Philippines,"Palawan district (Region IV province), Albay, Sorsogon, Catanduanes districts (Region V province), Bohol, Cebu districts (Region VII (Central Visayas) province), Eastern Samar, Leyte, Samar, Northern Samar, Southern Leyte districts (Region VIII province), Camiguin, Lanao del Norte districts (Region X (Northern Mindanao) province), Compostela, Davao Oriental, Davao del Norte, Davao del Sur districts (Region XI (Davao region) province), South Cobato district (Region XII province), Agusan del Norte, Agusan del Sur, Surigao del Norte, Surigao del Sur districts (Region XIII (Caraga) province), Maguindanao district (ARMM province)",Flood,Flash flood,2010,12,110,1972433,1972446,47411000.0,68204000.0
+Philippines,"Southern Leyte district (Region VIII (Eastern Visayas) province), Camiguin, Misamis Occidental, Misamis Oriental districts (Region X (Northern Mindanao) province), Compostela, Davao Oriental districts (Region XI (Davao region) province), Agusan del Norte, Agusan del Sur, Dinagat, Surigao del Norte, Surigao del Sur districts (Region XIII (Caraga) province), Masbate district (Region V (Bicol region) province), Sulu district (ARMM province)",Flood,Riverine flood,2011,1,23,638254,638418,12411000.0,17308000.0
+Philippines,"Sulu district (ARMM province), Surigao del Norte, Agusan del Norte, Surigao del Sur, Agusan del Sur districts (Region XIII province)",Flood,Riverine flood,2011,2,11,2000,2000,,
+Philippines,"Bohol district (Central Visayas province), Biliran, Eastern Samar, Leyte, Northern Samar, Samar, Southern Leyte districts (Eastern Visayas province), Lanao del Norte, Misamis Oriental districts (Northern Mindanao province), South Cotabato district (Soccsksargen province), Surigao Del Sur district (Caraga province)",Flood,Riverine flood,2011,3,16,241776,241777,280000.0,390000.0
+Philippines,Compostela district (Region XI province),Flood,Flash flood,2011,3,2,871,871,,
+Philippines,"Pantukan area (Compostela district, Region XI (Davao Region) province)",Mass movement (wet),Landslide (wet),2011,4,24,560,574,,
+Philippines,"Enrique B. Magalona, Victorias City areas (Negros Occidental district (Region VI province)",Flood,Flash flood,2011,5,,30858,30858,,
+Philippines,"Bulacan, Zambales districts (Region III (Central Luzon) province), Cebu district (Region VII (Central Visayas) province), Eastern Samar, Leyte, Northern Samar, Samar districts (Region VIII (Eastern Visayas) province), National Capital region (NCR), Region V (Bicol region)",Storm,Tropical cyclone,2011,5,37,430081,430092,31259000.0,43592000.0
+Philippines,"Taguig city (Metropolitan Manila district, National Capital region (NCR) province), Isabela district (Region II (Cagayan Valley) province), Albay, Camarines Norte, Camarines Sur, Catanduanes, Sorsogon districts (Region V (Bicol region) province), Zamboanga del Sur district (Region IX (Zamboanga Peninsula) province), Bukidnon district (Region X (Northern Mindanao) province), Compostela, Davao del Norte districts (Region XI (Davao Region) province), Lanao del Sur, Maguindanao districts (Autonomous region in Muslim Mindanao (ARMM) province)",Storm,Tropical cyclone,2011,5,,446907,446907,431000.0,601000.0
+Philippines,"Bukidnon district (Region X province), Compostela, Davao Del Sur districts (Region XI province), North Cotabato, Sultan Kudarat districts (Region XII province), Maguindanao district (ARMM province)",Flood,Riverine flood,2011,5,12,944778,944781,10666000.0,14874000.0
+Philippines,"National Capital region (NCR), Region III (Central Luzon), Region IV (Southern Tagalog), Region IV-A (Calabarzon) provinces",Storm,Tropical cyclone,2011,6,9,1151,1152,,
+Philippines,"Autonomous region in Muslim Mindanao (ARMM), Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV (Southern Tagalog) Region IV-A (Calabarzon), Region IX (Zamboanga Peninsula), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2011,6,,,,,
+Philippines,"Pangasinan district (Region I (Ilocos region) province), Batangas, Cavite, Rizal districts (Region IV-A (Calabarzon) province), Albay, Camarines Sur districts (Region V (Bicol region) province, National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2011,6,20,1700085,1700089,12869000.0,17946000.0
+Philippines,"Davao City area (Davao Del Sur district, Region XI (Davao Region) province), Cotabato City area (Shariff Kabunsuan district, Autonomous region in Muslim Mindanao (ARMM) province), Metropolitan Manila district (National Capital region (NCR) province), Bulacan, Pampanga, Bataan, Tarlac, Zambales districts (Region III (Central Luzon) province), Batangas district (Region IV-A (Calabarzon) province), Albay district (Region V (Bicol) province), La Union, Pangasinan districts (Region I (Ilocos Region) province), Region X (Northern Mindanao), Region XII (Soccsksargen) provinces",Flood,Flash flood,2011,6,31,121005,121005,251000.0,350000.0
+Philippines,Bukidnon district (Region X (Northern Mindanao) province),Mass movement (wet),Landslide (wet),2011,7,5,,5,,
+Philippines,"Zamboanga city (Zamboanga Del Sur district, Region IX province)",Flood,Flash flood,2011,7,,469,469,,
+Philippines,"La Pinas area (Metropolitan Manila district, National Capital region (NCR) province), Nueva Ecija district (Region III (Central Luzon) province), Cavite, Quezon districts (Region IV-A (Calabarzon) province), Marinduque district (Region IV (Southern Tagalog) province), Iloilo district (Region VI (Western Visayas) province), Siquijor district (Region VII (Central Visayas) province), Leyte district (Region VIII (Eastern Visayas) province), Ifugao district (Cordillera Administrative region (CAR) province), Region V (Bicol region) province",Storm,Tropical cyclone,2011,7,84,1108171,1108224,63258000.0,88216000.0
+Philippines,"Mandaluyong, Marikina, Quezon, San Juan cities (Metropolitan Manila district, National Capital region (NCR) province), Japalit area (Pampanga district, Region III (Central Luzon) province), Paniqui area (Tarlac district, Region III (Central Luzon) province), Calatagan, Malvar areas (Batangas district, Region IV-A (Calabarzon) province), Antopolo City, Rodriguez, San Mateo areas (Rizal district, Region IV-A (Calabarzon) province)",Storm,Tropical cyclone,2011,8,11,8418,8423,59000.0,82000.0
+Philippines,"Buntalala, Calubihan, Desamparados, Lanit boroughs (Jaro area, Iloilo City area, Iloilo district, Region VI province), Calajunan borough (Manduriao area, Iloilo City area, Iloilo district, Region VI province), Sooc borough (Arevalo area, Iloilo City area, Iloilo district, Region VI province)",Flood,Riverine flood,2011,8,,2060,2060,,
+Philippines,"Asinan village (Zambales district, Region III (Central Luzon) province)",Mass movement (wet),Landslide (wet),2011,8,,310,310,,
+Philippines,"Quezon City area (Metropolitan Manila district, National Capital region (NCR) province), Zambales, Bulacan districts (Region III (Central Luzon) province), Iloilo district (Region IV (Southern Tagalog) province), Benguet, Abra, Mountain Province districts (Cordillera Administrative region (CAR) province), Catanduanes district (Region V (Bicol region) province), Zamboanga Del Sur district (Region IX (Zamboanga Peninsula) province), Region I (Ilocos region) province",Storm,Tropical cyclone,2011,8,43,403193,403230,34452000.0,48045000.0
+Philippines,"Landan, Upper Klinan, Klinan 6, Maligo Barangays villages (Polomolok area, South Cotabato district, Region XII province)",Flood,Flash flood,2011,9,,274,274,115000.0,160000.0
+Philippines,"Mindoro Occidental, Mindoro Oriental, Romblon districts (Region IV (Southern Tagalog) province), Albay, Camarines Norte, Camarines Sur, Catanduanes districts (Region V (Bicol region) province), Antique, Iloilo districts (Region VI (Western Visayas) province), Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV-A (Calabarzon) province",Storm,Tropical cyclone,2011,9,103,3030755,3030846,344173000.0,479966000.0
+Philippines,"Cordillera Administrative region (CAR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2011,10,25,1113763,1113775,2655000.0,3703000.0
+Philippines,"Bobuntogan village (Jasaan area, Misamis Oriental district, Region X province)",Flood,Flash flood,2011,10,,185,185,,
+Philippines,"Mindoro Oriental, Romblon districts (Region IV (Southern Tagalog) province), Capiz, Iloilo, Negros Occidental districts (Region VI (Western Visayas) province), Cebu district (Region VII (Central Visayas) province), Southern Leyte district (Region VIII (Eastern Visayas) province), Misamis Oriental district (Region X (Northern Mindanao) province), South Cotabato district (Region XII (Soccsksargen) province), Dinagat district (Region XIII (Caraga) province)",Storm,Tropical cyclone,2011,10,11,75632,75638,,
+Philippines,"Carmen, Braulio E. Dujali areas (Davao del Norte district, Region XI province)",Flood,Flash flood,2011,11,,8610,8610,178881000.0,249458000.0
+Philippines,"Cagayan, Isabela districts (Region II province), Aurora district (Region III province), Capiz, Aklan districts (Region VI province)",Flood,Riverine flood,2011,11,5,16178,16191,183000.0,255000.0
+Philippines,"Cagayan district (Region II (Cagayan Valley) province), Negros Oriental, Cebu districts (Region VII (Central Visayas) province), Zamboanga del Norte district (Region IX (Zamboanga Peninsula) province), Misamis Oriental, Lanao del Norte, Bukidnon districts (Region X (Northern Mindanao) province), Compostela district (Region XI (Davao Region) province), Surigao del Sur district (Region XIII (Caraga) province), Lanao del Sur district (Autonomous region in Muslim Mindanao (ARMM) province)",Storm,Tropical cyclone,2011,12,1439,1144229,1150300,38082000.0,53107000.0
+Philippines,"Casiguran, Dilasag areas (Aurora district, Region III), Isabela, Cagayan districts (Region II province)",Flood,Riverine flood,2011,12,10,39520,39520,,
+Philippines,"Catanduanes district (Region V (Bicol) province), Aklan, Capiz, Negros Occidental districts (Region VI (Western Visayas) province), Cebu district (Region VII (Central Visayas) province), Leyte, Southern Leyte districts (Region VIII (Eastern Visayas) province), Bukidnon district (Region X (Northern Mindanao) province), Compostela, Davao del Norte district (Region XI (Davao Region) province), Agusan del Sur, Dinagat, Surigao del Norte, Surigao del Sur districts (Region XIII (Caraga) province)",Flood,Riverine flood,2011,12,12,171800,171809,,
+Philippines,"Napnapan village (Compostela district, Region XI (Davao Region) province)",Mass movement (wet),Landslide (wet),2012,1,75,7,23,,
+Philippines,"Agusan del Sur, Surigao del Sur districts (Region XIII province), Leyte district (Region VIII province), Compostela, Davao del Norte districts (Region XI province), Negros Occidental district (Region VI province), Region IV province",Flood,Riverine flood,2012,1,4,88570,88570,,
+Philippines,"Jabonga area (Agusan del Norte district, Region XIII province), Kauswagan and Bacolod areas (Lanao del Norte district, Region X province)",Flood,Riverine flood,2012,2,,569,569,,
+Philippines,"Lambayong area (Sultan Kudarat district, Region XII province), Agusan del Norte, Surigao del Norte districts (Region XIII province)",Flood,Riverine flood,2012,2,,25000,25000,,
+Philippines,Region VI (Western Visayas) province,Flood,Riverine flood,2012,3,11,,4835,2000000.0,2733000.0
+Philippines,"Glen area (Saranggani district, Region XII province), Maguindanao district (ARMM province), North Cotabato, Sultan Kudarat districts (Region XII province)",Flood,Flash flood,2012,6,1,700,700,,
+Philippines,"Kalamansig area (Sultan Kudarat district, Region XII province)",Flood,Flash flood,2012,6,,12300,12300,,
+Philippines,"Region XIII (Caraga), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen) provinces",Flood,Riverine flood,2012,6,29,,30929,1000000.0,1366000.0
+Philippines,"Ilocos Sur, Pangasinan districts (Region I (Ilocos region) province), Cagayan district (Region II (Cagayan Valley) province), Bataan, Bulacan, Nueva Ecija, Pampanga, Tarlac districts (Region III (Central Luzon) province), Batangas, Cavite, Laguna, Rizal district (Region IV-A (Calabarzon) province), Mindoro Occidental district (Region IV (Southern Tagalog) province), Aklan, Antique, Iloilo, Negros Occidental districts (Region VI (Western Visayas) province), Cebu district (Region VII (Central Visayas) province), Lanao del Norte, Misamis Oriental districts (Region X (Northern Mindanao) province), North Cotabato, South Cotabato districts (Region XII (Soccsksargen) province), Benguet, Ifugao, Kalinga, Mountain Province districts (Cordillera Administrative region (CAR) province), National Capital region (NCR) province",Storm,Tropical cyclone,2012,7,58,949051,949086,9821000.0,13418000.0
+Philippines,"Metropolitan Manila district (National Capital region (NCR) province), Ilocos Sur, La Union, Pangasinan districts (Region I (Ilocos Region) province), Bataan, Bulacan, Nueva Ecija, Pampanga, Tarlac, Zambales districts (Region III (Central Luzon) province), Batangas, Cavite, Laguna, Rizal districts (Region IV-A (Calabarzon) province), Mindoro Occidental, Mindoro Oriental districts (Region IV (Southern Tagalog) province), Iloilo district (Region VI (Western Visayas) province)",Flood,Riverine flood,2012,8,112,4451711,4451725,72330000.0,98823000.0
+Philippines,"Cordillera Administrative region (CAR), National Capital region (NCR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV-A (Calabarzon) provinces",Storm,Tropical cyclone,2012,8,4,,,3000000.0,4099000.0
+Philippines,La Union district (Region I (Ilocos region) province),Storm,Tropical cyclone,2012,8,11,5606,5607,99000.0,135000.0
+Philippines,"National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2012,9,1,1234,1234,,
+Philippines,"Muntinlupa city (Metropolitan Manila district, National Capital region (NCR) province), Zamboanga del Norte district (Region IX (Zamboanga Peninsula) province)",Storm,Tropical cyclone,2012,9,4,7921,7921,,
+Philippines,"Zambales district (Region III (Central Luzon) province), Mindoro Occidental district (Region IV (Southern Tagalog) province)",Storm,Tropical cyclone,2012,10,,322,322,,
+Philippines,"National Capital region (NCR), Region I (Ilocos region), Region III (Central Luzon), Region IV (Southern Tagalog), Region IV-A (Calabarzon), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas), Region XIII (Caraga) province",Storm,Tropical cyclone,2012,10,36,108021,108040,1339000.0,1829000.0
+Philippines,Region XI (Davao Region) province,Storm,Tropical cyclone,2012,12,1901,6243998,6246664,898352000.0,1227398000.0
+Philippines,"Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2012,12,24,241603,241606,5526000.0,7550000.0
+Philippines,"Palawan, Mindoro Oriental districts (Region IV (Southern Tagalog) province), Zamboanga Del Norte district (Region IX (Zamboanga Peninsula) province), Compostela, Davao del Norte districts (Region XI (Davao Region) province)",Storm,Tropical cyclone,2013,1,1,10597,10597,,
+Philippines,Region X (Northen Mindanao) province,Flood,Flash flood,2013,1,10,507769,507769,2800000.0,3770000.0
+Philippines,"Mindoro Oriental district (Region IV (Southern Tagalog) province), Leyte district (Region VIII (Eastern Visayas) province), Zamboanga del Norte district (Region IX (Zamboanga Peninsula) province), Bukidnon, Lanao del Norte districts (Region X (Northern Mindanao) province), North Cotabato, South Cotabato districts (Region XII (Soccsksargen) province), Agusan del Norte district (Region XIII (Caraga) province), Maguindanao district (Autonomous region in Muslim Mindanao (ARMM) province), Region VII (Central Visayas), Region XI (Davao Region) provinces",Storm,Tropical cyclone,2013,2,6,262880,262884,1680000.0,2262000.0
+Philippines,"Region III (Central Luzon), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2013,6,7,3592,3596,1000000.0,1347000.0
+Philippines,"Region XIII (Caraga), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen) provinces",Flood,Riverine flood,2013,8,11,100000,100021,36000000.0,48476000.0
+Philippines,"Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2013,8,18,395723,395730,32431000.0,43670000.0
+Philippines,"Region III (Central Luzon) province (Pampanga district (Lubao, Floridablanca, Minalin areas), Bulacan district (Meycauayan area), Nueva Ecija district (Mariveles, Bataan, Malolos City, Carranglan areas), Zambales district (Olongapo area), Tarlac, Bataan districts), Region IV-A (Calabarzon) province (Rizal district (Teresa, Binangonan areas), Cavite district (Imus, Bacoor, Kawit, Noveleta, Tanza areas), Quezon district (Sariaya area), Laguna district), Region IV province (Mindoro Occidental district), National Capital region (NCR) province (Metropolitan Manila district (Las Pinas, Caloocan, Valenzuela, Navotas, Malabon areas)), Region I (Ilocos region) province (Pagasinan district), Cordillera Administrative region (CAR) province (Mountain Province district (Bontoc, Sagada areas), Benguet district (Tuba area), Abra district)",Flood,Riverine flood,2013,8,31,3096392,3096422,2190000000.0,2948950000.0
+Philippines,"Cordillera Administrative region (CAR), Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV-A (Calabarzon), Region IV (Southern Tagalog), Region V (Bicol region), Region VI (Western Visayas) provinces",Storm,Tropical cyclone,2013,9,5,72696,72696,,
+Philippines,"Olongapo City area (Zambales district, Region III (Central Luzon) province), Busuanga area (Palawan district, Region IV province)",Flood,Riverine flood,2013,9,33,588147,588155,4000000.0,5386000.0
+Philippines,"Palawan district (Region IV province), ARMM, Region VI, Region VII, Region, VIII, Region IX, Region X, Region XI, Region XII, Region XIII provinces",Flood,Riverine flood,2013,10,20,207971,207971,1988000.0,2677000.0
+Philippines,"Nueva Vizcaya district (Region II (Cagayan Valley) province), Pangasinan district (Region I (Ilocos region) province), Region III (Central Luzon) province",Storm,Tropical cyclone,2013,10,20,871601,871755,96723000.0,130243000.0
+Philippines,"Ilocos Norte district (Region I (Ilocos region) province), Cagayan district (Region II (Cagayan Valley) province), Apayao district (Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2013,10,4,220443,220443,4729000.0,6368000.0
+Philippines,"Samar, Leyte districts (Region VIII (Eastern Visayas) province), Cebu district (Region VII (Central Visayas) province), Iloilo, Capiz, Aklan districts (Region VI (Western Visayas) province), Palawan district (Region IV (Southern Tagalog) province)",Storm,Tropical cyclone,2013,11,7354,16078181,16106870,10000000000.0,13465524000.0
+Philippines,"North Cotabato, South Cotabato districts (Region XII (Soccsksargen) province), Autonomous region in Muslim Mindanao (ARMM), Region X (Northern Mindanao), Region XI (Davao Region), Region XIII (Caraga) provinces",Storm,Tropical cyclone,2014,1,79,1148621,1148707,12591000.0,16684000.0
+Philippines,"Antique, Negros Occidental districts (Region VI (Western Visayas) province), Cebu (Region VII (Central Visayas) province), Biliran, Leyte, Southern Leyte districts (Region VIII (Eastern Visayas) province), Agusan del Norte, Dinagat, Surigao del Norte districts (Region XIII (Caraga) province)",Storm,Tropical cyclone,2014,1,6,47740,47740,3200000.0,4240000.0
+Philippines,"Maguindanao, Shariff Kabunsuan districts (ARMM province)",Flood,Riverine flood,2014,6,,99185,99185,791000.0,1048000.0
+Philippines,"National Capital region (NCR), Region III (Central Luzon), Region IV-A (Calabarzon), Region IV (Southern Tagalog), Region V (Bicol region), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2014,7,111,4653716,4654966,820576000.0,1087310000.0
+Philippines,"Region II, Region IV-A, Region IV provinces",Storm,Tropical cyclone,2014,7,2,683,683,,
+Philippines,"Kabacan, Tulunan, Pikit areas (North Cotabato district, Region XII province), Upi, So. Upi areas (Shariff Kabunsuan district, ARMM province), Maguindanao district (ARMM province)",Flood,Flood (General),2014,8,1,42175,42175,,
+Philippines,"El Salvador, Cagayan de Oro City, Lagonglong, Naauan, Opol areas (Misamis Oriental district, Region X province), Quezon area (Bukidnon district, Region X province)",Flood,Flash flood,2014,8,4,3770,3770,,
+Philippines,"Ilocos Norte, La Union, Pangasinan districts (Region I (Ilocos region) province), Cagayan, Isabela, Nueva Vizcaya districts (Region II (Cagayan Valley) province), Negros Occidental district (Region VI (Western Visayas) province), Rizal district (Region IV-A (Calabarzon) province), Apayao, Benguet, Kalinga districts (Cordillera Administrative region (CAR) province), National Capital region (NCR), Region III (Central Luzon) provinces",Storm,Tropical cyclone,2014,9,4,431085,431086,19183000.0,25419000.0
+Philippines,"Dagupan, Lingayen areas (Pangasinan district, Region I (Ilocos region) province), Pampanga district (Region III (Central Luzon) province), Metropolitan Manila district (National Capital region (NCR) province)",Storm,Tropical cyclone,2014,9,22,2052141,2052157,75783000.0,100417000.0
+Philippines,"Palawan district (Region IV (Southern Tagalog) province), Negros Occidental district (Region VI (Western Visayas) province), Bohol, Cebu, Negros Oriental districts (Region VII (Central Visayas) province), Southern Leyte district (Region VIII (Eastern Visayas) province), Misamis Occidental, Misamis Oriental districts (Region X (Northern Mindanao) province), Davao del Sur district (Region XI (Davao Region) province), Dinagat, Surigao del Norte, Surigao del Sur districts (Region XIII (Caraga) province)",Storm,Tropical cyclone,2014,11,12,4695,4695,,
+Philippines,"Bataan district (Region III (Central Luzon) province), Agusan Del Norte, Agusan Del Sur, Surigao Del Sur, Surigao Del Norte districts (Region XIII (Caraga) province), National Capital region (NCR), Region IV (Southern Tagalog), Region IV-A (Calabarzon), Region V (Bicol region), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces",Storm,Tropical cyclone,2014,12,18,4149484,4150400,113878000.0,150895000.0
+Philippines,"Palawan district (Region IV (Southern Tagalog) province), Antique, Capiz, Negros Occidental districts (Region VI (Western Visayas) province), Bohol, Cebu, Siquijor districts (Region VII (Central Visayas) province), Leyte, Samar, Southern Leyte districts (Region VIII (Eastern Visayas) province), Zamboanga Del Sur district (Region IX (Zamboanga Peninsula) province), Bukidnon, Camiguin, Lanao del Norte, Misamis Oriental districts (Region X (Northern Mindanao) province), Compostela, Davao del Norte, Davao Oriental districts (Region XI (Davao Region) province), Region XIII (Caraga) province",Storm,Tropical cyclone,2014,12,72,578549,578549,17688000.0,23438000.0
+Philippines,"Albay, Camarines Norte, Catanduanes, Sorsogon districts (Region V (Bicol region) province), Cebu district (Region VII (Central Visayas) province), Eastern Samar, Samar districts (Region VIII (Eastern Visayas) province)",Storm,Tropical cyclone,2015,1,2,21687,21687,1000000.0,1323000.0
+Philippines,"Isabela district (Region II (Cagayan Valley) province), Aurora district (Region III (Central Luzon) province)",Storm,Tropical cyclone,2015,4,,2761,2761,,
+Philippines,"Benito Soliven, Dinapigue, Dilvilacan, Maconacon, Palanan areas (Isabela district, Region II (Cagayan Valley) province), Aparri, Buguey, Calayan, Gonzaga, Santa Ana, Santa Teresita areas (Cagayan district, Region II (Cagayan Valley) province)",Storm,Tropical cyclone,2015,5,2,523,523,348000.0,461000.0
+Philippines,"Basilan, Tawi-tawi districts (ARMM province)",Flood,Flood (General),2015,7,8,122000,122000,,
+Philippines,"Ilocos Norte, Ilocos Sur, La Union districts (Region I (Ilocos region) province), Palawan district (Region IV (Southern Tagalog) province), Benguet, Abra, Kalinga districts (Cordillera Administrative region (CAR) province)",Storm,Tropical cyclone,2015,7,,55567,55567,2218000.0,2935000.0
+Philippines,"Caloocan, Malabon, Quezon City, Valenzuela City areas (Metropolitan Manila district, NCR province),Dinalpupihan, Mariveles areas (Bataan district, Region III province),Marilao, Meycauayan, San Jose Del Monte, Santa Maria areas (Bulacan district, Region III province), San Fernando area (Pampanga district, Region III province), Botolan, Candelaria, Masinloc areas (Zambales district, Region III province), San Jose area (Batangas district, Region IV-A province), San Pedro area (Laguna district, Region IV-A province), Conner, Kabugao areas (Apayao district, CAR province), Atok, Baguio City, Bangar, Itogon, Kapangan, Kibunga, La Trinidad, Sablan, Tuba areas (Benguet district, CAR province), Liwan, Tabuk areas (Kalinga district, CAR province)",Flood,Flood (General),2015,7,23,42500,42500,86000.0,114000.0
+Philippines,"Cordillera Administrative region (CAR), Region I (Ilocos region), Region II (Cagayan Valley) provinces",Storm,Tropical cyclone,2015,7,5,10800,14100,1500000000.0,1985230000.0
+Philippines,Pangasinan province,Flood,Flood (General),2015,7,4,3000,3000,,
+Philippines,"Jagna area (Bohol district, Region VII (Central Visayas) province), Malaybalay city, Valencia areas (Bukidnon district, Region X (Northern Mindanao) province), Ampatuan, Datu Piang, Pagalungan areas (Maguindanao districts, ARMM province), Kabuntalan, Sultan Kudarat areas (Shariff Kabunsuan district, ARMM province)",Flood,Flood (General),2015,7,9,62929,62929,114000.0,151000.0
+Philippines,"Isabela district (Region II (Cagayan Valley), Region XIII (Caraga), Autonomous region in Muslim Mindanao (ARMM), Region IX (Zamboanga Peninsula), Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen) provinces (Mindanao Isl.), Region VI (Western Visayas), Region VII (Central Visayas), Region VIII (Eastern Visayas) provinces (Visayas regions)",Drought,Drought,2015,8,,181687,181687,84399000.0,111701000.0
+Philippines,"Malaybalay City, Valencia areas (Bukidnon district, Region X province)",Flood,Riverine flood,2015,8,9,880,880,,
+Philippines,"Janiuary area (Iloilo district, Region VI (Western Visayas) province), Valladolid area (Negros Occidental district, Region VI (Western Visayas) province), San Lorenzo area (Guimaras district, Region VI (Western Visayas) province), Bayawan, Siaton areas (Negros Oriental district, Region VII (Central Visayas) province), Kapatagan, Laia, Sapad areas (Lanao Del Norte district, Region X (Northern Mindanao) province)",Storm,Tropical cyclone,2015,8,,3843,3843,,
+Philippines,"Ilocos Norte, Ilocos Sur districts (Region I (Ilocos region) province), Region II (Cagayan Valley), Cordillera Administrative region (CAR) provinces",Storm,Tropical cyclone,2015,8,40,318359,318383,30299000.0,40100000.0
+Philippines,"Benguet district (Cordillera Administrative region (CAR) province), La Union, Pangasinan districts (Region I (Ilocos region) province), Aurora, Bulacan, Nueva Ecija districts (Region III (Central Luzon) province)",Storm,Tropical cyclone,2015,10,2,3500,3500,1300000.0,1721000.0
+Philippines,"Camarines Norte, Catanduanes districts (Region V (Bicol region) province), Cordillera Administrative region (CAR), National Capital region (NCR) province, Region I (Ilocos region), Region II (Cagayan Valley), Region III (Central Luzon), Region IV-A (Calabarzon) provinces",Storm,Tropical cyclone,2015,10,51,2898507,2898590,210985000.0,279236000.0
+Philippines,"Nueva Vizcaya district (Region II (Cagayan Valley) province), Quezon, Batangas districts (Region IV-A (Calabarzon) province), Marinduque, Mindoro Oriental, Mindoro Occidental, Romblon districts (Region IV (Southern Tagalog) province), Catanduanes, Albay, Masbate, Sorsogon districts (Region V (Bicol region) province), Biliran districts (Region VII (Central Visayas) province), Samar, Northern Samar districts (Region VIII (Eastern Visayas) province), Quezon City area (Metropolitan Manila district, National Capital region (NCR) province)",Storm,Tropical cyclone,2015,12,46,287227,287251,135217000.0,178958000.0
+Philippines,"Zambales, Battan (Region III); Rizal, Batangas (Region IV)",Storm,Tropical cyclone,2016,7,2,3357,3359,,
+Philippines,"Ilocos Norte, Ilocos Sur districts (Region I (Ilocos region) province), Cagayan, Isabela districts (Region II (Cagayan valley) province), Iloilo district (Region VI (Western Visaya) province), Northern Samar district (Region VIII (Eastern Visayas) province), Region IV (Southern Tagalog), CAR, provinces",Storm,Storm (General),2016,7,,8809,8809,,
+Philippines,"National Capital Region (NCR) province, Ilocos Sur, La Union, Pangasinan districts (Region I (Ilocos Region) province), Bataan, Bulacan, Nueva Ecija, Pampanga, Tarlac, Zambales districts (Region III (Central Luzon) province), Laguna, Rizal districts (Region IV-A (Calabarzon) province), Antique, Iloilo, Negros Occidental districts (Region VI (Western Visaya) province), Abra, Benguet, Ifugao, Mountain province districts (Cordillera Administrative region (CAR) province)",Flood,Flood (General),2016,8,26,1263098,1263098,9320000.0,12181000.0
+Philippines,"Pampanga district (Region III (Central Luzon) province), Pangasinan district (Region I (Ilocos region) province)",Flood,Flood (General),2016,8,19,1300000,1300000,,
+Philippines,"Ilocos Norte district (Region I (Ilocos region) province), Batanes, Cagayan districts (Region II (Cagayan valley) province)",Storm,Tropical cyclone,2016,9,,16648,16648,4913000.0,6421000.0
+Philippines,"Meycauayan city, Marilao, Sta. Maria (Bulacan province)",Storm,Tropical cyclone,2016,9,,1559,1559,,
+Philippines,"Pangasinan district (Region I (Ilocos region) province), Nueva Vizcaya, Quirino, Isabela districts (Region II (Cagayan valley) province), Aurora, Bulacan, Nueva Ecija, Zambales districts (Region III (Central Luzon) province), Quezon, Rizal, Laguna, Cavite, Batangas districts (Region IV-A (Calabarzon) province), Albay, Catanduanes, Camarines Sur, Camarines Norte, Sorsogon districts (Region V (Bicol region) province)",Storm,Tropical cyclone,2016,10,,52270,52270,11490000.0,15017000.0
+Philippines,"Ilocos Norte, Ilocos Sur, La Union, Pangasinan districts (Region I (Ilocos region) province), Cagayan, Isabela, Nueva Vizcaya, Quirino districts (Region II (Cagayan valley) province), Aurora, Bataan, Bulacan, Nueva Ecija, Pampanga, Tarlac, Zambales districts (Region III (Central Luzon) province), Batangas, Quezon, Rizal districts (Regio IV-A (Calabarzon) province), Camarines Norte, Sorgoson (Region V (Bicol region) province)), Abra, Apayao, Benguet, Ifugao, Kalinga, Mountain province (Cordillera Administrative region (CAR))",Storm,Tropical cyclone,2016,10,8,981154,981154,50690000.0,66252000.0
+Philippines,"Romblon, Mindoro Oriental (Region IV (Southern Tagalog) province), Antique, Capiz, Aklan, Iloilo (Region VI (Western Visayas) province), Leyte (Region VIII (Eastern Visayas) province), Surigao del Sur, Surigao del Norte, Dinagat (Region XIII (Caraga) province)",Storm,Tropical cyclone,2016,11,,14309,14309,,
+Philippines,"Batangas, Cavite, Laguna, Quezon, Rizal (Calabarzon); Mariduque, Mindoro Occidental (Mimaropa); Albay, Camarines Norte, Camarines Sur, Catanduanes , Masbate, Sorsogon (Region V, Bicol region); Northern Samar (Region VIII, Eastern Visayas)",Storm,Tropical cyclone,2016,12,24,1893404,1893404,103661000.0,135485000.0
+Philippines,"Western Visayas, Central Visayas, Eastern Visayas, Zamboanga (Samboanga del Norte), Northern Mindanao (Bukidnon, Camiguin, Misamis Occidental, Misamis oriental, Lanao del Norte) Davao (Compostela, Davao del Norte, Davao del Sur, Davao Oriental), Caragan (Agusan del Norte, Agusan del Sur, Surigao del Norte), Autonomous region of Muslim Mindanao (Lanao del Sur, Maguindanao), Soccskargen (Saranggani)",Flood,Flood (General),2017,1,9,1500000,1500000,8100000.0,10366000.0
+Philippines,"Mindanao (Agusan del Sur, Compostela Valley, Agusan del Norte, Davao Oriental, Lanao del Sur and Maguindanao)",Flood,Flood (General),2017,2,13,334000,334000,,
+Philippines,"Cebu Isl. (Carmen, Danao City)",Storm,Tropical cyclone,2017,4,10,850,860,2000000.0,2559000.0
+Philippines,"National Capital Region (Valenzuela, Quezon, Manila, Malabon, Paranaque, Makati), Ilocos (Pangasinan, La Union, Ilocos Norte, Ilocos Sur), Central Luzon (Balagtas, Meycauayan, Marilao-Bulacan, MacabebeBrgy. Sto. Rosario - City of San Fernando -Pampanga), Calabarzon (Cavite, Rizal), Cordillera Administrative Region (CAR) (Benguet, Baguio city, Abra,Mt Province, Ifugao)",Storm,Tropical cyclone,2017,7,,7339,7339,174920.0,224000.0
+Philippines,"Ilocos, Cagayan Valley, Central Luzon, Cordillera Regions",Storm,Tropical cyclone,2017,8,,3400,3400,,
+Philippines,"Central Luzon, Calabarzon (Laguna, Quezon, Cavite, Rizal), the National Capital region (Metro Manila)",Storm,Tropical cyclone,2017,9,26,7465,9110,5300000.0,6783000.0
+Philippines,"Bacolod, Sipalay, Bago, Talisay, La Carlota, Hinobaan, Binalbagan, Pontevedra (Negros Occidental province-Western Visayas Region)",Flood,Flash flood,2017,9,,8000,8000,,
+Philippines,"Mimaropa (Puerto Princesa City, Palawan), Western Visayas (Negros occidental), Central Visayas (Negros oriental, Siquijor), Zamboanga peninsula (Zamboanga city, Zamboanga del Norte, Zamboanga del Sur, Zamboanga del Sibugay), Caraga (Agusan del Norte), the Autonomous Region of Muslim Mindanao (Maguindanao), Soccksargen (Sultan Kudarat) regions",Storm,Tropical cyclone,2017,10,9,163349,163349,3400000.0,4351000.0
+Philippines,"southern Luzon: Batangas (San Juan town), Palawan (Busuanga town), Camarines Sur (Barangay Sibaguan near Sagnay town, Lagonoy), Albay, Camarines Norte (Vinzons, Mercedes), Oriental Mindoro (Calapan city), Laguna - Calabarzon, Mimaropa, and Bicol Regions",Storm,Tropical cyclone,2017,11,6,305,305,,
+Philippines,"Bicol (Albay,Camarines Norte,Camarines Sur, Masbate, Sorsogon), Western Visayas (Aklan, Capiz, Iloilo), Central Visayas (Cebu), Eastern Visayas (Biliran, Leyte, Samar, Eastern Samar, Northern Samar,Southern Leyte), Caraga (Dinagat Island, Surigao del Norte), Southern Tagalog (Marinduque, Oriental Mindoro, Palawan, Romblon)",Storm,Storm (General),2017,12,91,1861250,1861328,71901000.0,92014000.0
+Philippines,"Valencia, (Mindanao),Salvador, Sapad, Dalama village (Tubod) (Lanao del Norte), Piagapo, Sibuco,Tugaya, Marawi (Lanao del Sud), Zamboanga del Norte, Zamboanga Sibugay, Cagayan de Oro (Misamis Oriental)",Storm,Storm (General),2017,12,58,871757,923757,50000000.0,63987000.0
+Philippines,"Aklan, Capiz (Region VI); Bohol, Cebu (Region VII); Camiguin, Lanao del NOrte, Misamis Oriental (Region X); Agusan del NOrte, Dinagat Isl., Surigao del Norte , Surigao del Sur (Caraga)",Storm,Tropical cyclone,2018,1,3,83908,83917,12292000.0,15355000.0
+Philippines,"Bicol, Dvao, Eastern Visayas, NOrthern Mindanao, Western Visayas",Flood,Flood (General),2018,1,11,180000,180000,,
+Philippines,"Palawan (Mimaropa); Capiz, Iloilo, Negros occidental (Region IV - Western Visayas); Bohol, Cebu, Negros Oriental, Siquijor (Region VII - Central Visayas); Biliran, Eastern Samar, Leyte, Samar, Southern Leyte (Region VII - Eastern Visayas); Agusan del Norte, Dinagat Isl., Surigao del Norte, Surigao del Sur (REgion XIII - Caraga)",Storm,Tropical cyclone,2018,2,,254859,254859,3070000.0,3835000.0
+Philippines,,Storm,Tropical cyclone,2018,7,16,2231101,2231101,88000000.0,109932000.0
+Philippines,"Apayao, Benguet, Cagayan, Kalinga, Isabela, Abra, Ilocos Norte and Ilocos Sur",Storm,Tropical cyclone,2018,9,84,3800000,3800138,32033000.0,40016000.0
+Philippines,"I, III, CAR, NCR, and CALABARZON",Storm,Tropical cyclone,2018,9,5,1709511,1709511,19000000.0,23735000.0
+Philippines,"Ilocos norte, Ilocos Sur, la Union, Pangasinan (Region 1 - Ilocos); Cagayan, Isabela, Nueva Vizcaya, Quirino (Region II - Cagayan Valley); Aurora, Nueva Ecija, Tarlac, Zambales (Region III - Central Luzon); Northern Samar (REgion VIII - Eastern Visayas); Abra, Apayao, Benguet, Ifugao, Kalinga, Mountain province (CAR)",Storm,Tropical cyclone,2018,10,12,253298,253300,305000000.0,381014000.0
+Philippines,"Regions IV-A (Calabarzon), IV-B (Mimaropa), V (Bicol), and VIII (Eastern Visayas)",Storm,Tropical cyclone,2018,12,182,1015958,1016063,106753000.0,133359000.0
+Philippines,"Agusan del Norte, Agisan del Sur, Dinaga Isl., Surigao del Norte, Surigao del Sur (Region XIII - Caraga)",Storm,Tropical cyclone,2019,1,,13160,13160,,
+Philippines,"MIMAROPA Region, Region IX, Region XII, BARMM, Metro Manilla",Drought,Drought,2019,3,,16000,16000,25600000.0,31411000.0
+Philippines,"Datu Salibo and Sultan sa Barongis municipalities (Maguindanao Province, Mindanao Island)",Flood,Flood (General),2019,6,,45000,45000,,
+Philippines,"Cordillera Administrative Region, Ilocos, Cagayan Valley",Storm,Tropical cyclone,2019,7,4,2000,2000,377440000.0,463115000.0
+Philippines,Aurora Province,Storm,Tropical cyclone,2019,8,2,61500,61502,,
+Philippines,"Cagayan province, north Luzon Island",Storm,Tropical cyclone,2019,11,19,670,673,36000000.0,44172000.0
+Philippines,"Romblon Province (Mimaropa region), Camarines Sur Province (Bicol Region)",Storm,Tropical cyclone,2019,11,,3000,3000,,
+Philippines,"Aurora, Pampanga, Bataan, Bulacan, Zambales (Region III); Batangas, Cavite, Laguna, Quezon (Calanarzon); Marinduqe, Oriental Mindoro, Occidental Mindoro, Romblon (Mimaropa); Albay, Camarines Norte, Camarines Sur, Catanduanes, Masbate, Sorgoson (Region V); Northern Samar, Eastern Samar, Western Samar, (Region VIII); Surigao del Sur (Caraga); Mountain province (CAR)",Storm,Tropical cyclone,2019,12,4,2305075,2647558,109151000.0,133927000.0
+Philippines,"Salcedo, Eastern Samar; Tacloban City, Leyte; Gigantes Islands, Carles, Iloilo; Ibajay, Aklan; Semirara Island, Caluya, Antique; Bulalacao, Oriental Mindoro; Cabucgayan, Biliran; Cagayan Valley, Cordillera Administrative Region",Storm,Tropical cyclone,2019,12,63,3296877,3297246,15722000.0,19291000.0
+Philippines,"Calabazon, Eastern Visayas, Cordillera Administrative Region provinces",Storm,Tropical cyclone,2020,5,5,578571,578740,31100000.0,37694000.0
+Philippines,"Visayas, Bicol, northern Mimaropa, southern Calabarzon Provinces",Storm,Tropical cyclone,2020,10,3,250,250,187000.0,227000.0
+Philippines,"Regions III, CALABARZON, MIMAROPA, V, VI, VII and VIII",Storm,Tropical cyclone,2020,10,31,888375,888415,87100000.0,105568000.0
+Philippines,"Calabarzon, Mimaropa, Bicol Regions; NCR, II, III, V, VIII, CAR regions",Storm,Tropical cyclone,2020,10,31,3355995,3356394,503294000.0,610011000.0
+Philippines,"National Capital Region, Quezon, Rizal province",Storm,Tropical cyclone,2020,11,111,514824,514909,421000000.0,510268000.0
+Philippines,"Mindanao Island, Leyte Province (Eastern Visayas), Cagayan Valley (north-eastern Luzon Island), Isabela Province (Luzon)",Storm,Tropical cyclone,2020,12,9,36030,36032,2293000.0,2779000.0
+Philippines,Cebu province,Mass movement (wet),Landslide (wet),2020,12,10,,11,,
+Philippines,"Bicol, Western Visayas and Eastern Visayas Regions",Storm,Severe weather,2021,1,6,37830,37830,,
+Philippines,Negros Occidental and Northern Samar Provinces (Visayas); Luzon,Flood,Flash flood,2021,1,2,38160,38160,25000000.0,28941000.0
+Philippines,"Bicol, Western and Eastern Visayas Regions",Flood,Flood (General),2021,1,2,261580,261580,,
+Philippines,"Eastern Samar, Southern Leyte and Samar Provinces (Eastern Visayas Region)",Flood,Flood (General),2021,2,1,18170,18170,,
+Philippines,Caraga Region (northern Mindanao) and Eastern Visayas Region,Storm,Tropical cyclone,2021,2,5,272451,272453,3114000.0,3605000.0
+Philippines,"Cagayan Valley, Bicol, Eastern Visayas and Caraga Regions",Storm,Tropical cyclone,2021,4,9,15000,15000,20000000.0,23153000.0
+Philippines,"Davao City (Bunawan and Buhangin-B districts, southern Mindanao)",Flood,Flood (General),2021,4,,3280,3280,,
+Philippines,,Storm,Tropical cyclone,2021,6,11,21000,21000,11000000.0,12734000.0
+Philippines,"Mimaropa, Bicol, Western Visayas, Eastern Visayas, Central Luzon, Western Calabarzon, NCR",Storm,Tropical cyclone,2021,9,17,313373,313397,,
+Philippines,"MIMAROPA and Western Visayas Regions, Capiz, Guimaras, Iloilo (Region VI)",Storm,Tropical cyclone,2021,10,3,8048,8048,240000.0,278000.0
+Philippines,Governor Generoso and San Isidro Municipalities (Davao Oriental Province),Flood,Flood (General),2021,10,,24166,24166,,
+Philippines,"Sur Province (north-western Luzon), Palawan Province (central-western Philippines) Pangasinan Province (central-western Luzon); Regions I, II, III, MIMAROPA, CALABARZON, VI, VIII, CARAGA, Cordillera Administrative Region (CAR) and National Capital Region (NCR)",Storm,Tropical cyclone,2021,10,59,1140534,1140539,75610000.0,87530000.0
+Philippines,"Eastern Visayas, Northern Mindanao, Davao, Caraga, Surigao del Norte, Dinagat Islands, Southern Leyte, Bohol, Cebu, Negros Oriental, Palawan, Iliolo",Storm,Tropical cyclone,2021,12,457,10607625,10608996,915271000.0,1059566000.0
+Philippines,"Maguindanao Province (Bangsamoro Region, western Mindanao); Agusan del Sur Province (Caraga Region, northern Mindanao); Mamasapano, Agusan del Sur, Davao de Oro and Sarangani provinces",Flood,Flash flood,2022,4,3,1955,1955,,
+Philippines,"Davao Region, Northern Mindanao, Leyte, Southern Leyte,Negros Occidental and Iloilo provinces",Storm,Tropical cyclone,2022,4,346,2298780,2298788,41556000.0,44543000.0
+Philippines,"Ilocos, Cagayan Valley, Cordillera Administrative Region (CAR), Bicol, and Calabarzon",Storm,Tropical cyclone,2022,8,,7616,7616,,
+Philippines,"Region III (Central Luzon), Region IV-A (Calabarzon)",Storm,Storm surge,2022,9,17,913893,913945,56946000.0,61039000.0
+Philippines,"Cagayan Valley (the worst-hit), Cordillera Administrative Region (CAR) and Calabarzon",Storm,Tropical cyclone,2022,10,,7000,7000,18000000.0,19294000.0
+Philippines,Luzon,Storm,Tropical cyclone,2022,10,,103600,103602,,
+Philippines,"Bukidnon Town (Malitbog Province); Tagoloan Municipality, Cagayan De Oro City (Misamis Oriental province, Northern Mindanao Region )",Mass movement (wet),Landslide (wet),2022,10,5,11712,11712,,
+Philippines,"Cotabato; Datu Blah Sinsuat (Mindanao Isl.); Virac, Catanduanes, Caramoan, Camarines Sur, Buenavista, Quezon, Santa Cruz, Marinduque, San Juan, Batangas; Region III (Central Luzon), Region VI (Western Visayas), Region VII (Central Visayas), National Capital region (NCR)",Storm,Tropical cyclone,2022,10,158,3323188,3323291,45569000.0,48844000.0
+Philippines,"Mimaropa, Bicol, Eastern Visayas, Zamboanga Peninsula, Northern Mindanao, Davao Region and Caraga (Mindanao and Luzon)",Flood,Flood (General),2022,12,70,600000,600016,11000000.0,11791000.0
+Philippines,"Lanao del Norte Province (Northern Mindanao Region); Davao de Oro and Davao del Norte provinces; Maguindanao (BARMM Region); Mimaropa Region; Cagayan Valley, Central Luzon, Calabarzon, Bicol, Western Visayas, Eastern Visayas, Zamboanga Peninsula, Soccsksargen, Caraga",Flood,Flood (General),2023,1,52,2143347,2143358,30371000.0,31267000.0
+Philippines,"Bicol, Western Visayas, Eastern Visayas, Zamboanga Peninsula, Davao Region, Soccsksargen and Caraga",Flood,Flood (General),2023,2,15,32764,32764,5000000.0,5147000.0
+Philippines,Davao City (Davao del Norte); Davao Oriental (Dava Region); Maguidanao del Sur Province (BARMM Region),Flood,Flood (General),2023,2,2,215000,215000,5000000.0,5147000.0
+Philippines,"Calabarzon, Mimaropa, Bicol, Davao and Zamboanga Peninsula",Storm,Tropical cyclone,2023,4,,136149,136149,222000.0,229000.0
+Philippines,"Ilocos Region, Cagayan Valley, Central Luzon, Western Visayas, CAR and MIMAROPA.",Storm,Tropical cyclone,2023,5,1,30500,30501,,
+Philippines,Northern Luzon,Storm,Tropical cyclone,2023,7,2,450,450,,
+Philippines,"Luzon Isl., Region 3, 1 (Ilocos), 6, 2 (Cagayan), 12, 5, 11 and 10, CAR, Mimaropa, NCR, Calabarzon, BARMM",Storm,Tropical cyclone,2023,7,39,5385066,5385237,284256000.0,292640000.0
+Philippines,,Storm,Tropical cyclone,2023,8,4,900000,900003,33000000.0,33973000.0
+Philippines,"Luzon, Batanes and the Babuyan Islands",Storm,Tropical cyclone,2023,10,,275,275,,
+Philippines,"Eastern Visayas, Western Visayas and Bicol Regions",Flood,Flood (General),2023,11,2,1157487,1157488,2160000.0,2224000.0
+Philippines,"Davao, Northern Mindanao, Caraga, Mimaropa, Western Visayas and Eastern Visayas)",Storm,Tropical cyclone,2023,12,1,425866,425867,42000.0,43000.0
+Philippines,"Region X (Northern Mindanao), Region XI (Davao Region), Region XII (Soccsksargen), Region XIII (Caraga)",Flood,Flood (General),2024,1,21,1228003,1228014,30000000.0,30000000.0
+Philippines,"Sitio Panlaisan village (Davao Oriental Province, Davao Region, eastern Mindanao Island)",Mass movement (wet),Landslide (wet),2024,1,22,1567339,1567350,65110000.0,65110000.0
+Philippines,"Massara, Maco Municipality (Davao de Oro Province, Mindanao Island)",Mass movement (wet),Landslide (wet),2024,2,128,1400000,1400032,50000000.0,50000000.0
+Philippines,,Extreme temperature,Heat wave,2024,4,,,34,,
+Philippines,"Cagayan Valley, Central Luzon, Calabarzon, Mimaropa, Bicol, and Eastern and Central Visayas.",Storm,Tropical cyclone,2024,5,6,52000,52008,20000000.0,20000000.0
+Philippines,"Metro Manilla, Batangas, Cavite, Pampanga and Bulacan provinces; Regions NCR, I, II, III, CALABARZON, MIMAROPA, V, VI, VII, X, and CAR",Storm,Tropical cyclone,2024,7,53,6498918,6498934,211000000.0,211000000.0
+Philippines,"Luzon Isl., Isabela province, Visayas",Storm,Tropical cyclone,2024,9,33,3000000,3000022,33000000.0,33000000.0
+Philippines,,Storm,Tropical cyclone,2024,9,38,95000,95013,,
+Philippines,,Storm,Tropical cyclone,2024,9,12,203000,203011,,
+Philippines,Northern Luzon island,Storm,Tropical cyclone,2024,9,4,219000,219008,11000000.0,11000000.0
+Philippines,"Luzon, Visayas and northern Mindanao, Camarines Sur, Camarines Norte, Albay, Masbate (Region 5 (Bicol), and Batangas, Laguna, Cavite, and Quezon in Region 4A (Calabarzon)",Storm,Tropical cyclone,2024,10,181,9652607,9652739,373000000.0,373000000.0
+Philippines,,Storm,Tropical cyclone,2024,10,,,,,
+Philippines,Northern Luzon,Storm,Tropical cyclone,2024,11,1,375000,375001,10000000.0,10000000.0
+Philippines,"Aurora, Isabela provinces",Storm,Tropical cyclone,2024,11,,310000,310002,10000000.0,10000000.0
+Philippines,"Cagayan, Ilocos, Central Luzon, Calabarzon, Bicol",Storm,Tropical cyclone,2024,11,15,3967000,3967014,100000000.0,100000000.0
+Philippines,"Mimaropa, Eastern Visayas, and Bicol regions",Flood,Flood (General),2025,2,7,123000,123000,,
+Philippines,,Storm,Tropical cyclone,2025,2,,50678,50678,,
+Philippines,"Bangsamoro Autonomous Region, Maguindanao del Sur province (Muslim Mindanao)",Storm,Severe weather,2025,5,,233945,233945,,
+Philippines,Zamboanga Peninsula region (Mindanao) and Luzon islands,Flood,Flood (General),2025,6,,192,192,,
+Philippines,"Luzon, Zamboanga Peninsula, Davao, Mindanao, and SOCCSKSARGEN regions",Storm,Tropical cyclone,2025,6,3,17516,17517,,
+Philippines,,Storm,Tropical cyclone,2025,7,38,11138197,11138205,195000000.0,
+Philippines,"Luzon Isl., La Union province, Baguio City, Benguet province, Ilocos Sur, Nueva Vizcaya province",Storm,Tropical cyclone,2025,9,11,690000,690000,300000000.0,
+Philippines,,Storm,Tropical cyclone,2025,9,55,4580000,4580041,57000000.0,
+Philippines,,Storm,Tropical cyclone,2025,9,1,314000,314000,,
+Philippines,Pitogo (Lucon Isl.),Storm,Tropical cyclone,2025,10,9,330000,330001,,
+Philippines,"Calabarzon, Mimaropa, Region 5, Region 6, Region 7, Region 8, Region 10, Caraga, and the Negros Islands Region (NIR)",Storm,Tropical cyclone,2025,11,372,5458858,5459360,,
+Philippines,"Region 1, Region 2, the Cordillera Administrative Region (CAR), Region 3, Calabarzon, Mimaropa, Region 5, Region 6, Region 7, Region 8, Region 9, the Bangsamoro Autonomous Region in Muslim Mindanao (BARMM), Caraga, and the NIR",Storm,Storm (General),2025,11,34,7660000,7660051,,
+Philippines,"Mindanao, southern Visayas and northern Palawan",Storm,Tropical cyclone,2025,11,2,937552,937552,,
+Philippines,"Northern Mindanao, Caraga",Storm,Tropical cyclone,2026,2,7,645612,645612,5000000.0,
