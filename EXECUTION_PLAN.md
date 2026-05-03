@@ -1,131 +1,97 @@
 # 🎯 EXECUTION PLAN — R-Ignite MASA Hackathon
 ## Step-by-Step Build Order (Strongest Competition Path)
 
-**Current date:** 4 May 2026  
-**Status audit:** Codebase has significant gaps and bugs — see critical issues list below before running anything.
+**Last updated:** 4 May 2026  
+**Status:** Phase 1 COMPLETE — all critical bugs fixed. Now building missing notebooks (Phase 2).
 
 ---
 
-## 🔴 CRITICAL ISSUES TO FIX FIRST (Before Running Any Code)
+## ✅ COMPLETED — Critical Fixes (Phase 1 Done)
 
-These bugs are in the current codebase and will produce wrong answers if not fixed:
-
-| # | File | Bug | Fix |
-|---|---|---|---|
-| 1 | `notebooks/02_indicator_analysis.ipynb` | Indicator table uses `"CHIRPS 3-day max precipitation"` — wrong metric name | Replace with `"CHIRPS RX5day (WMO ETCCDI annual max 5-day precip)"` |
-| 2 | `notebooks/02_indicator_analysis.ipynb` | Indicator `"WDI Total GHG (EN.ATM.GHGT.KT.CE)"` — wrong column name | Replace with `WB_WDI_EN_GHG_ALL_MT_CE_AR5` |
-| 3 | `notebooks/02_indicator_analysis.ipynb` | Only 10 indicators, only Malaysia, reads from `ghg-emissions.csv` | Rewrite to 16 indicators + both countries using correct processed files |
-| 4 | `outputs/r1_indicator_table.csv` | Contains old wrong indicators (will be submitted?) | Regenerate using corrected `02_indicator_analysis.ipynb` |
-| 5 | `notebooks/exhibit_2_analysis.py` | Reads from `Dataset/` folder which does NOT exist in repo | Outputs already exist in `outputs/` — use those directly |
+| # | File | Fix Applied |
+|---|---|---|
+| 1 | `notebooks/02_indicator_analysis.ipynb` | Fully rewritten — now uses `RX5day_mm` (WMO ETCCDI 5-day, not "3-day") |
+| 2 | `notebooks/02_indicator_analysis.ipynb` | All column names corrected (`WB_WDI_EN_GHG_ALL_MT_CE_AR5`, `WB_WDI_EN_GHG_CO2_PC_CE_AR5`) |
+| 3 | `notebooks/02_indicator_analysis.ipynb` | Expanded from 10 → 16 indicators, both MYS + PHL, correct source files |
+| 4 | `outputs/r1_indicator_table.csv` | Regenerated with 16 correct indicators; also saved as `r1_indicator_table_v2.csv` |
+| 5 | `notebooks/exhibit_2_analysis.py` | `DATA_DIR` changed from nonexistent `Dataset/` → `../data/raw/`; `GHG_FILE` → correct processed path |
 
 ---
 
 ## 📦 CURRENT STATE OF ALL FILES
 
 ```
-DONE ✅ / BROKEN ❌ / MISSING ⬜
+DONE ✅ / NEEDS WORK ⚠️ / MISSING ⬜
 ─────────────────────────────────────────────────────────────
-DATA (all clean, verified)
-  ✅ data/processed/chirpsRX5_mls_phl.csv       (RX5day, MYS+PHL, 1990-2023)
-  ✅ data/processed/cleaned_wdi.csv             (12 WDI indicators, MYS+PHL)
-  ✅ data/processed/msia_climatewatch_lulucf.csv (5 sectors, MYS)
-  ✅ data/processed/phili_climatewatch_lulucf.csv(5 sectors, PHL)
-  ✅ data/processed/EM_DAT_cleaned.csv           (725 events, 1905-2025)
-  ✅ data/processed/noaa_oni_cleaned.csv         (1950-2026, DJF ANOM)
-  ✅ data/processed/missing_data_log.csv         (WDI gap log)
+DATA (all clean, verified — do not touch)
+  ✅ data/processed/chirpsRX5_mls_phl.csv        (RX5day, MYS+PHL, 1990-2023)
+  ✅ data/processed/cleaned_wdi.csv              (12 WDI indicators, MYS+PHL)
+  ✅ data/processed/msia_climatewatch_lulucf.csv  (5 sectors, MYS)
+  ✅ data/processed/phili_climatewatch_lulucf.csv (5 sectors, PHL)
+  ✅ data/processed/EM_DAT_cleaned.csv            (725 events, 1905-2025)
+  ✅ data/processed/noaa_oni_cleaned.csv          (1950-2026, DJF ANOM)
+  ✅ data/processed/missing_data_log.csv          (WDI gap log)
   ✅ data/processed/climate_watch_sector_merged.csv (MYS only, 5 sectors)
 
-OUTPUTS (partially done)
-  ✅ outputs/exhibit_2_transition_cost_results.csv         (NZ2050 costs by sector)
+OUTPUTS
+  ✅ outputs/exhibit_2_transition_cost_results.csv              (NZ2050 sector costs)
   ✅ outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv (sensitivity)
-  ❌ outputs/r1_indicator_table.csv  ← WRONG (old v1, 10 indicators, bad names)
+  ✅ outputs/r1_indicator_table.csv       (16 indicators — regenerated, correct)
+  ✅ outputs/r1_indicator_table_v2.csv    (same, versioned copy)
+  ✅ outputs/r1_cw_sector_decomposition.png  (MYS+PHL GHG sector stacked area)
+  ✅ outputs/r1_ghg_urban_dual_axis.png      (GHG growth × urbanisation)
+  ✅ outputs/r1_emdat_hazard_profile.png     (MYS flood vs PHL storm counts)
+  ⬜ outputs/r2_arima_mys.png
+  ⬜ outputs/r2_arima_phl.png
+  ⬜ outputs/r2_ghg_forecast_table.csv
+  ⬜ outputs/r3_gev_and_regime_break.png
+  ⬜ outputs/r3_enso_dependence.png
+  ⬜ outputs/r3_results_table.csv
+  ⬜ outputs/exhibit_2_chart_final.png
+  ⬜ outputs/executive_summary.png
 
 NOTEBOOKS / SCRIPTS
-  ✅ notebooks/01_data_ingestion.ipynb   (WDI pipeline, correct — re-run to refresh)
-  ❌ notebooks/02_indicator_analysis.ipynb  (WRONG indicator names & source files)
-  ✅ notebooks/exhibit_2_analysis.py     (runs if NGFS data file exists)
-  ✅ notebooks/exhibit_2_analysis_excluding_LULCF.py (sensitivity version)
-  ✅ notebooks/preprocess_emdat.py       (EM-DAT cleaning, already ran)
-  ⬜ notebooks/03_arima_ghg_forecast.ipynb  ← MISSING (R2 deliverable)
-  ⬜ notebooks/04_chirps_gev_enso.ipynb     ← MISSING (R3 deliverable)
-  ⬜ notebooks/05_exhibit2_visualization.ipynb ← MISSING (R4 charts)
-  ⬜ notebooks/06_executive_summary.ipynb   ← MISSING (R5 deliverable)
+  ✅ notebooks/01_data_ingestion.ipynb         (WDI pipeline — can re-run to refresh)
+  ✅ notebooks/02_indicator_analysis.ipynb     (R1 COMPLETE — all 5 cells run OK)
+  ✅ notebooks/exhibit_2_analysis.py           (fixed DATA_DIR path)
+  ✅ notebooks/exhibit_2_analysis_excluding_LULCF.py (fixed DATA_DIR path)
+  ✅ notebooks/preprocess_emdat.py             (EM-DAT cleaning, already ran)
+  ⬜ notebooks/03_arima_ghg_forecast.ipynb     ← BUILD NEXT (R2 deliverable)
+  ⬜ notebooks/04_chirps_gev_enso.ipynb        ← BUILD NEXT (R3 deliverable)
+  ⬜ notebooks/05_exhibit2_visualization.ipynb ← BUILD NEXT (R4 charts)
+  ⬜ notebooks/06_executive_summary.ipynb      ← BUILD LAST (R5 deliverable)
 ─────────────────────────────────────────────────────────────
 ```
 
 ---
 
-## ⚙️ ENVIRONMENT SETUP (Do This First, Once)
+## ⚙️ ENVIRONMENT SETUP
+
+The kernel for `02_indicator_analysis.ipynb` is `.venv (Python 3.14.3)` with `pandas`, `numpy`, `matplotlib`, `seaborn`, `scipy` already installed. For the new notebooks, additionally install:
 
 ```bash
-pip install ruptures statsmodels scikit-learn scipy matplotlib seaborn pandas numpy
+pip install ruptures statsmodels scikit-learn
 ```
 
-Verify:
+Or inside a notebook cell:
 ```python
-import ruptures, statsmodels, sklearn, scipy
-print("All packages OK")
+%pip install ruptures statsmodels scikit-learn
 ```
 
 ---
 
-## PHASE 1 — FIX BROKEN NOTEBOOKS (Day 1, ~2 hours)
+## ✅ PHASE 1 — COMPLETE
+
+`02_indicator_analysis.ipynb` fully rewritten and all 5 cells executed successfully.
+- Cell 1: Data loading + 5 assertions (all pass)
+- Cell 2: 16-indicator table → `outputs/r1_indicator_table_v2.csv` ✅
+- Cell 3: Chart 1 — GHG sector decomposition (MYS+PHL) → `outputs/r1_cw_sector_decomposition.png` ✅
+- Cell 4: Chart 2 — GHG × urbanisation dual-axis → `outputs/r1_ghg_urban_dual_axis.png` ✅
+- Cell 5: Chart 3 — EM-DAT hazard profiles → `outputs/r1_emdat_hazard_profile.png` ✅
 
 ---
 
-### STEP 1: Fix `02_indicator_analysis.ipynb` — R1 Deliverable
-
-**Why:** This is the FIRST requirement. The current output (`r1_indicator_table.csv`) has wrong metric names and missing indicators. Judges will check this.
-
-**What to change — complete cell rewrite:**
-
-```python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
-
-DATA = Path("../data/processed")
-OUT  = Path("../outputs")
-
-# ── LOAD DATA ─────────────────────────────────────────────────────────────────
-df_wdi      = pd.read_csv(DATA / "cleaned_wdi.csv")
-df_chirps   = pd.read_csv(DATA / "chirpsRX5_mls_phl.csv")   # ← RX5day_mm
-df_oni      = pd.read_csv(DATA / "noaa_oni_cleaned.csv")
-df_cw_mys   = pd.read_csv(DATA / "msia_climatewatch_lulucf.csv")
-df_cw_phl   = pd.read_csv(DATA / "phili_climatewatch_lulucf.csv")
-df_emdat    = pd.read_csv(DATA / "EM_DAT_cleaned.csv")
-
-# Verify no old wrong columns exist in code
-assert 'RX5day_mm' in df_chirps.columns
-assert 'WB_WDI_EN_GHG_ALL_MT_CE_AR5' in df_wdi.columns
-print("Assertions passed")
-
-# ── 16-INDICATOR TABLE (v2 — Corrected) ───────────────────────────────────────
-# (paste indicator_table dict from master plan code section)
-
-df_indicators = pd.DataFrame(indicator_table)
-df_indicators.to_csv(OUT / "r1_indicator_table_v2.csv", index=False)
-print(f"Saved: r1_indicator_table_v2.csv ({len(df_indicators)} rows)")
-```
-
-**Chart 1 to produce:** GHG sector decomposition — MYS vs PHL side-by-side stacked area (both Climate Watch files)  
-- MYS LULUCF = positive (emitter, dashed line above zero)  
-- PHL LULUCF = negative (sink, dashed line below zero)  
-- Save as `outputs/r1_cw_sector_decomposition.png`
-
-**Chart 2 to produce:** WDI GHG × Urbanisation dual-axis (both countries, 1990–2023)  
-- Save as `outputs/r1_ghg_urban_dual_axis.png`
-
-**Chart 3 to produce:** EM-DAT disaster type count bar chart — MYS vs PHL  
-- Shows MYS = flood-dominated, PHL = storm-dominated  
-- Save as `outputs/r1_emdat_hazard_profile.png`
-
-**Output file:** `outputs/r1_indicator_table_v2.csv` (16 rows, 5 columns)
-
----
-
-## PHASE 2 — BUILD MISSING NOTEBOOKS (Day 1–2)
+## 🔵 PHASE 2 — BUILD MISSING NOTEBOOKS (Current Focus)
 
 ---
 
@@ -422,11 +388,11 @@ else:
 
 | Requirement | Notebook | Status | Key Output File |
 |---|---|---|---|
-| **R1: Indicator selection & justification** | `02_indicator_analysis.ipynb` | ❌ Needs fix | `r1_indicator_table_v2.csv` |
-| **R2: GHG forecast 2024** | `03_arima_ghg_forecast.ipynb` | ⬜ Missing | `r2_ghg_forecast_table.csv` |
-| **R3: Climate → claims (2 countries)** | `04_chirps_gev_enso.ipynb` | ⬜ Missing | `r3_gev_and_regime_break.png` |
-| **R4: Mitigation + stress test** | `05_exhibit2_visualization.ipynb` | ⬜ Missing | `exhibit_2_chart_final.png` |
-| **R5: Insights + 3 recommendations** | `06_executive_summary.ipynb` | ⬜ Missing | `executive_summary.png` |
+| **R1: Indicator selection & justification** | `02_indicator_analysis.ipynb` | ✅ DONE | `r1_indicator_table_v2.csv` + 3 charts |
+| **R2: GHG forecast 2024** | `03_arima_ghg_forecast.ipynb` | ⬜ Build next | `r2_ghg_forecast_table.csv` |
+| **R3: Climate → claims (2 countries)** | `04_chirps_gev_enso.ipynb` | ⬜ Build next | `r3_gev_and_regime_break.png` |
+| **R4: Mitigation + stress test** | `05_exhibit2_visualization.ipynb` | ⬜ Build next | `exhibit_2_chart_final.png` |
+| **R5: Insights + 3 recommendations** | `06_executive_summary.ipynb` | ⬜ Build last | `executive_summary.png` |
 
 ---
 
@@ -451,18 +417,18 @@ Supporting data: Climate Watch LULUCF values + Exhibit 2 outputs
 
 ---
 
-## ⏱️ ESTIMATED TIME BY STEP
+## ⏱️ ESTIMATED TIME REMAINING
 
-| Step | Task | Estimated Time |
-|---|---|---|
-| Environment setup | pip install + verify | 15 min |
-| Step 1 | Fix `02_indicator_analysis.ipynb` | 1.5 hours |
-| Step 2 | Build `03_arima_ghg_forecast.ipynb` | 2 hours |
-| Step 3 | Build `04_chirps_gev_enso.ipynb` | 3 hours (most complex) |
-| Step 4 | Build `05_exhibit2_visualization.ipynb` | 1 hour |
-| Step 5 | Build `06_executive_summary.ipynb` | 1 hour |
-| Step 6 | Final validation run + output check | 30 min |
-| **TOTAL** | | **~9 hours** |
+| Step | Task | Estimated Time | Status |
+|---|---|---|---|
+| ~~Environment setup~~ | ~~pip install + verify~~ | ~~15 min~~ | ✅ Done |
+| ~~Step 1~~ | ~~Fix `02_indicator_analysis.ipynb`~~ | ~~1.5 hours~~ | ✅ Done |
+| Step 2 | Build `03_arima_ghg_forecast.ipynb` | 2 hours | ⬜ Next |
+| Step 3 | Build `04_chirps_gev_enso.ipynb` | 3 hours (most complex) | ⬜ |
+| Step 4 | Build `05_exhibit2_visualization.ipynb` | 1 hour | ⬜ |
+| Step 5 | Build `06_executive_summary.ipynb` | 1 hour | ⬜ |
+| Step 6 | Final validation run + output check | 30 min | ⬜ |
+| **REMAINING** | | **~7.5 hours** | |
 
 ---
 
@@ -470,28 +436,29 @@ Supporting data: Climate Watch LULUCF values + Exhibit 2 outputs
 
 ```
 notebooks/
-  01_data_ingestion.ipynb            ← data loading + cleaning (fix & re-run)
-  02_indicator_analysis.ipynb        ← R1: 16 indicators, 5 charts, v2 table
-  03_arima_ghg_forecast.ipynb        ← R2: ARIMA GHG forecast to 2024
-  04_chirps_gev_enso.ipynb           ← R3: GEV + regime break + ENSO dependence
-  05_exhibit2_visualization.ipynb    ← R4: Transition cost charts MYS vs PHL
-  06_executive_summary.ipynb         ← R5: Full narrative + 3 recommendations
+  01_data_ingestion.ipynb            ✅ WDI pipeline (re-run to refresh if needed)
+  02_indicator_analysis.ipynb        ✅ R1: 16 indicators, 3 charts, v2 table — DONE
+  03_arima_ghg_forecast.ipynb        ⬜ R2: ARIMA GHG forecast to 2024
+  04_chirps_gev_enso.ipynb           ⬜ R3: GEV + regime break + ENSO dependence
+  05_exhibit2_visualization.ipynb    ⬜ R4: Transition cost charts MYS vs PHL
+  06_executive_summary.ipynb         ⬜ R5: Full narrative + 3 recommendations
 
 outputs/
-  r1_indicator_table_v2.csv          ← 16 indicators, verified column names
-  r1_cw_sector_decomposition.png     ← MYS+PHL sector GHG stacked area
-  r1_ghg_urban_dual_axis.png         ← GHG growth + urbanisation
-  r1_emdat_hazard_profile.png        ← MYS flood vs PHL storm counts
-  r2_arima_mys.png                   ← MYS GHG ARIMA fit + 2024 forecast
-  r2_arima_phl.png                   ← PHL GHG ARIMA fit + 2024 forecast
-  r2_ghg_forecast_table.csv          ← ARIMA orders, MAPE, 2024 point estimates
-  r3_gev_and_regime_break.png        ← GEV return level curves + PELT break
-  r3_enso_dependence.png             ← ONI × loss scatter + phase box plot
-  r3_results_table.csv               ← GEV params, break years, ENSO r values
-  exhibit_2_transition_cost_results.csv          ← ✅ already exists
-  exhibit_2_transition_cost_results_excluding_LULCF.csv ← ✅ already exists
-  exhibit_2_chart_final.png          ← MYS vs PHL transition cost bar charts
-  executive_summary.png              ← 1-page "three gaps" master visual
+  r1_indicator_table.csv             ✅ 16 indicators, correct column names
+  r1_indicator_table_v2.csv          ✅ same, versioned copy
+  r1_cw_sector_decomposition.png     ✅ MYS+PHL sector GHG stacked area
+  r1_ghg_urban_dual_axis.png         ✅ GHG growth + urbanisation
+  r1_emdat_hazard_profile.png        ✅ MYS flood vs PHL storm counts
+  r2_arima_mys.png                   ⬜ MYS GHG ARIMA fit + 2024 forecast
+  r2_arima_phl.png                   ⬜ PHL GHG ARIMA fit + 2024 forecast
+  r2_ghg_forecast_table.csv          ⬜ ARIMA orders, MAPE, 2024 point estimates
+  r3_gev_and_regime_break.png        ⬜ GEV return level curves + PELT break
+  r3_enso_dependence.png             ⬜ ONI × loss scatter + phase box plot
+  r3_results_table.csv               ⬜ GEV params, break years, ENSO r values
+  exhibit_2_transition_cost_results.csv          ✅ already exists
+  exhibit_2_transition_cost_results_excluding_LULCF.csv ✅ already exists
+  exhibit_2_chart_final.png          ⬜ MYS vs PHL transition cost bar charts
+  executive_summary.png              ⬜ 1-page "three gaps" master visual
 ```
 
 ---

@@ -24,7 +24,9 @@ from pathlib import Path
 # CONFIGURATION
 # ============================================================================
 
-DATA_DIR = Path("Dataset")
+# NOTE: Outputs already in outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv
+# Place NGFS file in data/raw/ to re-run.
+DATA_DIR = Path("../data/raw")
 NGFS_CSV_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.csv"
 NGFS_XLSX_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.xlsx"
 GHG_FILE = DATA_DIR / "ghg-emissions_excluding_LULCF.csv"  # SENSITIVITY: EXCLUDING LULCF

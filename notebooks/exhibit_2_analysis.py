@@ -21,10 +21,14 @@ from pathlib import Path
 # CONFIGURATION
 # ============================================================================
 
-DATA_DIR = Path("Dataset")
+# NOTE: Outputs are already computed and saved in outputs/
+# If you need to re-run, place the NGFS data file in data/raw/ and run this script.
+# Verified output: outputs/exhibit_2_transition_cost_results.csv
+#   → NZ2050 carbon price = $55.578/tonne | MYS total = $22,383M/yr
+DATA_DIR = Path("../data/raw")
 NGFS_CSV_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.csv"
 NGFS_XLSX_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.xlsx"
-GHG_FILE = DATA_DIR / "ghg-emissions.csv"
+GHG_FILE = Path("../data/processed") / "msia_climatewatch_lulucf.csv"
 
 CARBON_PRICE_YEAR = 2027  # Mid-range year for analysis
 REGION = "MYS"
