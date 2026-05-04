@@ -209,6 +209,34 @@ def main() -> None:
         if cleaned:
             cleaned_rows.append(cleaned)
 
+    if not cleaned_rows:
+        raise ValueError("No EM-DAT rows survived the climate-risk scope filters")
+
+    countries = {row["country"] for row in cleaned_rows}
+    if not countries.issubset(TARGET_COUNTRIES):
+        unexpected = sorted(countries - TARGET_COUNTRIES)
+        raise ValueError(f"Unexpected countries in cleaned EM-DAT output: {unexpected}")
+
+    for row in cleaned_rows:
+        if row["disaster_group"] != NATURAL_GROUP:
+            raise ValueError(f"Non-natural event survived filter: {row['disno']}")
+        if row["disaster_subgroup"] not in CLIMATE_SUBGROUPS:
+            raise ValueError(f"Unexpected disaster subgroup in output: {row['disaster_subgroup']}")
+        if row["start_month"] is not None and not 1 <= row["start_month"] <= 12:
+            raise ValueError(f"Invalid start month for {row['disno']}: {row['start_month']}")
+        if row["end_month"] is not None and not 1 <= row["end_month"] <= 12:
+            raise ValueError(f"Invalid end month for {row['disno']}: {row['end_month']}")
+        if row["start_day"] is not None and not 1 <= row["start_day"] <= 31:
+            raise ValueError(f"Invalid start day for {row['disno']}: {row['start_day']}")
+        if row["end_day"] is not None and not 1 <= row["end_day"] <= 31:
+            raise ValueError(f"Invalid end day for {row['disno']}: {row['end_day']}")
+        if row["total_damage_usd"] is not None and row["total_damage_usd"] < 0:
+            raise ValueError(f"Negative total_damage_usd for {row['disno']}")
+        if row["total_damage_adjusted_usd"] is not None and row["total_damage_adjusted_usd"] < 0:
+            raise ValueError(f"Negative total_damage_adjusted_usd for {row['disno']}")
+        if row["duration_days"] is not None and row["duration_days"] <= 0:
+            raise ValueError(f"Non-positive event duration for {row['disno']}: {row['duration_days']}")
+
     # Sort so the output is stable and easy to diff from run to run.
     cleaned_rows.sort(key=lambda row: (row.get("country", ""), row.get("start_year") or 0, row.get("start_date", ""), row.get("disno", "")))
 

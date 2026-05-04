@@ -26,7 +26,7 @@ from pathlib import Path
 # Verified output: outputs/exhibit_2_transition_cost_results.csv
 #   → NZ2050 carbon price = $55.578/tonne | MYS total = $22,383M/yr
 DATA_DIR = Path("../data/raw")
-NGFS_CSV_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.csv"
+NGFS_CSV_FILE = Path("../data/processed") / "ngfs_carbon_price_mys_phl.csv"
 NGFS_XLSX_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.xlsx"
 GHG_FILE = Path("../data/processed") / "msia_climatewatch_lulucf.csv"
 
@@ -41,6 +41,21 @@ CARBON_PRICE_VAR = "Price|Carbon"
 print("=" * 80)
 print("EXHIBIT 2: TRANSITION RISK COST ANALYSIS")
 print("=" * 80)
+
+# ── Graceful degradation: skip if NGFS absent but pre-computed outputs exist ──
+_ngfs_present = NGFS_CSV_FILE.exists() or NGFS_XLSX_FILE.exists()
+if not _ngfs_present:
+    _pre = Path("../outputs/exhibit_2_transition_cost_results.csv")
+    if _pre.exists():
+        print(f"\n⚠  NGFS raw file not found in: {DATA_DIR}")
+        print(f"   Pre-computed output already exists: {_pre}")
+        print("   Skipping analysis. Place NGFS data in data/raw/ to regenerate.")
+        exit(0)
+    else:
+        print(f"\n❌  NGFS raw file not found AND no pre-computed output exists.")
+        print(f"   Required: '{NGFS_CSV_FILE.name}' or '{NGFS_XLSX_FILE.name}' in {DATA_DIR}")
+        exit(1)
+
 print("\n[Step 1] Loading NGFS data...")
 
 # Try CSV first, then XLSX
@@ -70,7 +85,8 @@ except Exception as e:
 
 print("\n[Step 2] Extracting Malaysia carbon prices...")
 
-# Filter for Malaysia carbon price data
+# Actuarial Assumption: We filter to pure Malaysia regional projections
+# to isolate country-specific regulatory impact rather than regional blending.
 carbon_price_data = ngfs_df[
     (ngfs_df["Region"] == REGION) &
     (ngfs_df["Variable"] == CARBON_PRICE_VAR)
@@ -102,6 +118,10 @@ net_zero_price = None
 current_pol_scenario = None
 net_zero_scenario = None
 
+# Actuarial Assumption: 
+# The 'Current Policies' scenario represents our $0/baseline tax exposure, acting as our benchmark.
+# The 'Net Zero 2050' (Scenario 4) serves as our regulatory compliance shock logic.
+# 
 # Detect scenarios by price profile:
 # Current Policies = $0 at CARBON_PRICE_YEAR (scenario with zero or near-zero price)
 # Net Zero 2050    = highest positive price at CARBON_PRICE_YEAR (scenario 4 = $55.578)
@@ -166,25 +186,58 @@ for idx, row in ghg_df.iterrows():
         print(f"    {sector:45s}: {emissions:>10.2f} MtCO2e")
 
 # ============================================================================
-# STEP 5: CALCULATE TRANSITION COSTS
+# STEP 5: CALCULATE TRANSITION COSTS (Dynamic Stress Scenarios & Pass-Through)
 # ============================================================================
 
-print(f"\n[Step 5] Calculating transition costs...")
+print(f"\n[Step 5] Calculating transition costs with Dynamic Stress Scenarios & Pass-Through...")
 
 carbon_price_diff = net_zero_price - current_pol_price
 print(f"\n  Carbon price differential (Net Zero - Current Policies):")
 print(f"    {net_zero_price:.2f} - {current_pol_price:.2f} = ${carbon_price_diff:.2f}/ton CO2e")
 
-transition_costs = {}
-for sector, emissions_mtco2e in sector_emissions.items():
-    # Emissions are in MtCO2e (million metric tons)
-    # Cost = Emissions (MtCO2e) × Price Differential ($/ton) / 1,000,000 (to get to $M)
-    cost_usd = emissions_mtco2e * carbon_price_diff * 1_000_000  # MtCO2e to tCO2e × $/t
-    cost_millions = cost_usd / 1_000_000  # Convert to millions
-    transition_costs[sector] = cost_millions
+STRESS_MULTIPLIER = 2.0  # e.g., representing an extreme policy shock or $111/t scenario
+PASS_THROUGH_RATES = [0.01, 0.03, 0.05]
 
-# Sort by cost (descending)
+# Using 3% baseline pass-through for default transition costs
+DEFAULT_PT_RATE = 0.03
+
+# Unit conversion: GHG emissions are in MtCO₂e; carbon price is in USD/tCO₂e.
+# Multiplying by MT_TO_T converts megatonnes to tonnes, yielding USD.
+# Source: SI prefix — 1 Mt = 1,000,000 t (https://www.bipm.org/en/measurement-units)
+MT_TO_T = 1_000_000  # 1 megatonne = 1,000,000 tonnes
+
+transition_costs = {}
+all_scenario_results = []
+
+for sector, emissions_mtco2e in sector_emissions.items():
+    # Base Transition Cost (Using $55.58)
+    # emissions_mtco2e [MtCO₂e] × carbon_price_diff [USD/tCO₂e] × MT_TO_T [t/Mt] = total cost [USD]
+    base_cost_usd = emissions_mtco2e * carbon_price_diff * MT_TO_T
+    base_cost_millions = base_cost_usd / MT_TO_T
+    transition_costs[sector] = base_cost_millions
+    
+    # Stress Scenarios Loop
+    for pt_rate in PASS_THROUGH_RATES:
+        # Baseline Cost using variable pass-through
+        cost_usd_base = emissions_mtco2e * carbon_price_diff * pt_rate * MT_TO_T
+        # Stress Cost ($111.16/t equivalent) using variable pass-through
+        cost_usd_stress = emissions_mtco2e * (carbon_price_diff * STRESS_MULTIPLIER) * pt_rate * MT_TO_T
+        
+        all_scenario_results.append({
+            "Sector": sector,
+            "Pass_Through_Rate": f"{pt_rate*100}%",
+            "Baseline_Cost_USD_Millions": cost_usd_base / MT_TO_T,
+            "Stress_Cost_USD_Millions": cost_usd_stress / MT_TO_T
+        })
+
+# Sort by default cost (descending)
 sorted_costs = sorted(transition_costs.items(), key=lambda x: x[1], reverse=True)
+
+# Export Stress Scenarios
+stress_df = pd.DataFrame(all_scenario_results)
+stress_output_file = Path("../outputs/r4_sector_pass_through_sensitivity.csv")
+stress_df.to_csv(stress_output_file, index=False)
+print(f"  ✓ Stress scenarios exported to: {stress_output_file}")
 
 # ============================================================================
 # STEP 6: CREATE RESULTS TABLE

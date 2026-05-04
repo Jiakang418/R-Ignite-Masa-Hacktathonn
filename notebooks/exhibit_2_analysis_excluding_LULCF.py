@@ -27,7 +27,7 @@ from pathlib import Path
 # NOTE: Outputs already in outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv
 # Place NGFS file in data/raw/ to re-run.
 DATA_DIR = Path("../data/raw")
-NGFS_CSV_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.csv"
+NGFS_CSV_FILE = Path("../data/processed") / "ngfs_carbon_price_mys_phl.csv"
 NGFS_XLSX_FILE = DATA_DIR / "Downscaled_GCAM 6.0 NGFS_data.xlsx"
 GHG_FILE = DATA_DIR / "ghg-emissions excluding LULCF.csv"  # SENSITIVITY: EXCLUDING LULCF
 
@@ -42,6 +42,21 @@ CARBON_PRICE_VAR = "Price|Carbon"
 print("=" * 80)
 print("EXHIBIT 2: TRANSITION RISK COST ANALYSIS (SENSITIVITY: EXCLUDING LULCF)")
 print("=" * 80)
+
+# ── Graceful degradation: skip if NGFS absent but pre-computed outputs exist ──
+_ngfs_present = NGFS_CSV_FILE.exists() or NGFS_XLSX_FILE.exists()
+if not _ngfs_present:
+    _pre = Path("../outputs/exhibit_2_transition_cost_results_excluding_LULCF.csv")
+    if _pre.exists():
+        print(f"\n⚠  NGFS raw file not found in: {DATA_DIR}")
+        print(f"   Pre-computed output already exists: {_pre}")
+        print("   Skipping analysis. Place NGFS data in data/raw/ to regenerate.")
+        exit(0)
+    else:
+        print(f"\n❌  NGFS raw file not found AND no pre-computed output exists.")
+        print(f"   Required: '{NGFS_CSV_FILE.name}' or '{NGFS_XLSX_FILE.name}' in {DATA_DIR}")
+        exit(1)
+
 print("\n[Step 1] Loading NGFS data...")
 
 # Try CSV first, then XLSX
@@ -169,22 +184,39 @@ for idx, row in ghg_df.iterrows():
 # STEP 5: CALCULATE TRANSITION COSTS
 # ============================================================================
 
-print(f"\n[Step 5] Calculating transition costs...")
+print(f"\n[Step 5] Calculating transition costs with Dynamic Stress Scenarios & Pass-Through...")
 
 carbon_price_diff = net_zero_price - current_pol_price
 print(f"\n  Carbon price differential (Net Zero - Current Policies):")
 print(f"    {net_zero_price:.2f} - {current_pol_price:.2f} = ${carbon_price_diff:.2f}/ton CO2e")
 
+STRESS_MULTIPLIER = 2.0
+PASS_THROUGH_RATES = [0.01, 0.03, 0.05]
+DEFAULT_PT_RATE = 0.03
+
 transition_costs = {}
+all_scenario_results = []
 for sector, emissions_mtco2e in sector_emissions.items():
-    # Emissions are in MtCO2e (million metric tons)
-    # Cost = Emissions (MtCO2e) × Price Differential ($/ton) / 1,000,000 (to get to $M)
-    cost_usd = emissions_mtco2e * carbon_price_diff * 1_000_000  # MtCO2e to tCO2e × $/t
-    cost_millions = cost_usd / 1_000_000  # Convert to millions
-    transition_costs[sector] = cost_millions
+    # Match the primary R4 methodology so the LULUCF exclusion is a like-for-like sensitivity.
+    base_cost_usd = emissions_mtco2e * carbon_price_diff * 1_000_000
+    transition_costs[sector] = base_cost_usd / 1_000_000
+
+    for pt_rate in PASS_THROUGH_RATES:
+        baseline_cost_usd = emissions_mtco2e * carbon_price_diff * pt_rate * 1_000_000
+        stress_cost_usd = emissions_mtco2e * (carbon_price_diff * STRESS_MULTIPLIER) * pt_rate * 1_000_000
+        all_scenario_results.append({
+            "Sector": sector,
+            "Pass_Through_Rate": f"{pt_rate * 100:.0f}%",
+            "Baseline_Cost_USD_Millions": baseline_cost_usd / 1_000_000,
+            "Stress_Cost_USD_Millions": stress_cost_usd / 1_000_000,
+        })
 
 # Sort by cost (descending)
 sorted_costs = sorted(transition_costs.items(), key=lambda x: x[1], reverse=True)
+
+stress_output_file = Path("../outputs/r4_stress_scenario_table_excluding_LULCF.csv")
+pd.DataFrame(all_scenario_results).to_csv(stress_output_file, index=False)
+print(f"  ✓ Stress scenarios exported to: {stress_output_file}")
 
 # ============================================================================
 # STEP 6: CREATE RESULTS TABLE
@@ -273,18 +305,30 @@ print("\n" + "=" * 80)
 print("SENSITIVITY ANALYSIS: LULCF IMPACT")
 print("=" * 80)
 
+primary_output_file = Path("../outputs/exhibit_2_transition_cost_results.csv")
+primary_df = pd.read_csv(primary_output_file)
+primary_total = primary_df["Annual_Transition_Cost_USD_Millions"].sum()
+lulucf_impact = primary_total - total_cost
+lulucf_pct = (lulucf_impact / primary_total * 100) if primary_total else float("nan")
+
 print(f"\nComparison with PRIMARY ANALYSIS (including LULCF):")
-print(f"  Primary Total (5 sectors):        $22,376.25M")
+print(f"  Primary Total (5 sectors):        ${primary_total:>10,.2f}M")
 print(f"  Sensitivity Total (4 sectors):    ${total_cost:>10,.2f}M")
-print(f"  LULCF Sector Impact:              ${22376.25 - total_cost:>10,.2f}M ({(22376.25 - total_cost)/22376.25*100:.1f}%)")
+print(f"  LULCF Sector Impact:              ${lulucf_impact:>10,.2f}M ({lulucf_pct:.1f}%)")
+
+# Dynamic energy-sector burden percentages
+_energy_primary = primary_df[primary_df["Sector"] == "Energy"]["Annual_Transition_Cost_USD_Millions"].sum()
+_energy_sensit  = results_df[results_df["Sector"] == "Energy"]["Annual_Transition_Cost_USD_Millions"].sum()
+_energy_primary_pct = _energy_primary / primary_total * 100 if primary_total else float("nan")
+_energy_sensit_pct  = _energy_sensit  / total_cost   * 100 if total_cost   else float("nan")
 
 print(f"\nTop Risk Sector Shift:")
-print(f"  Primary:   Energy (69.5% of burden)")
-print(f"  Sensitivity: Energy (82.5% of burden - LULCF removal concentrates risk)")
+print(f"  Primary:     Energy ({_energy_primary_pct:.1f}% of burden)")
+print(f"  Sensitivity: Energy ({_energy_sensit_pct:.1f}% of burden — LULCF removal concentrates risk)")
 
 print(f"\n💡 KEY INSIGHT:")
-print(f"   Excluding LULCF changes total exposure from $22,376.25M to ${total_cost:,.2f}M")
-print(f"   LULCF accounts for only 15.7% of transition cost, but is critical for")
+print(f"   Excluding LULCF changes total exposure from ${primary_total:,.2f}M to ${total_cost:,.2f}M")
+print(f"   LULCF accounts for {lulucf_pct:.1f}% of transition cost, but is critical for")
 print(f"   policy assessment. Recommend PRIMARY analysis (with LULCF) for use.")
 
 print("\n" + "=" * 80)

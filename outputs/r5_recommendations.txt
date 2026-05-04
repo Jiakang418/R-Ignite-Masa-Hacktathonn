@@ -1,0 +1,46 @@
+
+HANNOVER RE SEA TREATY BOOK — CLIMATE RISK RESERVE GAP
+R-Ignite MASA Hackathon 2026  ·  Malaysia & Philippines
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINDING: Two independent, additive pricing gaps in SEA treaty books.
+
+Physical gap — GEV analysis of CHIRPS RX5day annual maxima yields
+100-yr return levels of 216mm (MYS) and 521mm (PHL). A PELT
+regime break in 2007 (synchronized, both markets) shifts the hazard
+baseline +6.9% (MYS) and +6.1% (PHL). Forward EAL exceeds EM-DAT
+burning cost by +5.9% (MYS) and +1.3% (PHL). Note: PHL CI is
+[326–985mm] — a 3× range on n=34 observations — demanding floor
+loading only, not point-estimate pricing.
+
+Transition gap — NGFS GCAM 6.0 (NZ2050, USD 55.58/t) projects USD 22.4bn/yr
+(MYS, incl. LULUCF emitter) and USD 14.8bn/yr (PHL, net LULUCF sink).
+At 3% pass-through: USD 1.11bn/yr SEA treaty pool exposure.
+Under 2× stress (USD 111/t): USD 2.23bn/yr.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THREE ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+(1) RECALIBRATE PHYSICAL EAL
+Replace burning-cost benchmarks with GEV EAL for treaties > USD 50M.
+Apply +6–8% flood loading (MYS) and +1–2% floor loading (PHL).
+Discard unadjusted SEA-pooled proxies.
+
+(2) COUNTRY-SPECIFIC TRANSITION SURCHARGES
+MYS: 3–5% surcharge (BNM CCPT C3/C4 cedants). LULUCF emitter status
+(+63 MtCO2e) warrants Climate Warranty Clause at renewal.
+PHL: 1–2% surcharge. LULUCF net sink (-27 MtCO2e) generates
+Article 6.2 ITMO credits that partially offset transition cost.
+Re-evaluate at every NGFS Phase update.
+
+(3) PASS-THROUGH GOVERNANCE & ENSO PROTOCOL
+Pass-through rate (1%→5%) drives 5× HRe reserve variance — USD
+3.0M–14.9M/yr at 10% SEA alloc. Apply 5% rate to C3/C4
+cedants when carbon exceeds USD 111/t; review each NGFS Phase.
+ENSO: ONI–loss correlation is absent at annual aggregation (r = -0.016,
+p = 0.93). Use NOAA La Niña 12-month outlook as a TCFD
+facultative audit trigger — not a pricing variable.
+
+Sources: CHIRPS v2.0 · EM-DAT · NOAA ONI · NGFS GCAM 6.0 ·
+Climate Watch 2023 · BNM CCPT 2021 · BSP Circ.1085 · UNFCCC Art.6

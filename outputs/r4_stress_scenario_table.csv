@@ -1,4 +1,4 @@
-Scenario,Carbon_Price_USD_per_t,MYS_Cost_USD_Bn,MYS_Pct_GDP,PHL_Cost_USD_Bn,PHL_Pct_GDP,Rationale
-Low (0.5× NZ2050),27.789,11.19,3.0,7.4,1.7,Delayed transition / Below-NZ2050 scenario
-Base (NZ2050),55.578,22.38,6.0,14.8,3.3,NGFS GCAM 6.0 Net Zero 2050 (verified)
-Stress (2× NZ2050),111.156,44.75,11.9,29.6,6.7,High-ambition / accelerated decarbonisation path
+Scenario,Carbon Price (USD/t),MYS Cost (USD bn),MYS % GDP,PHL Cost (USD bn),PHL % GDP
+Current Policies (CP),0.0,0.0,0.0,0.0,0.0
+NGFS NZ2050 Baseline (ARIMA 2024),55.578,21.586,5.3,14.493,3.3
+Stress: NZ2050 × 2 (ARIMA 2024),111.156,43.172,10.6,28.986,6.5

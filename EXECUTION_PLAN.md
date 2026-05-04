@@ -244,15 +244,28 @@ NOTEBOOKS / SCRIPTS
    - Both Pearson AND Spearman non-significant → robust to distributional assumption
 
 **Priority 2 — High value if time allows:**
-7. ☐ Insurance penetration caveat in notebook 04 Cell 7 (EAL methodology)
-8. ☐ ENSO Recommendation 3 reframe in notebook 06
-9. ☐ Explicit limitations section in notebook 06
-10. ☐ PELT penalty sensitivity comment in notebook 04 Cell 3
-11. ☐ Policy document citations (BNM CCPT, TCFD, Paris Agreement) in notebook markdowns
+7. ✅ Insurance penetration caveat in notebook 04 Cell 7 (EAL methodology)
+   - Swiss Re Sigma 2023, SEA penetration 15–30%; gap understates reinsurance exposure by 4–6×
+   - Implied insured EAL: MYS USD 18–35M/yr | PHL USD 141–281M/yr
+8. ✅ ENSO Recommendation 3 reframe in notebook 06
+   - Reframed as forward-looking structural risk variable (TCFD Physical Risk framework)
+   - Not retrospective statistical finding; supported by IPCC AR6 mechanistic pathway
+9. ✅ Explicit limitations section in notebook 06
+   - 5-point limitations block: GEV sample size, EAL total vs insured, ARIMA structural assumption, carbon price uncertainty, ENSO annual aggregation
+10. ✅ PELT penalty sensitivity comment in notebook 04 Cell 3
+    - Tested pen=5/10/20; MYS break stable at 2007; PHL sensitivity disclosed per IPCC AR6
+11. ✅ Policy document citations (BNM CCPT, TCFD, Paris Agreement) in notebook markdowns
+    - Notebook 02: BNM CCPT, TCFD, IPCC AR6 WG1 Ch.11, Paris Agreement Art.6
 
 **Priority 3 — Bonus points:**
-12. ☐ Interactive Plotly/Streamlit dashboard
-13. ☐ One-page executive summary (PDF)
+12. ✅ Interactive Plotly/Streamlit dashboard
+    - `outputs/interactive_stress_test.html` (4.6MB) — three-panel: GEV return level curves, transition cost USD bn/yr, cost as % of GDP
+    - Verified functional in browser: all Plotly interactions working
+13. ✅ One-page executive summary (PDF)
+    - `outputs/executive_summary.pdf` (73KB) saved alongside PNG
+
+**Submission Package:**
+- ✅ `../R-Ignite-MASA-Hackathon-Submission.zip` (4.5MB) — contains notebooks/, outputs/, data/processed/, README.md
 
 ---
 

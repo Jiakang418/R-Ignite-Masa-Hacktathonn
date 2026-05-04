@@ -1,0 +1,11 @@
+Metric,Value,Source
+"SEA Physical EAL Gap (MYS+PHL, USD M)",18.4,r3_results_table.csv (GEV EAL − EM-DAT burning cost)
+HRe Physical Exposure (USD M/yr),0.74,HRE_MARKET_SHARE × TREATY_ATTACHMENT_FACTOR
+SEA Transition Pass-Through 3% Baseline (USD M/yr),1115.0,r4_pass_through_sensitivity_matrix.csv 3% Baseline
+HRe Transition Exposure — Floor 3% alloc (USD M/yr),2.68,HRE_MARKET_SHARE × HRE_SEA_ALLOCATION(3%)
+HRe Combined Reserve Gap — FLOOR (USD M/yr),3.41,"Conservative floor: 3% SEA alloc, 3% PT rate, baseline carbon"
+HRe Combined Reserve Gap — Base case 10% alloc (USD M/yr),9.66,"10% SEA alloc, 3% PT rate, baseline carbon"
+HRe Combined Reserve Gap — Stress 2× 10% alloc (USD M/yr),18.58,"10% SEA alloc, 3% PT rate, 2× stress carbon"
+HRE_MARKET_SHARE (assumption),0.08,Hannover Re Annual Report 2023 p.47
+HRE_SEA_ALLOCATION — floor (assumption),0.03,Conservative floor; HRe APAC non-life sub-book
+TREATY_ATTACHMENT_FACTOR (assumption),0.5,Swiss Re Sigma No. 1/2024 SEA treaty structure
