@@ -7,7 +7,7 @@
 **What works:** The dual-gap framing (physical EAL + transition compliance) is structurally sound and relevant to treaty pricing. Six heterogeneous datasets, all publicly cited, with explicit provenance. The LULUCF asymmetry (MYS net emitter vs PHL net sink) is genuinely insightful — this is the sharpest original observation in the submission.
 
 **What fails:**
-- The physical EAL gap translates to $0.74M HRe physical exposure. That number is determined almost entirely by three stacked assumptions: 20% insurance penetration × 50% treaty attachment × 3% SEA allocation. None of these three are visualized or stress-tested independently. The most consequential variables in the model are treated as footnotes.
+- The physical EAL gap translates to $0.74M HRe physical exposure. That number is determined almost entirely by three stacked assumptions: 20% insurance penetration × 50% treaty attachment × 3% SEA allocation. None of these three are visualized or stress-tested independently. The most consequential variables in the model are treated as footnotes. ✅
 - The ENSO investigation is dead weight. Testing a null that was almost certain to be null (annual aggregation of a high-variance weather signal against aggregate economic loss) and then displaying the result adds noise to the story, not signal. It was called a "gap" initially and is now called a "finding" — neither is accurate. It is a diagnostic dead-end.
 - No explicit statement of what insurance penetration rate was assumed, where, and why. This assumption alone can move the physical gap by 5×.
 
