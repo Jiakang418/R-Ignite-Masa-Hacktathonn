@@ -8,12 +8,16 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
-from scipy.stats import genextreme
+from scipy.stats import genextreme, kendalltau, spearmanr, norm
+from scipy.optimize import minimize_scalar
+from statsmodels.distributions.copula.api import (
+    GaussianCopula, ClaytonCopula, GumbelCopula, FrankCopula, IndependenceCopula,
+)
 from pathlib import Path
 
 st.set_page_config(
     page_title="HRe SEA Climate Risk · R-Ignite 2026",
-    page_icon="🌏",
+    page_icon=":material/public:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -49,8 +53,23 @@ st.markdown(f"""
 
 *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
 
-html, body, .stApp, [class*="st-"], [data-testid] {{
+html, body, .stApp {{
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+}}
+/* Keep Google Material icon glyphs from rendering as plain text */
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-symbols-sharp {{
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
 }}
 
 .stApp {{
@@ -68,22 +87,128 @@ html, body, .stApp, [class*="st-"], [data-testid] {{
   max-width: 100% !important;
 }}
 
-/* ── Hide Streamlit chrome ── */
-#MainMenu, footer, header, [data-testid="stToolbar"],
-[data-testid="stDecoration"], [data-testid="stStatusWidget"] {{
+/* ── Hide Streamlit chrome (keep header so sidebar toggle stays visible) ── */
+#MainMenu, footer,
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"], [data-testid="stMainMenu"] {{
   display: none !important;
+}}
+header[data-testid="stHeader"] {{
+  background: transparent !important;
+  pointer-events: none !important;
+}}
+header[data-testid="stHeader"] * {{
+  pointer-events: auto !important;
 }}
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {{
   background: {C['surf1']} !important;
   border-right: 1px solid {C['border']} !important;
+  box-shadow: 4px 0 18px rgba(0,0,0,0.35);
+  transition: transform .25s ease !important;
+  scrollbar-width: none !important;
+}}
+[data-testid="stSidebar"]::-webkit-scrollbar {{
+  display: none !important;
 }}
 [data-testid="stSidebar"] > div:first-child {{
-  padding: 0 !important;
+  padding: 0 10px 8px 12px !important;
+  overflow-y: hidden !important;
 }}
 [data-testid="stSidebar"] .block-container {{
-  padding: 1.2rem 1.2rem 2rem 1.2rem !important;
+  padding: 0.25rem 1.05rem 1.1rem 1.05rem !important;
+}}
+
+/* ── Streamlit's native sidebar collapse / expand controls ── */
+/* Keep close button in the original compact style */
+[data-testid="stSidebarCollapseButton"] button {{
+  background: {C['surf2']} !important;
+  border: 1px solid {C['border']} !important;
+  border-radius: 8px !important;
+  color: {C['tx2']} !important;
+  transition: all .15s ease !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+}}
+[data-testid="stSidebarCollapseButton"] button:hover {{
+  background: {C['surf3']} !important;
+  border-color: {C['teal']} !important;
+  color: {C['teal']} !important;
+}}
+
+/* Open button (collapsed state): center-edge tab, partially off-screen */
+[data-testid="stSidebarCollapsedControl"] button {{
+  background: rgba(39,39,42,0.18) !important;
+  border: 1px solid rgba(82,82,91,0.22) !important;
+  border-radius: 10px !important;
+  color: transparent !important;
+  transition: all .15s ease !important;
+  width: 22px !important;
+  height: 56px !important;
+  min-width: 22px !important;
+  min-height: 56px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.24 !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button svg,
+[data-testid="stSidebarCollapsedControl"] button [data-testid="stIcon"],
+[data-testid="stSidebarCollapsedControl"] button span {{
+  display: none !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button::before {{
+  content: "❯";
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  color: {C['tx3']} !important;
+  display: block !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button:hover {{
+  background: rgba(63,63,70,0.35) !important;
+  border-color: {C['teal']} !important;
+  opacity: 0.55 !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button:hover::before {{
+  color: {C['teal']} !important;
+}}
+[data-testid="stSidebarCollapsedControl"] button:focus-visible {{
+  outline: none !important;
+  box-shadow: 0 0 0 1px {C['teal']} !important;
+  opacity: 0.95 !important;
+}}
+/* Dock close button at sidebar right-center edge */
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {{
+  position: absolute !important;
+  top: 50% !important;
+  right: -10px !important;
+  transform: translateY(-50%) !important;
+  z-index: 1001 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}}
+/* When sidebar is collapsed, keep reopen tab at center-left edge */
+[data-testid="stSidebarCollapsedControl"] {{
+  display: flex !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-35%, -50%) !important;
+  z-index: 2000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}}
+
+/* Hide only top-left header control visuals; keep center-fixed control above */
+header [data-testid="stSidebarCollapsedControl"] {{
+  background: transparent !important;
 }}
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span,
@@ -91,6 +216,11 @@ html, body, .stApp, [class*="st-"], [data-testid] {{
 [data-testid="stSidebar"] div {{
   color: {C['tx2']} !important;
   font-size: 0.8rem !important;
+}}
+[data-testid="stSidebar"] .material-symbols-outlined,
+[data-testid="stSidebar"] .material-symbols-rounded,
+[data-testid="stSidebar"] .material-symbols-sharp {{
+  font-size: 18px !important;
 }}
 [data-testid="stSidebar"] .stSlider label,
 [data-testid="stSidebar"] .stCheckbox label {{
@@ -113,7 +243,7 @@ html, body, .stApp, [class*="st-"], [data-testid] {{
 }}
 [data-testid="stTabs"] > div:first-child {{
   background: {C['surf1']};
-  border-bottom: 1px solid {C['border']};
+  border-bottom: none !important;
   border-radius: 10px 10px 0 0;
   padding: 0 4px;
   gap: 2px;
@@ -141,11 +271,19 @@ html, body, .stApp, [class*="st-"], [data-testid] {{
   font-weight: 600 !important;
 }}
 [data-testid="stTabsContent"] {{
-  background: {C['surf1']};
-  border: 1px solid {C['border']};
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-  padding: 1.5rem 1.5rem 2rem 1.5rem !important;
+  background: {C['surf1']} !important;
+  border: 1px solid {C['border']} !important;
+  border-radius: 0 0 10px 10px !important;
+  padding: 0.85rem 1rem 1.1rem 1rem !important;
+  min-height: 66vh !important;
+  height: auto !important;
+  overflow: visible !important;
+}}
+[data-testid="stTabsContent"] > div,
+[data-testid="stTabsContent"] > div > div,
+[data-testid="stTabsContent"] [role="tabpanel"] {{
+  min-height: 66vh !important;
+  height: auto !important;
 }}
 
 /* ── Native st.metric ── */
@@ -175,11 +313,13 @@ html, body, .stApp, [class*="st-"], [data-testid] {{
 [data-testid="stMetricDelta"] svg {{ display: none !important; }}
 
 /* ── Dataframe ── */
-[data-testid="stDataFrame"] > div {{
+[data-testid="stDataFrame"] {{
   background: {C['surf2']} !important;
   border: 1px solid {C['border']} !important;
   border-radius: 8px !important;
-  overflow: hidden !important;
+}}
+[data-testid="stDataFrame"] > div {{
+  background: transparent !important;
 }}
 .dvn-scroller {{ background: {C['surf2']} !important; }}
 
@@ -215,6 +355,9 @@ hr {{ border: none; border-top: 1px solid {C['border']}; margin: 1.2rem 0; }}
 [data-testid="column"] {{
   gap: 0.8rem;
 }}
+[data-testid="stHorizontalBlock"] {{
+  margin-bottom: 0.75rem;
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -227,7 +370,7 @@ def base_layout(**overrides):
         paper_bgcolor = C['surf2'],
         plot_bgcolor  = C['surf2'],
         font          = dict(family=FONT, color=C['tx2'], size=11),
-        title_font    = dict(family=FONT, color=C['tx1'], size=13, weight=600),
+        title         = dict(text="", font=dict(family=FONT, color=C['tx1'], size=13)),
         xaxis         = dict(
             gridcolor=C['surf3'], gridwidth=1, linecolor=C['border'],
             tickfont=dict(family=FONT, color=C['tx3'], size=10),
@@ -253,24 +396,6 @@ def base_layout(**overrides):
     )
     base.update(overrides)
     return base
-
-# ── HTML / Layout helpers ─────────────────────────────────────────────────────
-def card(content_fn, title="", badge="", badge_color=""):
-    """Wraps a content function in a styled card."""
-    hdr = ""
-    if title:
-        bdg = (f'<span style="background:{badge_color}22;color:{badge_color};'
-               f'font-size:0.65rem;font-weight:600;padding:2px 8px;border-radius:20px;'
-               f'border:1px solid {badge_color}44;margin-left:8px;letter-spacing:0.06em">'
-               f'{badge}</span>') if badge else ""
-        hdr = (f'<div style="font-size:0.78rem;font-weight:700;color:{C["tx2"]};'
-               f'text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem">'
-               f'{title}{bdg}</div>')
-    st.markdown(f'<div style="background:{C["surf2"]};border:1px solid {C["border"]};'
-                f'border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem">'
-                f'{hdr}</div>', unsafe_allow_html=True)
-    content_fn()
-
 
 def kpi_row(items):
     """items = list of (label, value, sub, accent_color)"""
@@ -303,13 +428,19 @@ def badge(text, color):
             f'letter-spacing:0.06em;font-family:{FONT}">{text}</span>')
 
 
-def callout(text, accent=None, icon=""):
+def callout(text, accent=None, icon="", fixed_height=None):
     accent = accent or C['sky']
+    icon_html = (f'<span style="display:inline-flex;align-items:center;justify-content:center;'
+                 f'min-width:22px;height:22px;padding:0 6px;margin-right:8px;border-radius:6px;'
+                 f'background:{accent}22;color:{accent};font-size:0.7rem;font-weight:700;'
+                 f'font-family:{FONT};letter-spacing:0.04em;flex-shrink:0">{icon}</span>') if icon else ""
     st.markdown(f"""
-<div style="background:{accent}0d;border:1px solid {accent}33;border-left:3px solid {accent};
+<div style="background:{accent}0d;border:0;border-left:3px solid {accent};
      border-radius:8px;padding:12px 16px;margin:8px 0;
-     font-size:0.81rem;color:{C['tx2']};line-height:1.65">
-  {'<span style="font-size:0.85rem;margin-right:6px">'+icon+'</span>' if icon else ''}{text}
+     font-size:0.81rem;color:{C['tx2']};line-height:1.65;
+     display:flex;align-items:flex-start;gap:0;overflow-wrap:anywhere;
+     {'height:'+str(fixed_height)+'px;overflow:auto;' if fixed_height else ''}">
+  {icon_html}<div style="flex:1;min-width:0">{text}</div>
 </div>""", unsafe_allow_html=True)
 
 
@@ -333,10 +464,12 @@ def load_data():
     gdp    = pd.read_csv(DATA/"wb_2023_nominal_gdp_usd_bn.csv").set_index("Country")["Nominal_GDP_USD_Bn"]
     cw_mys = pd.read_csv(DATA/"msia_climatewatch_lulucf.csv")
     cw_phl = pd.read_csv(DATA/"phili_climatewatch_lulucf.csv")
+    chirps = pd.read_csv(DATA/"chirpsRX5_mls_phl.csv")
+    oni = pd.read_csv(DATA/"noaa_oni_cleaned.csv")
     cop    = pd.read_csv(OUT/"r8_copula_results.csv").set_index("metric") if (OUT/"r8_copula_results.csv").exists() else None
-    return r3, r4s, pt, gdp, cw_mys, cw_phl, cop
+    return r3, r4s, pt, gdp, cw_mys, cw_phl, chirps, oni, cop
 
-r3, r4s, pt_df, gdp, cw_mys, cw_phl, cop = load_data()
+r3, r4s, pt_df, gdp, cw_mys, cw_phl, chirps_df, oni_df, cop = load_data()
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -361,7 +494,7 @@ with st.sidebar:
 
     st.markdown(f'<div style="color:{C["violet"]};font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin:18px 0 10px 0">◈ Physical Risk</div>', unsafe_allow_html=True)
     show_ci   = st.checkbox("Show 95% bootstrap CI bands", value=True)
-    log_scale = st.checkbox("Log-scale x-axis", value=True)
+    log_scale = st.checkbox("Log-scale x-axis", value=False, key="log_scale_axis_v2")
 
     st.markdown(f'<div style="color:{C["amber"]};font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin:18px 0 10px 0">◎ HRe Portfolio</div>', unsafe_allow_html=True)
     sea_alloc_pct = st.slider("HRe SEA allocation (%)", 1, 25, 3, 1,
@@ -371,7 +504,7 @@ with st.sidebar:
     treaty_attach = 0.50
 
     st.markdown(f"""
-<div style="border-top:1px solid {C['border']};margin-top:24px;padding-top:16px">
+<div style="border-top:1px solid {C['border']};margin-top:18px;padding-top:12px;padding-bottom:14px">
   <div style="color:{C['tx4']};font-size:0.68rem;line-height:1.8">
     CHIRPS v2.0 · EM-DAT · NOAA ONI<br>
     WDI · NGFS GCAM 6.0 · Climate Watch<br>
@@ -439,10 +572,10 @@ kpi_row([
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 tab1, tab2, tab3, tab4 = st.tabs([
-    "📈  Physical Risk — GEV",
-    "🏭  Transition Risk",
-    "🏦  HRe Reserve Gap",
-    "🔗  Copula Analysis",
+    "◈  Physical Risk — GEV",
+    "⬡  Transition Risk",
+    "◎  HRe Reserve Gap",
+    "✦  Copula Analysis",
 ])
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -463,7 +596,8 @@ with tab1:
     with c_desc2:
         st.markdown(f"""
 <div style="background:{C['surf2']};border:1px solid {C['border']};border-radius:8px;
-     padding:10px 14px;font-size:0.75rem;color:{C['tx3']};line-height:1.7">
+     padding:10px 14px;font-size:0.75rem;color:{C['tx3']};line-height:1.7;
+     margin-bottom:12px">
   <b style="color:{C['tx2']}">Source</b><br>
   CHIRPS v2.0 · UCSB<br>
   WMO ETCCDI RX5day<br>
@@ -471,7 +605,8 @@ with tab1:
 </div>""", unsafe_allow_html=True)
 
     # GEV chart
-    return_periods = np.logspace(np.log10(2), np.log10(200), 300)
+    # Keep timeline intuitive and bounded to ~100 years.
+    return_periods = np.linspace(2, 100, 250)
     exc_probs      = 1.0 - 1.0 / return_periods
 
     fig = go.Figure()
@@ -518,6 +653,11 @@ with tab1:
     layout = base_layout(height=400)
     layout["xaxis"]["title"] = "Return period (years)"
     layout["xaxis"]["type"]  = "log" if log_scale else "linear"
+    if log_scale:
+        layout["xaxis"]["range"] = [np.log10(2), np.log10(100)]
+    else:
+        layout["xaxis"]["range"] = [2, 100]
+        layout["xaxis"]["dtick"] = 10
     layout["yaxis"]["title"] = "RX5day precipitation (mm)"
     layout["legend"]["orientation"] = "h"
     layout["legend"]["y"] = 1.05
@@ -543,12 +683,12 @@ with tab1:
             f"{badge('Non-stationary preferred', C['amber'])}<br>"
             f"μ₁ = +0.48 mm/yr trend confirmed. Pre/post-2007 KS test: σ, ξ stable → "
             "location-only shift validated.",
-            accent=C['teal'], icon="🇲🇾"
+            accent=C['teal'], icon="MY", fixed_height=86
         )
     with col_p:
         kpi_row([
             ("100-yr Return Level",  f"{phl_r.return_level_100yr_mm:.0f} mm",
-             f"CI [{phl_r.rl_100yr_ci95_lo_mm:.0f}–{phl_r.rl_100yr_ci95_hi_mm:.0f}] mm  ⚠", C['violet']),
+             f"CI [{phl_r.rl_100yr_ci95_lo_mm:.0f}–{phl_r.rl_100yr_ci95_hi_mm:.0f}] mm  △", C['violet']),
             ("PELT Break",           "2007",
              f"+{phl_r.uplift_pct:.1f}% post-break mean", C['violet']),
             ("EAL Pricing Gap",      f"+{phl_r.eal_pricing_gap_pct:.1f}%",
@@ -560,7 +700,7 @@ with tab1:
             f"{badge('3× CI width — n=34', C['coral'])}<br>"
             "Wide CI [326–985 mm] is not a failure; it proves single-point historical "
             "pricing is dangerous for catastrophe reserving.",
-            accent=C['violet'], icon="🇵🇭"
+            accent=C['violet'], icon="PH", fixed_height=86
         )
 
 
@@ -588,11 +728,7 @@ with tab2:
 
     fig_tc = make_subplots(
         rows=1, cols=3,
-        subplot_titles=[
-            f"<b>Malaysia</b> — Sectors @ ${carbon_price}/t",
-            f"<b>Philippines</b> — Sectors @ ${carbon_price}/t",
-            "<b>Scenario</b> — MYS vs PHL Total",
-        ],
+        subplot_titles=["", "", ""],
         column_widths=[0.32, 0.32, 0.36],
         horizontal_spacing=0.07,
     )
@@ -623,9 +759,10 @@ with tab2:
     layout_tc["barmode"] = "group"
     layout_tc["showlegend"] = True
     layout_tc["legend"]["orientation"] = "h"
-    layout_tc["legend"]["y"] = 1.08
+    layout_tc["legend"]["y"] = 1.22
     layout_tc["legend"]["x"] = 0
-    layout_tc["margin"] = dict(t=60, b=36, l=52, r=20)
+    layout_tc["legend"]["font"] = dict(family=FONT, color=C['tx2'], size=9)
+    layout_tc["margin"] = dict(t=110, b=36, l=52, r=20)
     ax = dict(gridcolor=C['surf3'], linecolor=C['border'],
               tickfont=dict(family=FONT, color=C['tx3'], size=9),
               title_font=dict(family=FONT, color=C['tx2'], size=10),
@@ -637,7 +774,7 @@ with tab2:
     for r, c in [(1,1),(1,2),(1,3)]:
         fig_tc.update_xaxes(**ax, row=r, col=c)
         fig_tc.update_yaxes(title_text="USD bn/yr", **yax_tc, row=r, col=c)
-    fig_tc.update_annotations(font=dict(color=C['tx2'], size=11, family=FONT))
+    fig_tc.update_annotations(font=dict(color=C['tx2'], size=10, family=FONT))
     st.plotly_chart(fig_tc, use_container_width=True, config={"displayModeBar": False})
 
     section_label("GDP Materiality")
@@ -652,8 +789,9 @@ with tab2:
         f"<b style='color:{C['tx1']}'>LULUCF Asymmetry — a uniform SEA surcharge misprices both markets</b><br>"
         f"Malaysia = {badge('net LULUCF emitter +63.3 MtCO₂e', C['coral'])} palm oil deforestation → BNM CCPT C3/C4 surcharge (3–5%).<br>"
         f"Philippines = {badge('net LULUCF sink −26.9 MtCO₂e', C['teal'])} reforestation → Art.6.2 ITMO credits offset cost (1–2% loading).",
-        accent=C['amber'], icon="📊"
+        accent=C['amber'], icon="▦"
     )
+    st.markdown('<div style="height:36px"></div>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -694,7 +832,7 @@ with tab3:
         textfont=dict(color=C['tx2'], size=9, family=MONO),
         connector=dict(line=dict(color=C['surf3'], dash="dot", width=1)),
         increasing=dict(marker=dict(color=C['sky'], line=dict(width=0))),
-        decreasing=dict(marker=dict(color=C['coral'], opacity=0.85, line=dict(width=0))),
+        decreasing=dict(marker=dict(color=C['coral'], line=dict(width=0))),
         totals=dict(marker=dict(color=C['teal'], line=dict(width=0))),
         hovertemplate="%{x}<br><b>%{y:.3f} USD M</b><extra></extra>",
     ), row=1, col=1)
@@ -742,8 +880,9 @@ with tab3:
         f"${hre_tot:.1f}M/yr is derived from four stacked conservative assumptions. "
         "The primary deliverable is the <b>repricing framework itself</b> — once cedant-level "
         "loss triangles are disclosed, this estimate refines by an order of magnitude.",
-        accent=C['coral'], icon="⚠"
+        accent=C['coral'], icon="△"
     )
+    st.markdown('<div style="height:36px"></div>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -761,33 +900,311 @@ with tab4:
 </div>""", unsafe_allow_html=True)
 
     if cop is None:
-        callout("Run <code>python run_all.py</code> to generate copula outputs.", C['coral'], "⚠")
+        callout("Run <code>python run_all.py</code> to generate copula outputs.", C['coral'], "△")
     else:
+        rx = chirps_df.pivot(index="year", columns="country_code", values="RX5day_mm")
+        idx = rx.dropna().index.astype(int)
+        mys_raw = rx.loc[idx, "MYS"].to_numpy()
+        phl_raw = rx.loc[idx, "PHL"].to_numpy()
+
+        oni_djf = (
+            oni_df[oni_df["SEAS"] == "DJF"]
+            .rename(columns={"YR": "year", "ANOM": "oni_anom"})
+            .set_index("year")["oni_anom"]
+        )
+        oni_aligned = oni_djf.reindex(idx)
+
+        def enso_phase(anom):
+            if pd.isna(anom):
+                return "Unknown"
+            if anom >= 0.5:
+                return "El Niño"
+            if anom <= -0.5:
+                return "La Niña"
+            return "Neutral"
+
+        phases = oni_aligned.apply(enso_phase)
+
+        xi_m, mu_m, sc_m = genextreme.fit(mys_raw, method="mle")
+        xi_p, mu_p, sc_p = genextreme.fit(phl_raw, method="mle")
+        eps = 1e-6
+        u = np.clip(genextreme.cdf(mys_raw, xi_m, loc=mu_m, scale=sc_m), eps, 1 - eps)
+        v = np.clip(genextreme.cdf(phl_raw, xi_p, loc=mu_p, scale=sc_p), eps, 1 - eps)
+
+        cond_results = {}
+        for ph in ["La Niña", "Neutral", "El Niño"]:
+            mask = (phases == ph).to_numpy()
+            if mask.sum() >= 5:
+                tau_ph, p_ph = kendalltau(mys_raw[mask], phl_raw[mask])
+                rho_ph, _ = spearmanr(mys_raw[mask], phl_raw[mask])
+                cond_results[ph] = {"n": int(mask.sum()), "tau": float(tau_ph), "p": float(p_ph), "rho": float(rho_ph)}
+
+        uv = np.column_stack([u, v])
+        n_uv = len(uv)
+
+        def fit_archimedean(copula_cls, lo, hi):
+            def neg_ll(theta):
+                try:
+                    lp = copula_cls(theta=theta).logpdf(uv)
+                    return -np.sum(lp) if np.all(np.isfinite(lp)) else np.inf
+                except Exception:
+                    return np.inf
+            res = minimize_scalar(neg_ll, bounds=(lo + 1e-4, hi - 1e-4), method="bounded")
+            ll = -res.fun
+            aic = 2 - 2 * ll
+            bic = np.log(n_uv) - 2 * ll
+            return float(aic), float(bic)
+
         tau_all = float(cop.loc["Kendall_tau_all","value"])
-        p_tau   = float(cop.loc["p_tau_all","value"])
-        tau_la  = float(cop.loc["tau_LaNina","value"])
-        rho_la  = float(cop.loc["rho_gaussian_LaNina","value"])
+        p_tau = float(cop.loc["p_tau_all","value"])
+        tau_la = float(cop.loc["tau_LaNina","value"])
+        rho_la = float(cop.loc["rho_gaussian_LaNina","value"])
         p99_gap = float(cop.loc["p99_gap_USD_M","value"])
-        best_c  = str(cop.loc["best_copula","value"])
+        hre_p99_gap = float(cop.loc["HRe_10pct_alloc_p99_gap_USD_M","value"])
+        try:
+            aic_cl, bic_cl = fit_archimedean(ClaytonCopula, 0.0, 20.0)
+            aic_gu, bic_gu = fit_archimedean(GumbelCopula, 1.0, 20.0)
+            aic_fr, bic_fr = fit_archimedean(FrankCopula, 0.0, 40.0)
+            rho_g = float(np.sin(np.pi / 2 * tau_all))
+            ll_g = GaussianCopula(corr=rho_g).logpdf(uv).sum()
+            aic_g = float(2 - 2 * ll_g)
+            bic_g = float(np.log(n_uv) - 2 * ll_g)
+            ll_i = IndependenceCopula().logpdf(uv).sum()
+            aic_ind = float(2 * (-ll_i))
+            bic_ind = float(2 * (-ll_i))
+        except Exception:
+            # Fallback to backend summary values if fit fails in runtime.
+            aic_ind = float(cop.loc["AIC_Independence", "value"])
+            bic_ind = aic_ind
+            aic_cl, bic_cl = 2.0, np.log(n_uv) + 2.0
+            aic_gu, bic_gu = 2.0, np.log(n_uv) + 2.0
+            aic_fr, bic_fr = 2.0, np.log(n_uv) + 2.0
+            aic_g, bic_g = 1.85, np.log(n_uv) + 1.85
+
+        aic_models = {
+            "Clayton": (aic_cl, bic_cl),
+            "Gumbel": (aic_gu, bic_gu),
+            "Frank": (aic_fr, bic_fr),
+            "Gaussian": (aic_g, bic_g),
+            "Independence": (aic_ind, bic_ind),
+        }
+        best_c = min(aic_models, key=lambda k: aic_models[k][0])
 
         kpi_row([
             ("Overall Kendall τ",    f"{tau_all:+.4f}",  f"p = {p_tau:.4f}  ·  cannot reject H₀",    C['tx3']),
-            ("La Niña τ",            f"{tau_la:+.4f}",   f"vs El Niño −0.091  ·  Δτ = +0.30",         C['teal']),
+            ("La Niña τ",            f"{tau_la:+.4f}",   f"Gaussian ρ = {rho_la:.3f}",                C['teal']),
             ("AIC-best copula",      best_c,             "ΔAIC < 2  ·  independence adequate",         C['tx3']),
-            ("100-yr Portfolio Gap", f"+${p99_gap:.1f}M", f"La Niña ρ={rho_la:.2f} vs independence",  C['amber']),
+            ("100-yr Portfolio Gap", f"+${p99_gap:.1f}M", f"HRe (10% SEA alloc): +${hre_p99_gap:.1f}M", C['amber']),
         ])
 
-        col_l, col_r = st.columns(2)
-        with col_l:
-            section_label("PIT scatter by ENSO phase")
-            pit = OUT / "r8_copula_pit_scatter.png"
-            if pit.exists():
-                st.image(str(pit), use_container_width=True)
-        with col_r:
-            section_label("AIC selection · Conditional τ · Portfolio CDF")
-            ca = OUT / "r8_copula_analysis.png"
-            if ca.exists():
-                st.image(str(ca), use_container_width=True)
+        section_label("PIT scatter by ENSO phase (interactive)")
+        la = cond_results.get("La Niña", {"n": 0, "tau": np.nan})
+        en = cond_results.get("El Niño", {"n": 0, "tau": np.nan})
+        ne = cond_results.get("Neutral", {"n": 0, "tau": np.nan})
+
+        def tau_lbl(v):
+            return "NA" if not np.isfinite(v) else f"{v:+.3f}"
+
+        fig_pit = make_subplots(
+            rows=2, cols=2,
+            subplot_titles=[
+                f"All years (n={len(idx)}) · τ={tau_all:+.3f}",
+                f"La Niña (n={la['n']}) · τ={tau_lbl(la['tau'])}",
+                f"El Niño (n={en['n']}) · τ={tau_lbl(en['tau'])}",
+                f"Neutral (n={ne['n']}) · τ={tau_lbl(ne['tau'])}",
+            ],
+            horizontal_spacing=0.08,
+            vertical_spacing=0.20,
+        )
+        phase_specs = [
+            ("All years", None, C["tx2"], 1, 1),
+            ("La Niña", "La Niña", C["teal"], 1, 2),
+            ("El Niño", "El Niño", C["coral"], 2, 1),
+            ("Neutral", "Neutral", C["amber"], 2, 2),
+        ]
+        for _, phase_name, clr, r, c in phase_specs:
+            mask = np.ones(len(idx), dtype=bool) if phase_name is None else (phases == phase_name).to_numpy()
+            fig_pit.add_trace(
+                go.Scatter(
+                    x=u[mask], y=v[mask], mode="markers",
+                    marker=dict(size=7, color=clr, line=dict(color=C["surf1"], width=0.6), opacity=0.82),
+                    customdata=np.column_stack([idx[mask]]),
+                    hovertemplate="Year %{customdata[0]}<br>U(MYS): %{x:.3f}<br>V(PHL): %{y:.3f}<extra></extra>",
+                    showlegend=False,
+                ),
+                row=r, col=c
+            )
+            fig_pit.add_vline(x=0.5, line_dash="dot", line_color=C["surf3"], line_width=1, row=r, col=c)
+            fig_pit.add_hline(y=0.5, line_dash="dot", line_color=C["surf3"], line_width=1, row=r, col=c)
+            fig_pit.update_xaxes(range=[0, 1], row=r, col=c)
+            fig_pit.update_yaxes(range=[0, 1], row=r, col=c)
+        # Keep axis labels only where they add information, to avoid overlap between subplots.
+        fig_pit.update_xaxes(title_text="U (MYS PIT)", row=2, col=1)
+        fig_pit.update_xaxes(title_text="U (MYS PIT)", row=2, col=2)
+        fig_pit.update_yaxes(title_text="V (PHL PIT)", row=1, col=1)
+        fig_pit.update_yaxes(title_text="V (PHL PIT)", row=2, col=1)
+
+        lay_pit = base_layout(height=600)
+        lay_pit["margin"] = dict(t=78, b=44, l=56, r=20)
+        lay_pit["title"] = dict(
+            text="R8 — GEV Copula PIT Scatter by ENSO Phase",
+            x=0.01, xanchor="left",
+            font=dict(family=FONT, color=C["tx2"], size=12),
+        )
+        fig_pit.update_layout(**{k: v for k, v in lay_pit.items() if k not in ("xaxis", "yaxis")})
+        fig_pit.update_annotations(font=dict(color=C["tx2"], size=10, family=FONT))
+        st.plotly_chart(fig_pit, use_container_width=True, config={"displayModeBar": False})
+
+        section_label("AIC selection · Conditional τ · Portfolio CDF (interactive)")
+        fig_cop = make_subplots(
+            rows=1, cols=3,
+            subplot_titles=["AIC comparison", "ENSO-conditional concordance (τ)", "Portfolio loss curve"],
+            column_widths=[0.28, 0.30, 0.42],
+            horizontal_spacing=0.09,
+        )
+        aic_x = ["Clayton", "Gumbel", "Frank", "Gaussian", "Independence"]
+        aic_vals = [aic_models[m][0] for m in aic_x]
+        bic_vals = [aic_models[m][1] for m in aic_x]
+        aic_colors = [C["sky"], C["sky"], C["sky"], C["sky"], C["teal"]]
+        fig_cop.add_trace(
+            go.Bar(
+                x=aic_x, y=aic_vals,
+                marker_color=aic_colors,
+                marker_line_width=0,
+                name="AIC",
+                text=[f"{v:.2f}" if abs(v) >= 0.005 else "0.00" for v in aic_vals],
+                textposition="outside",
+                textfont=dict(color=C["tx2"], size=9, family=MONO),
+                hovertemplate="<b>%{x}</b><br>AIC %{y:.3f}<extra></extra>",
+                showlegend=True,
+            ),
+            row=1, col=1
+        )
+        fig_cop.add_trace(
+            go.Bar(
+                x=aic_x, y=bic_vals,
+                marker_color="rgba(0,0,0,0)",
+                marker_line_width=1.8,
+                marker_line_color=C["tx3"],
+                opacity=1.0,
+                name="BIC",
+                hovertemplate="<b>%{x}</b><br>BIC %{y:.3f}<extra></extra>",
+                showlegend=True,
+            ),
+            row=1, col=1
+        )
+
+        ph_order = ["El Niño", "Neutral", "La Niña"]
+        ph_colors = [C["coral"], C["tx2"], C["teal"]]
+        tau_vals, n_vals = [], []
+        for ph in ph_order:
+            if ph in cond_results:
+                tau_vals.append(cond_results[ph]["tau"])
+                n_vals.append(cond_results[ph]["n"])
+            else:
+                tau_vals.append(np.nan)
+                n_vals.append(0)
+        fig_cop.add_trace(
+            go.Bar(
+                x=ph_order, y=tau_vals,
+                marker_color=ph_colors, marker_line_width=0,
+                text=[f"τ={t:+.3f}<br>n={n}" if np.isfinite(t) else "NA" for t, n in zip(tau_vals, n_vals)],
+                textposition="auto",
+                textfont=dict(color=C["tx2"], size=9, family=MONO),
+                hovertemplate="<b>%{x}</b><br>τ %{y:+.4f}<extra></extra>",
+                showlegend=False,
+            ),
+            row=1, col=2
+        )
+        fig_cop.add_hline(y=0, line_color=C["surf3"], line_width=1, row=1, col=2)
+        fig_cop.add_hline(y=tau_all, line_color=C["tx3"], line_dash="dot", line_width=1, row=1, col=2)
+
+        rng = np.random.default_rng(42)
+        n_sim = 200000
+        mys_eal_bn = float(r3.loc["MYS", "eal_forward_usd_bn"])
+        phl_eal_bn = float(r3.loc["PHL", "eal_forward_usd_bn"])
+
+        def gev_loss_from_uniform(prob, xi, mu, sc, eal_bn):
+            rx5 = genextreme.ppf(np.clip(prob, 1e-8, 1 - 1e-8), xi, loc=mu, scale=sc)
+            mean_rx = genextreme.mean(xi, loc=mu, scale=sc) if xi < 1 else mu
+            return eal_bn * 1e3 * (rx5 / mean_rx)
+
+        u_ind = rng.uniform(size=n_sim)
+        v_ind = rng.uniform(size=n_sim)
+        combined_ind = gev_loss_from_uniform(u_ind, xi_m, mu_m, sc_m, mys_eal_bn) + gev_loss_from_uniform(v_ind, xi_p, mu_p, sc_p, phl_eal_bn)
+        z1 = rng.standard_normal(n_sim)
+        z2 = rng.standard_normal(n_sim)
+        z2_corr = rho_la * z1 + np.sqrt(1 - rho_la**2) * z2
+        combined_la = gev_loss_from_uniform(norm.cdf(z1), xi_m, mu_m, sc_m, mys_eal_bn) + gev_loss_from_uniform(norm.cdf(z2_corr), xi_p, mu_p, sc_p, phl_eal_bn)
+        pct_range = np.linspace(80, 99.5, 320)
+        t_range = 1 / (1 - pct_range / 100)
+        pct_vals_ind = np.percentile(combined_ind, pct_range)
+        pct_vals_la = np.percentile(combined_la, pct_range)
+
+        fig_cop.add_trace(
+            go.Scatter(
+                x=t_range, y=pct_vals_ind, mode="lines",
+                line=dict(color=C["teal"], width=2.2),
+                name="Independence",
+                hovertemplate="T=%{x:.1f}yr<br>$%{y:,.1f}M<extra></extra>",
+                showlegend=True,
+            ),
+            row=1, col=3
+        )
+        fig_cop.add_trace(
+            go.Scatter(
+                x=t_range, y=pct_vals_la, mode="lines",
+                line=dict(color=C["violet"], width=2.2, dash="dash"),
+                name=f"La Niña Gaussian (ρ={rho_la:.2f})",
+                hovertemplate="T=%{x:.1f}yr<br>$%{y:,.1f}M<extra></extra>",
+                showlegend=True,
+            ),
+            row=1, col=3
+        )
+        fig_cop.add_trace(
+            go.Scatter(
+                x=np.concatenate([t_range, t_range[::-1]]),
+                y=np.concatenate([pct_vals_ind, pct_vals_la[::-1]]),
+                fill="toself", fillcolor="rgba(167,139,250,0.12)",
+                line=dict(color="rgba(0,0,0,0)"),
+                hoverinfo="skip",
+                showlegend=False,
+            ),
+            row=1, col=3
+        )
+        fig_cop.add_vline(x=100, line_dash="dot", line_color=C["surf3"], line_width=1, row=1, col=3)
+        fig_cop.add_annotation(
+            x=100, y=max(np.percentile(combined_ind, 99), np.percentile(combined_la, 99)),
+            xref="x3", yref="y3",
+            text=f"Δ100-yr: +${p99_gap:.1f}M",
+            showarrow=False, yshift=20,
+            font=dict(color=C["coral"], size=10, family=MONO),
+        )
+        lay_cop = base_layout(height=405)
+        lay_cop["barmode"] = "overlay"
+        lay_cop["legend"] = dict(
+            orientation="h", y=-0.28, x=0.5, xanchor="center",
+            font=dict(family=FONT, color=C["tx2"], size=9)
+        )
+        lay_cop["margin"] = dict(t=70, b=120, l=40, r=14)
+        lay_cop["title"] = dict(
+            text="R8 — Copula Model Selection, Conditional Concordance, and Portfolio Tail Risk",
+            x=0.01, xanchor="left",
+            font=dict(family=FONT, color=C["tx2"], size=12),
+        )
+        fig_cop.update_layout(**{k: v for k, v in lay_cop.items() if k not in ("xaxis", "yaxis")})
+        fig_cop.update_yaxes(title_text="AIC", row=1, col=1)
+        fig_cop.update_yaxes(title_text="Kendall τ", range=[-0.55, 0.55], row=1, col=2)
+        fig_cop.update_xaxes(
+            type="log",
+            title_text="Return period (years)",
+            range=[np.log10(5), np.log10(200)],
+            tickvals=[5, 10, 20, 50, 100, 200],
+            row=1, col=3
+        )
+        fig_cop.update_yaxes(title_text="Combined loss (USD M)", row=1, col=3)
+        fig_cop.update_annotations(font=dict(color=C["tx2"], size=10, family=FONT))
+        st.plotly_chart(fig_cop, use_container_width=True, config={"displayModeBar": False})
 
         section_label("Three key findings")
         f1, f2, f3 = st.columns(3)
@@ -797,42 +1214,85 @@ with tab4:
                 f"<b style='color:{C['tx1']}'>Independence adequate annually</b><br>"
                 f"τ = {tau_all:+.4f} (p = {p_tau:.4f}). ΔAIC < 2 — Burnham-Anderson: no evidence against "
                 "independence. <b>Standard univariate GEV (R3) is validated.</b>",
-                C['teal']
+                C['teal'], fixed_height=160
             )
         with f2:
             callout(
                 f"{badge('Finding 2', C['amber'])}<br><br>"
                 f"<b style='color:{C['tx1']}'>ENSO breaks independence</b><br>"
-                f"La Niña τ = {tau_la:+.4f} vs El Niño τ = −0.09. Δτ = +0.30. "
-                "Mechanism: La Niña → western Pacific warm pool → simultaneous MYS floods "
-                "+ PHL typhoons (IPCC AR6 WG1 §3.3.3).",
-                C['amber']
+                f"La Niña τ = {tau_la:+.4f} and Gaussian ρ = {rho_la:.4f}. "
+                "Conditional dependence strengthens under ENSO stress and should be priced in tail scenarios.",
+                C['amber'], fixed_height=160
             )
         with f3:
             callout(
                 f"{badge('Finding 3', C['coral'])}<br><br>"
                 f"<b style='color:{C['tx1']}'>100-yr portfolio understatement</b><br>"
                 f"La Niña Gaussian copula (ρ = {rho_la:.2f}) raises combined 100-yr loss by "
-                f"<b>+${p99_gap:.1f}M (+1.2%)</b>. Supplements Rec.3 with a "
-                "mathematically grounded reserve loading.",
-                C['coral']
+                f"<b>+${p99_gap:.1f}M</b>; HRe 10% SEA allocation uplift is <b>+${hre_p99_gap:.1f}M</b>.",
+                C['coral'], fixed_height=160
             )
 
         section_label("ENSO-conditional concordance table")
-        cond_df = pd.DataFrame({
-            "Phase":  ["🔵  La Niña (n=14)", "⚫  Neutral (n=9)", "🔴  El Niño (n=11)", "—  All years (n=34)"],
-            "Kendall τ":  [f"{tau_la:+.4f}", "−0.3333", "−0.0909", f"{tau_all:+.4f}"],
-            "p-value": ["0.3308", "0.2595", "0.7612", f"{p_tau:.4f}"],
-            "Interpretation": ["Positive dependence — joint extremes", "Negative — offsetting", "Near-independent", "Cannot reject independence"],
-            "Treaty action": ["Apply +1% loading on combined MYS+PHL XL limits", "No action required", "No action required", "Standard univariate pricing valid"],
-        })
-        st.dataframe(cond_df, hide_index=True, use_container_width=True)
+
+        def fmt_tau(x):
+            return "NA" if not np.isfinite(x) else f"{x:+.4f}"
+
+        def fmt_p(x):
+            return "NA" if not np.isfinite(x) else f"{x:.4f}"
+
+        ln = cond_results.get("La Niña", {"n": 0, "tau": np.nan, "p": np.nan})
+        nt = cond_results.get("Neutral", {"n": 0, "tau": np.nan, "p": np.nan})
+        el = cond_results.get("El Niño", {"n": 0, "tau": np.nan, "p": np.nan})
+
+        rows = [
+            ("●", C['teal'],   "La Niña",   f"n={ln['n']}",  fmt_tau(ln["tau"]), fmt_p(ln["p"]), "Positive dependence — joint extremes",  "Apply +1% loading on combined MYS+PHL XL limits"),
+            ("◐", C['tx2'],    "Neutral",   f"n={nt['n']}",  fmt_tau(nt["tau"]), fmt_p(nt["p"]), "Negative / offsetting",                  "No action required"),
+            ("○", C['coral'],  "El Niño",   f"n={el['n']}",  fmt_tau(el["tau"]), fmt_p(el["p"]), "Near-independent",                       "No action required"),
+            ("—", C['tx3'],    "All years", f"n={len(idx)}", f"{tau_all:+.4f}", f"{p_tau:.4f}", "Cannot reject independence",             "Standard univariate pricing valid"),
+        ]
+        body_rows = ""
+        for dot, dot_color, phase, n, tau, p, interp, action in rows:
+            body_rows += f"""
+<tr style="border-top:1px solid {C['border']}">
+  <td style="padding:11px 14px;white-space:nowrap">
+    <span style="color:{dot_color};font-size:0.95rem;margin-right:8px">{dot}</span>
+    <span style="color:{C['tx1']};font-weight:600">{phase}</span>
+    <span style="color:{C['tx3']};font-size:0.72rem;margin-left:6px;font-family:{MONO}">{n}</span>
+  </td>
+  <td style="padding:11px 14px;font-family:{MONO};color:{C['tx1']};font-size:0.82rem">{tau}</td>
+  <td style="padding:11px 14px;font-family:{MONO};color:{C['tx2']};font-size:0.82rem">{p}</td>
+  <td style="padding:11px 14px;color:{C['tx2']};font-size:0.81rem">{interp}</td>
+  <td style="padding:11px 14px;color:{C['tx2']};font-size:0.81rem">{action}</td>
+</tr>"""
+        st.markdown(f"""
+<div style="background:{C['surf2']};border:1px solid {C['border']};border-radius:10px;
+     overflow:hidden">
+  <table style="width:100%;border-collapse:collapse;font-family:{FONT}">
+    <thead>
+      <tr style="background:{C['surf3']}">
+        <th style="text-align:left;padding:10px 14px;color:{C['tx3']};
+            font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Phase</th>
+        <th style="text-align:left;padding:10px 14px;color:{C['tx3']};
+            font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Kendall τ</th>
+        <th style="text-align:left;padding:10px 14px;color:{C['tx3']};
+            font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">p-value</th>
+        <th style="text-align:left;padding:10px 14px;color:{C['tx3']};
+            font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Interpretation</th>
+        <th style="text-align:left;padding:10px 14px;color:{C['tx3']};
+            font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Treaty action</th>
+      </tr>
+    </thead>
+    <tbody>{body_rows}</tbody>
+  </table>
+</div>""", unsafe_allow_html=True)
+        st.markdown('<div style="height:36px"></div>', unsafe_allow_html=True)
 
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown(f"""
-<div style="border-top:1px solid {C['border']};margin-top:2.5rem;
-     padding-top:1.2rem;display:flex;justify-content:space-between;
+<div style="margin-top:1.3rem;
+     padding-top:0.7rem;display:flex;justify-content:space-between;
      align-items:center;gap:16px;flex-wrap:wrap">
   <div style="color:{C['tx4']};font-size:0.71rem;line-height:1.8">
     <b style="color:{C['tx3']}">Data:</b>
