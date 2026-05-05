@@ -1,0 +1,6 @@
+Rec,Trigger,Loading,Basis
+R1: EAL-calibrated flood loading,MYS treaties > USD 50M,+35-36%,GEV PELT uplift + bootstrap CI
+R2: Climate Warranty Clause,At renewal - 5 conditions,10% co-participation on non-disclosure,BNM CCPT Pillar 2; Lloyds 2023
+R3: ENSO Conditional Audit,NOAA OND ONI <= -0.5 C,+6.9% if audit >15% increase,CHIRPS PELT uplift
+R4: CI-derived loading,All MYS/PHL treaties,+29.5pp MYS / +44.5pp PHL,Bootstrap CI n=34 - calculated
+R5: Data procurement,Immediate to 12mo,Reduces CI loading when n=43,Hosking-Wallis (1997)

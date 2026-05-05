@@ -1,0 +1,8 @@
+year,ngfs_carbon_price_usd_t,mys_ghg_baseline_mt,phl_ghg_baseline_mt,mys_annual_cost_usd_bn,phl_annual_cost_usd_bn,combined_cost_usd_bn,abatement_assumption
+2024,28.231,380.72,194.42,10.748,5.489,16.237,3%/yr linear (IEA NZ2050 conservative)
+2025,32.789,369.3,188.58,12.109,6.184,18.293,3%/yr linear (IEA NZ2050 conservative)
+2026,37.347,358.22,182.93,13.379,6.832,20.21,3%/yr linear (IEA NZ2050 conservative)
+2027,41.905,347.48,177.44,14.561,7.436,21.996,3%/yr linear (IEA NZ2050 conservative)
+2028,46.462,337.05,172.12,15.66,7.997,23.657,3%/yr linear (IEA NZ2050 conservative)
+2029,51.02,326.94,166.95,16.681,8.518,25.199,3%/yr linear (IEA NZ2050 conservative)
+2030,55.578,317.13,161.94,17.626,9.001,26.626,3%/yr linear (IEA NZ2050 conservative)

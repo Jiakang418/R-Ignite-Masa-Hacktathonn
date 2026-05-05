@@ -1,0 +1,12 @@
+{
+  "mys_economic_gap_m": 6.502,
+  "mys_insured_gap_lo_m": 0.65,
+  "mys_insured_gap_mid_m": 0.975,
+  "mys_insured_gap_hi_m": 1.3,
+  "phl_economic_gap_m": 11.881,
+  "phl_insured_gap_lo_m": 0.594,
+  "phl_insured_gap_mid_m": 0.951,
+  "phl_insured_gap_hi_m": 1.782,
+  "mys_pen_adopted": 0.15,
+  "phl_pen_adopted": 0.08
+}

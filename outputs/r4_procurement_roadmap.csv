@@ -1,0 +1,5 @@
+Action,Data,Timeline,Cost,Impact,Fixes
+1. Extend precip record,MMD/PAGASA station 1981-89,6 months,15-25K,n:34->43; SE reduction 12%,n=34 GEV CI width
+2. Cedant loss disclosure,"Events >$500K, prior 5yr",Immediate,Nil,Replaces flat penetration with book-specific calibration,Flat penetration rate
+3. Geocoded schedule,Lat/lon + SI for properties >$1M,2026 renewal,1% premium credit,Sub-national CHIRPS at actual exposure location,National bounding box != cedant geography
+4. Peril penetration study,AIR/RMS SEA market study,12 months,80-120K,Peril-class specific rates replace uniform 15%/8%,Uniform penetration across peril types
