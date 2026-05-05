@@ -61,6 +61,18 @@ streamlit run app.py
 
 Opens a live browser app with three panels: GEV return level curves, transition cost explorer (carbon price × pass-through sliders), and HRe reserve gap waterfall. All data loaded from `outputs/` — no re-running notebooks required.
 
+### Deploy (Streamlit Community Cloud)
+
+This project is configured for Streamlit deployment (`app.py` entrypoint, `requirements.txt`, `runtime.txt`).
+
+1. Push this repo to GitHub.
+2. Open [Streamlit Community Cloud](https://share.streamlit.io/) and click **New app**.
+3. Select repository + branch (`main`), and set:
+   - **Main file path:** `app.py`
+4. Deploy.
+
+If a redeploy is needed after changes, use **Reboot app** from the app settings.
+
 ## Key Outputs — Start Here
 
 The `outputs/` directory contains 29 files. Judges: read these five in order.
