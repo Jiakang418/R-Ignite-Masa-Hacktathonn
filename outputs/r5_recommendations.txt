@@ -42,5 +42,20 @@ ENSO: ONI–loss correlation is absent at annual aggregation (r = -0.016,
 p = 0.93). Use NOAA La Niña 12-month outlook as a TCFD
 facultative audit trigger — not a pricing variable.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+METHODOLOGY NOTE — RESERVE FLOOR, NOT FINAL QUANTUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The HRe combined reserve estimate of USD 3.41M/yr (floor) and USD 9.66M/yr
+(base case, 10% SEA allocation) is a conservative top-down floor derived from
+four stacked macro assumptions: 17.5% blended insurance penetration × 50%
+treaty attachment × 8% HRe APAC market share × 3–10% SEA allocation.
+These assumptions are each independently sourced and defensible, but by
+construction produce a lower bound on the true reserve gap.
+The primary deliverable of this analysis is the repricing METHODOLOGY itself,
+not the initial dollar quantum. Once cedant-level loss triangles and sub-
+national hazard data are incorporated (Recommendation 5), the framework
+will translate directly into contract-specific premium adjustments, refining
+this estimate by an order of magnitude.
+
 Sources: CHIRPS v2.0 · EM-DAT · NOAA ONI · NGFS GCAM 6.0 ·
 Climate Watch 2023 · BNM CCPT 2021 · BSP Circ.1085 · UNFCCC Art.6

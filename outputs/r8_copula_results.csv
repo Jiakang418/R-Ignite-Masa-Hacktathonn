@@ -1,0 +1,18 @@
+metric,value,source
+Kendall_tau_all,-0.0232,Annual CHIRPS RX5day
+p_tau_all,0.8472,kendalltau scipy
+Spearman_rho_all,-0.0509,spearmanr scipy
+tau_LaNina,0.2088,n=14 La Nina years
+rho_gaussian_LaNina,0.3221,Van der Waerden sin(pi/2 * tau)
+best_copula,Independence,AIC model selection
+AIC_Independence,-0.0,k=0
+AIC_best,-0.0,Independence
+delta_AIC_indep_minus_best,0.0,ΔAIC
+theta_Clayton_overall,0.0081,MLE
+lower_tail_dep_Clayton,0.0,lambda_L = 2^(-1/theta)
+theta_Gumbel_overall,1.0001,MLE
+upper_tail_dep_Gumbel,0.0001,lambda_U = 2 - 2^(1/theta)
+p99_combined_loss_indep_USD_M,2100.85,"N_sim=200,000"
+p99_combined_loss_LaNina_USD_M,2126.78,Gaussian rho=0.3221
+p99_gap_USD_M,25.94,La Nina minus Independence
+HRe_10pct_alloc_p99_gap_USD_M,2.59,10% SEA allocation

@@ -19,9 +19,23 @@ Quantify two additive sources of reserve inadequacy in Hannover Re's SEA treaty 
 
 **Estimated total run time:** ~5–8 minutes on a standard laptop (GEV bootstrap n=500 and ARIMA grid search dominate).
 
+### Quickstart — Single Command
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python -m ipykernel install --user --name rignite_venv --display-name "R-Ignite Venv"
+python run_all.py
+```
+
+`run_all.py` executes all six notebooks in dependency order, writes outputs back to the `.ipynb` files, and prints a summary of all key output files on completion.
+
+### Manual Step-by-Step
+
 1. Create a virtual environment: `python -m venv .venv && source .venv/bin/activate`
 2. Install dependencies: `pip install -r requirements.txt`
-3. Execute notebooks `01` through `06` **sequentially** — each notebook depends on outputs from the prior step.
+3. Register the kernel: `python -m ipykernel install --user --name rignite_venv`
+4. Execute notebooks `01` through `06` **sequentially** — each notebook depends on outputs from the prior step.
 
 | Notebook | Purpose | Key Output |
 |---|---|---|
@@ -31,12 +45,45 @@ Quantify two additive sources of reserve inadequacy in Hannover Re's SEA treaty 
 | `04_chirps_gev_enso.ipynb` | GEV extreme value + PELT + ENSO | `outputs/r3_*.csv/png` |
 | `05_exhibit2_visualization.ipynb` | Transition cost (NGFS NZ2050) + stress matrix | `outputs/r4_*.csv/png` |
 | `06_executive_summary.ipynb` | Combined dashboard + winning paragraph | `outputs/executive_summary.png`, `interactive_stress_test.html` |
+| `08_gev_copula.ipynb` | GEV-Copula joint model — MYS-PHL tail dependence | `outputs/r8_copula_*.png`, `r8_copula_results.csv` |
 
 **Optional — NGFS pre-processing:** `process_ngfs.py` converts the raw `data/raw/Downscaled_GCAM 6.0 NGFS_data.csv` (62 MB) into `data/processed/ngfs_carbon_price_mys_phl.csv`. Run it once if the processed file is missing:
 ```
 python process_ngfs.py
 ```
 If the raw NGFS file is absent, notebooks gracefully degrade to pre-computed outputs in `outputs/`.
+
+### Interactive Dashboard
+
+```bash
+streamlit run app.py
+```
+
+Opens a live browser app with three panels: GEV return level curves, transition cost explorer (carbon price × pass-through sliders), and HRe reserve gap waterfall. All data loaded from `outputs/` — no re-running notebooks required.
+
+## Key Outputs — Start Here
+
+The `outputs/` directory contains 29 files. Judges: read these five in order.
+
+| File | What it shows | Notebook |
+|---|---|---|
+| `executive_summary_onepage.pdf` | **One-page brief** — Three Gaps framework, three actions, dollar amounts | `06` |
+| `interactive_stress_test.html` | **Interactive dashboard** — open in any browser, no install needed | `06` |
+| `r3_gev_and_regime_break.png` | GEV return levels (MYS 216mm / PHL 521mm) + PELT 2007 break | `04` |
+| `exhibit_2_chart_final.png` | Transition cost (NGFS NZ2050): MYS $22.4bn vs PHL $14.8bn | `05` |
+| `r3_eal_decomposition_waterfall.png` | EAL assumption chain: total loss → insurance penetration → treaty attachment → HRe share | `04` |
+
+Supporting analytical outputs:
+
+| File | Content |
+|---|---|
+| `r3_results_table.csv` | GEV parameters, bootstrap CIs, PELT break, ENSO correlations, EAL gap |
+| `r4_stress_scenario_table.csv` | Three carbon price scenarios (CP / NZ2050 / 2× stress) with GDP % |
+| `r4_pass_through_sensitivity_matrix.csv` | 3×3 pass-through × carbon price sensitivity (anchored to IMF/EIOPA) |
+| `r6_hre_impact_estimate.csv` | HRe reserve gap with assumption chain and source citations |
+| `r8_copula_results.csv` | GEV-Copula: Kendall τ, AIC table, conditional La Niña copula, portfolio loss gap |
+| `r8_copula_analysis.png` | Copula AIC comparison · ENSO-conditional τ · portfolio loss CDF |
+| `regulatory_context.pdf` | BNM CCPT / BSP Circ.1085 / UNFCCC Art.6 treaty implication table |
 
 ## Generative AI Usage
 See [AI_Usage.md](AI_Usage.md) for full disclosure of AI tooling used in this repository.
