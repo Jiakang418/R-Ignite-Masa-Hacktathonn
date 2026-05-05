@@ -471,6 +471,38 @@ def load_data():
 
 r3, r4s, pt_df, gdp, cw_mys, cw_phl, chirps_df, oni_df, cop = load_data()
 
+# ── Derive all constants from backend CSVs (no hardcodes) ─────────────────────
+_cw_mys_num = cw_mys.copy(); _cw_mys_num["ghg"] = pd.to_numeric(_cw_mys_num["2023"])
+_cw_phl_num = cw_phl.copy(); _cw_phl_num["ghg"] = pd.to_numeric(_cw_phl_num["2023"])
+
+# Carbon price baseline from NGFS stress scenario table
+BASELINE_C    = float(r4s[r4s["Scenario"].str.contains("Baseline", case=False, na=False)]["Carbon Price (USD/t)"].iloc[0])
+
+# GHG totals from Climate Watch (positive sectors only — same basis as notebook 05)
+MYS_GHG       = float(_cw_mys_num[_cw_mys_num["ghg"] > 0]["ghg"].sum())
+PHL_GHG       = float(_cw_phl_num[_cw_phl_num["ghg"] > 0]["ghg"].sum())
+
+# LULUCF values for callout text
+MYS_LULUCF    = float(_cw_mys_num[_cw_mys_num["Sector"].str.contains("Land Use", na=False)]["ghg"].iloc[0])
+PHL_LULUCF    = float(_cw_phl_num[_cw_phl_num["Sector"].str.contains("Land Use", na=False)]["ghg"].iloc[0])
+
+# EAL gap from r3 (sum of MYS+PHL insured pricing gap in USD M)
+eal_gap       = float((r3.loc["MYS","eal_pricing_gap_usd_bn"] + r3.loc["PHL","eal_pricing_gap_usd_bn"]) * 1000)
+
+# HRe portfolio assumptions from r6 (sourced and saved by notebook 06)
+_r6           = pd.read_csv(OUT/"r6_hre_impact_estimate.csv").set_index("Metric")
+hre_share     = float(_r6.loc["HRE_MARKET_SHARE (assumption)","Value"])
+treaty_attach = float(_r6.loc["TREATY_ATTACHMENT_FACTOR (assumption)","Value"])
+
+# PELT break year and observation count from r3
+MYS_BREAK     = int(r3.loc["MYS","pelt_break_year"])
+PHL_BREAK     = int(r3.loc["PHL","pelt_break_year"])
+N_OBS         = int(r3.loc["MYS","eal_data_window_yrs"])
+
+# Copula summary stats from r8 (used in Tab4 description text)
+_tau_all_live = float(cop.loc["Kendall_tau_all","value"]) if cop is not None else -0.023
+_p_tau_live   = float(cop.loc["p_tau_all","value"])      if cop is not None else 0.85
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(f"""
@@ -486,8 +518,8 @@ with st.sidebar:
 </div>""", unsafe_allow_html=True)
 
     st.markdown(f'<div style="color:{C["teal"]};font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px">⬡ Transition Risk</div>', unsafe_allow_html=True)
-    carbon_price = st.slider("Carbon price (USD/tCO₂e)", 0, 200, 56, 1,
-                             help="NGFS NZ2050 ≈ $55.6/t · 2× stress = $111/t")
+    carbon_price = st.slider("Carbon price (USD/tCO₂e)", 0, 200, int(round(BASELINE_C)), 1,
+                             help=f"NGFS NZ2050 = ${BASELINE_C:.1f}/t · 2× stress = ${BASELINE_C*2:.0f}/t")
     pt_rate_pct  = st.slider("Pass-through rate (%)", 1, 8, 3, 1,
                              help="IMF Fiscal Monitor 2021: 1–5% · EIOPA 2023: 3–8%")
     pt_rate = pt_rate_pct / 100.0
@@ -500,8 +532,6 @@ with st.sidebar:
     sea_alloc_pct = st.slider("HRe SEA allocation (%)", 1, 25, 3, 1,
                               help="Floor 3% · Base 10% · Regional 20%")
     sea_alloc     = sea_alloc_pct / 100.0
-    hre_share     = 0.08
-    treaty_attach = 0.50
 
     st.markdown(f"""
 <div style="border-top:1px solid {C['border']};margin-top:18px;padding-top:12px;padding-bottom:14px">
@@ -512,19 +542,15 @@ with st.sidebar:
   </div>
 </div>""", unsafe_allow_html=True)
 
-# ── Live calcs ────────────────────────────────────────────────────────────────
-BASELINE_C = 55.578
-MYS_GHG    = 388.4   # 325.1 (ARIMA 2024) + 63.3 (LULUCF)
-PHL_GHG    = 260.8
-
+# ── Live calcs (all inputs derived from backend CSVs above) ───────────────────
 mys_tc   = MYS_GHG * carbon_price / 1000
 phl_tc   = PHL_GHG * carbon_price / 1000
 mys_pt   = mys_tc * pt_rate
 phl_pt   = phl_tc * pt_rate
-eal_gap  = 18.4  # USD M, MYS+PHL
-pen      = 0.175
-insured  = eal_gap * pen
-attached = insured * treaty_attach
+
+# eal_gap is the INSURED EAL pricing gap from r3 (penetration already applied in nb04).
+# Chain: insured_gap × treaty_attachment × HRe_market_share = $18.4M × 50% × 8% = $0.74M
+attached = eal_gap * treaty_attach
 hre_phys = attached * hre_share
 hre_tran = (mys_pt + phl_pt) * 1e3 * hre_share * sea_alloc
 hre_tot  = hre_phys + hre_tran
@@ -590,7 +616,7 @@ with tab1:
   GEV fitted via MLE to CHIRPS RX5day annual maxima.
   <b style="color:{C['teal']}">Non-stationary model preferred for Malaysia</b>
   (ΔAIC = +1.88, μ₁ = +0.48 mm/yr) — location parameter trending upward.
-  PELT structural break detected at <b style="color:{C['tx1']}">2007</b> in both markets.
+  PELT structural break detected at <b style="color:{C['tx1']}">{MYS_BREAK}</b> (MYS) and <b style="color:{C['tx1']}">{PHL_BREAK}</b> (PHL).
   Bootstrap CI n=500, seed=42.
 </div>""", unsafe_allow_html=True)
     with c_desc2:
@@ -601,7 +627,7 @@ with tab1:
   <b style="color:{C['tx2']}">Source</b><br>
   CHIRPS v2.0 · UCSB<br>
   WMO ETCCDI RX5day<br>
-  1990–2023 · n=34
+  1990–2023 · n={N_OBS}
 </div>""", unsafe_allow_html=True)
 
     # GEV chart
@@ -672,7 +698,7 @@ with tab1:
         kpi_row([
             ("100-yr Return Level",  f"{mys_r.return_level_100yr_mm:.0f} mm",
              f"CI [{mys_r.rl_100yr_ci95_lo_mm:.0f}–{mys_r.rl_100yr_ci95_hi_mm:.0f}] mm", C['teal']),
-            ("PELT Break",           "2007",
+            ("PELT Break",           str(MYS_BREAK),
              f"+{mys_r.uplift_pct:.1f}% post-break mean", C['teal']),
             ("EAL Pricing Gap",      f"+{mys_r.eal_pricing_gap_pct:.1f}%",
              "GEV forward vs burning cost", C['teal']),
@@ -681,7 +707,7 @@ with tab1:
             f"<b style='color:{C['tx1']}'>Malaysia · Flood-dominated</b> &nbsp; "
             f"{badge('Weibull ξ='+str(round(mys_r.gev_shape_c,4)), C['teal'])} "
             f"{badge('Non-stationary preferred', C['amber'])}<br>"
-            f"μ₁ = +0.48 mm/yr trend confirmed. Pre/post-2007 KS test: σ, ξ stable → "
+            f"μ₁ = +0.48 mm/yr trend confirmed. Pre/post-{MYS_BREAK} KS test: σ, ξ stable → "
             "location-only shift validated.",
             accent=C['teal'], icon="MY", fixed_height=86
         )
@@ -689,7 +715,7 @@ with tab1:
         kpi_row([
             ("100-yr Return Level",  f"{phl_r.return_level_100yr_mm:.0f} mm",
              f"CI [{phl_r.rl_100yr_ci95_lo_mm:.0f}–{phl_r.rl_100yr_ci95_hi_mm:.0f}] mm  △", C['violet']),
-            ("PELT Break",           "2007",
+            ("PELT Break",           str(PHL_BREAK),
              f"+{phl_r.uplift_pct:.1f}% post-break mean", C['violet']),
             ("EAL Pricing Gap",      f"+{phl_r.eal_pricing_gap_pct:.1f}%",
              "GEV forward vs burning cost", C['violet']),
@@ -697,7 +723,7 @@ with tab1:
         callout(
             f"<b style='color:{C['tx1']}'>Philippines · Storm/Typhoon-dominated</b> &nbsp; "
             f"{badge('Weibull ξ='+str(round(phl_r.gev_shape_c,4)), C['violet'])} "
-            f"{badge('3× CI width — n=34', C['coral'])}<br>"
+            f"{badge(f'3× CI width — n={N_OBS}', C['coral'])}<br>"
             "Wide CI [326–985 mm] is not a failure; it proves single-point historical "
             "pricing is dangerous for catastrophe reserving.",
             accent=C['violet'], icon="PH", fixed_height=86
@@ -787,8 +813,8 @@ with tab2:
 
     callout(
         f"<b style='color:{C['tx1']}'>LULUCF Asymmetry — a uniform SEA surcharge misprices both markets</b><br>"
-        f"Malaysia = {badge('net LULUCF emitter +63.3 MtCO₂e', C['coral'])} palm oil deforestation → BNM CCPT C3/C4 surcharge (3–5%).<br>"
-        f"Philippines = {badge('net LULUCF sink −26.9 MtCO₂e', C['teal'])} reforestation → Art.6.2 ITMO credits offset cost (1–2% loading).",
+        f"Malaysia = {badge(f'net LULUCF emitter {MYS_LULUCF:+.1f} MtCO₂e', C['coral'])} palm oil deforestation → BNM CCPT C3/C4 surcharge (3–5%).<br>"
+        f"Philippines = {badge(f'net LULUCF sink {PHL_LULUCF:+.1f} MtCO₂e', C['teal'])} reforestation → Art.6.2 ITMO credits offset cost (1–2% loading).",
         accent=C['amber'], icon="▦"
     )
     st.markdown('<div style="height:36px"></div>', unsafe_allow_html=True)
@@ -819,15 +845,16 @@ with tab3:
         column_widths=[0.46, 0.54], horizontal_spacing=0.10,
     )
 
+    # Waterfall: eal_gap is already the INSURED pricing gap (penetration applied in nb04).
+    # Chain: Insured EAL gap → × Attach 50% → × HRe 8% → HRe Physical
     fig_wf.add_trace(go.Waterfall(
         orientation="v",
-        measure=["absolute","relative","relative","relative","total"],
-        x=["Total EAL", f"× Pen {pen:.0%}", f"× Attach {treaty_attach:.0%}",
+        measure=["absolute","relative","relative","total"],
+        x=["Insured EAL Gap\n(pen-adjusted)", f"× Attach {treaty_attach:.0%}",
            f"× HRe {hre_share:.0%}", "HRe Physical"],
-        y=[eal_gap, -(eal_gap-insured), -(insured-attached), -(attached-hre_phys), None],
-        text=[f"${eal_gap:.1f}M", f"−${eal_gap-insured:.1f}M",
-              f"−${insured-attached:.2f}M", f"−${attached-hre_phys:.2f}M",
-              f"${hre_phys:.2f}M"],
+        y=[eal_gap, -(eal_gap - attached), -(attached - hre_phys), None],
+        text=[f"${eal_gap:.1f}M", f"−${eal_gap-attached:.2f}M",
+              f"−${attached-hre_phys:.2f}M", f"${hre_phys:.2f}M"],
         textposition="outside",
         textfont=dict(color=C['tx2'], size=9, family=MONO),
         connector=dict(line=dict(color=C['surf3'], dash="dot", width=1)),
@@ -870,7 +897,7 @@ with tab3:
 
     section_label("Reserve Estimate Summary")
     kpi_row([
-        ("Physical Exposure",   f"${hre_phys:.2f}M/yr",   f"EAL × {pen:.0%} × {treaty_attach:.0%} × {hre_share:.0%}", C['teal']),
+        ("Physical Exposure",   f"${hre_phys:.2f}M/yr",   f"Insured EAL gap × {treaty_attach:.0%} attach × {hre_share:.0%} HRe share", C['teal']),
         ("Transition (floor)",  f"${hre_tran:.1f}M/yr",   f"{pt_rate_pct}% PT · {sea_alloc_pct}% SEA alloc",           C['violet']),
         ("Combined (floor)",    f"${hre_tot:.1f}M/yr",    f"base 10% → ${hre_phys+(mys_pt+phl_pt)*1e3*hre_share*0.10:.1f}M", C['amber']),
     ])
@@ -894,7 +921,7 @@ with tab4:
   Formally tests whether MYS and PHL extreme precipitation losses are independent or dependent,
   using Probability Integral Transform + four copula families.
   Key finding: <b style="color:{C['tx1']}">independence cannot be rejected annually</b>
-  (τ = −0.023, p = 0.85), but
+  (τ = {_tau_all_live:+.3f}, p = {_p_tau_live:.2f}), but
   <b style="color:{C['amber']}">La Niña introduces conditional positive dependence</b>
   (Δτ = +0.30 vs El Niño).
 </div>""", unsafe_allow_html=True)

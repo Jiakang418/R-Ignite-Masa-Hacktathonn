@@ -55,23 +55,32 @@ If the raw NGFS file is absent, notebooks gracefully degrade to pre-computed out
 
 ### Interactive Dashboard
 
+**Live deployed app:** *(deploy via Streamlit Community Cloud — see steps below)*
+
 ```bash
 streamlit run app.py
 ```
 
-Opens a live browser app with three panels: GEV return level curves, transition cost explorer (carbon price × pass-through sliders), and HRe reserve gap waterfall. All data loaded from `outputs/` — no re-running notebooks required.
+Opens a live browser app with three panels:
+- **Panel 1 — GEV Return Level Curves:** MYS and PHL 100-yr return levels with 95% bootstrap CI bands
+- **Panel 2 — Transition Cost Explorer:** Carbon price × pass-through rate sliders (IMF/OECD calibrated range)
+- **Panel 3 — HRe Reserve Gap Waterfall:** Combined physical + transition exposure with SEA allocation sensitivity
 
-### Deploy (Streamlit Community Cloud)
+All data loaded from `outputs/` — no re-running notebooks required.
 
-This project is configured for Streamlit deployment (`app.py` entrypoint, `requirements.txt`, `runtime.txt`).
+**Static fallback:** `outputs/interactive_stress_test.html` — open in any browser, no install needed.
 
-1. Push this repo to GitHub.
-2. Open [Streamlit Community Cloud](https://share.streamlit.io/) and click **New app**.
-3. Select repository + branch (`main`), and set:
-   - **Main file path:** `app.py`
-4. Deploy.
+### Deploy to Streamlit Community Cloud (Bonus Points)
 
-If a redeploy is needed after changes, use **Reboot app** from the app settings.
+This project is fully configured for one-click Streamlit deployment (`app.py` entrypoint, `requirements.txt`, `runtime.txt`).
+
+1. Push this repo to GitHub: `git push origin main`
+2. Open [share.streamlit.io](https://share.streamlit.io/) → **New app**
+3. Select repository + branch (`main`), set **Main file path:** `app.py`
+4. Click **Deploy** — app goes live at `https://<repo-name>.streamlit.app`
+5. **Add the live URL to this README and to `outputs/r5_recommendations.txt`**
+
+If a redeploy is needed after changes, use **Reboot app** from the Streamlit app settings menu.
 
 ## Key Outputs — Start Here
 
