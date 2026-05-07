@@ -107,4 +107,6 @@ Supporting analytical outputs:
 | `regulatory_context.pdf` | BNM CCPT / BSP Circ.1085 / UNFCCC Art.6 treaty implication table |
 
 ## Generative AI Usage
-See [AI_Usage.md](AI_Usage.md) for full disclosure of AI tooling used in this repository.
+All AI tools used for assistance in code optimization, documentation, or brainstorming have been fully disclosed and documented in [AI_Usage.md](AI_Usage.md).
+
+AI was used **for assistance only** — code optimization, documentation drafting, and brainstorming. All statistical models, actuarial methodology, data sourcing, and result interpretation are the original work of Team Numbers. Every quantitative claim is reproducible via `python run_all.py` without any AI dependency.
