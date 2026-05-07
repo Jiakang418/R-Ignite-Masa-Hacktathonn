@@ -55,13 +55,31 @@ hre_la_nina = float(cop.loc[cop.metric=="HRe_10pct_alloc_p99_gap_USD_M","value"]
 enso_r_mys  = float(mys_r3["enso_pearson_r"])
 enso_p_mys  = float(mys_r3["enso_pearson_p"])
 
-# Transition
-mys_bn_24   = float(stress[stress["Scenario"].str.contains("2024 GHG.*55")]["MYS Cost (USD bn)"].iloc[0])
-phl_bn_24   = float(stress[stress["Scenario"].str.contains("2024 GHG.*55")]["PHL Cost (USD bn)"].iloc[0])
-mys_bn_30   = float(stress[stress["Scenario"].str.contains("2030 GHG.*55")]["MYS Cost (USD bn)"].iloc[0])
-phl_bn_30   = float(stress[stress["Scenario"].str.contains("2030 GHG.*55")]["PHL Cost (USD bn)"].iloc[0])
-mys_str30   = float(stress[stress["Scenario"].str.contains("2030 GHG.*111")]["MYS Cost (USD bn)"].iloc[0])
-phl_str30   = float(stress[stress["Scenario"].str.contains("2030 GHG.*111")]["PHL Cost (USD bn)"].iloc[0])
+# Transition — parse new 5-row stress table with Horizon column
+_s24b = stress[stress["Scenario"].str.contains("Baseline") & (stress["Horizon"] == 2024)].iloc[0]
+_s24x = stress[stress["Scenario"].str.startswith("Stress") & (stress["Horizon"] == 2024)].iloc[0]
+_s30b = stress[stress["Scenario"].str.contains("Baseline") & (stress["Horizon"] == 2030)].iloc[0]
+_s30x = stress[stress["Scenario"].str.startswith("Stress") & (stress["Horizon"] == 2030)].iloc[0]
+mys_bn_24   = float(_s24b["MYS Cost (USD bn)"])
+phl_bn_24   = float(_s24b["PHL Cost (USD bn)"])
+mys_pct_24  = float(_s24b["MYS % GDP"])
+phl_pct_24  = float(_s24b["PHL % GDP"])
+mys_bn_30   = float(_s30b["MYS Cost (USD bn)"])
+phl_bn_30   = float(_s30b["PHL Cost (USD bn)"])
+mys_pct_30  = float(_s30b["MYS % GDP"])
+phl_pct_30  = float(_s30b["PHL % GDP"])
+mys_str30   = float(_s30x["MYS Cost (USD bn)"])
+phl_str30   = float(_s30x["PHL Cost (USD bn)"])
+mys_str24   = float(_s24x["MYS Cost (USD bn)"])
+phl_str24   = float(_s24x["PHL Cost (USD bn)"])
+cp_24_base  = float(_s24b["Carbon Price (USD/t)"])
+cp_24_str   = float(_s24x["Carbon Price (USD/t)"])
+cp_30_base  = float(_s30b["Carbon Price (USD/t)"])
+cp_30_str   = float(_s30x["Carbon Price (USD/t)"])
+# Carbon price trajectory (yearly ramp 2024–2030)
+traj_cp = pd.read_csv(OUT / "r4_carbon_price_trajectory.csv")
+cp_traj_2024 = float(traj_cp[(traj_cp["Region"]=="MYS") & (traj_cp["Year"]==2024)]["Carbon_Price_USD_per_t"].iloc[0])
+cp_traj_2030 = float(traj_cp[(traj_cp["Region"]=="MYS") & (traj_cp["Year"]==2030)]["Carbon_Price_USD_per_t"].iloc[0])
 
 # ── Document helpers ──────────────────────────────────────────────────────────
 
@@ -301,57 +319,57 @@ def build():
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "1. Executive Summary")
     para(doc,
-        f"Hannover Re's SEA non-life treaty book carries two distinct, compounding pricing gaps that current "
-        f"burning-cost methods cannot detect. The first is physical: a 2007 hazard regime shift — confirmed by "
-        f"PELT analysis across both Malaysia and the Philippines — has raised flood and typhoon baselines by "
-        f"+6.9% and +6.1% respectively, translating into a combined EAL shortfall of USD 18.4M/yr. The second "
-        f"is transitional: NGFS NZ2050 carbon pricing at USD 55.578/t generates a USD 1.115bn/yr compliance "
-        f"pass-through into the SEA treaty pool at a 3% rate. A critical asymmetry exists — Malaysia is a net "
-        f"LULUCF emitter (+63 MtCO₂e, palm oil), while the Philippines is a net sink (-27 MtCO₂e, REDD+), "
-        f"making any uniform SEA loading actuarially incorrect. The resulting HRe reserve gap spans "
-        f"USD {hre_floor:.1f}M (floor) to USD {hre_central:.1f}M (central) to USD {hre_stress:.1f}M (stress) per year.")
-    para(doc,
-        f"By 2030, the combined compliance cost reaches USD {mys_bn_30:.1f}bn (MYS) and USD {phl_bn_30:.1f}bn "
-        f"(PHL) at baseline, and USD {mys_str30:.1f}bn (MYS) / USD {phl_str30:.1f}bn (PHL) under the 2× carbon stress "
-        f"— with 2027 as the actionable repricing trigger year before capital constraints bind.")
-    para(doc, "")
+        f"Two compounding pricing gaps are undetected in Hannover Re's SEA non-life treaty book. "
+        f"Physically, a 2007 PELT regime shift raised flood/typhoon baselines by +6.9% (MYS) and +6.1% (PHL), "
+        f"creating a combined EAL shortfall of USD 18.4M/yr. Transitionally, NGFS NZ2050 carbon pricing "
+        f"(${cp_traj_2024:.1f}/t in 2024, rising to ${cp_traj_2030:.1f}/t by 2030) generates a USD 1.115bn/yr "
+        f"pass-through into the SEA treaty pool. Malaysia's net LULUCF emitter status (+63 MtCO₂e) versus "
+        f"the Philippines' net sink (-27 MtCO₂e) makes a uniform SEA loading actuarially incorrect. "
+        f"The resulting HRe reserve gap spans USD {hre_floor:.1f}M–USD {hre_stress:.1f}M/yr; 2027 is the actionable repricing trigger.",
+        size=11, sa=4)
     h2(doc, "Key Quantitative Results")
     table(doc,
         ["Metric", "Malaysia (MYS)", "Philippines (PHL)"],
         [
-            [f"ARIMA 2024 GHG forecast / MAPE",
-             f"{mys_fc24:.1f} MtCO₂e  (MAPE {mys_mape:.2f}%)",
-             f"{phl_fc24:.1f} MtCO₂e  (MAPE {phl_mape:.2f}%)"],
-            ["GEV 100-yr RX5day return level",
-             f"{mys_r3.return_level_100yr_mm:.0f}mm  [{mys_r3.rl_100yr_ci95_lo_mm:.0f}–{mys_r3.rl_100yr_ci95_hi_mm:.0f}]",
-             f"{phl_r3.return_level_100yr_mm:.0f}mm  [{phl_r3.rl_100yr_ci95_lo_mm:.0f}–{phl_r3.rl_100yr_ci95_hi_mm:.0f}]"],
-            ["PELT break year / hazard uplift",
-             f"{int(mys_r3.pelt_break_year)} / +{mys_r3.uplift_pct:.1f}%",
-             f"{int(phl_r3.pelt_break_year)} / +{phl_r3.uplift_pct:.1f}%"],
-            ["Forward EAL vs. burning-cost gap",
+            ["GHG forecast 2024 / MAPE",
+             f"{mys_fc24:.1f} MtCO₂e  ({mys_mape:.2f}%)",
+             f"{phl_fc24:.1f} MtCO₂e  ({phl_mape:.2f}%)"],
+            ["GEV 100-yr RL / PELT break",
+             f"{mys_r3.return_level_100yr_mm:.0f}mm / {int(mys_r3.pelt_break_year)} (+{mys_r3.uplift_pct:.1f}%)",
+             f"{phl_r3.return_level_100yr_mm:.0f}mm / {int(phl_r3.pelt_break_year)} (+{phl_r3.uplift_pct:.1f}%)"],
+            ["EAL gap vs. burning cost",
              f"+USD {mys_r3.eal_pricing_gap_usd_bn*1000:.1f}M/yr (+{mys_r3.eal_pricing_gap_pct:.2f}%)",
              f"+USD {phl_r3.eal_pricing_gap_usd_bn*1000:.1f}M/yr (+{phl_r3.eal_pricing_gap_pct:.2f}%)"],
-            ["ENSO–loss correlation (ONI DJF)", f"r = {enso_r_mys:.3f},  p = {enso_p_mys:.2f}", "r = -0.026,  p = 0.83"],
-            ["Transition cost @ NGFS NZ2050 (2024)",
-             f"USD {mys_bn_24:.1f}bn/yr (5.3% GDP)", f"USD {phl_bn_24:.1f}bn/yr (3.3% GDP)"],
-            ["Transition cost @ NGFS NZ2050 (2030)",
-             f"USD {mys_bn_30:.1f}bn/yr (5.8% GDP)", f"USD {phl_bn_30:.1f}bn/yr (3.6% GDP)"],
-            ["HRe reserve gap (floor / central / stress)",
+            ["Transition cost (2024 / 2030 baseline)",
+             f"USD {mys_bn_24:.1f}bn / USD {mys_bn_30:.1f}bn ({mys_pct_30:.1f}% GDP)",
+             f"USD {phl_bn_24:.1f}bn / USD {phl_bn_30:.1f}bn ({phl_pct_30:.1f}% GDP)"],
+            ["2030 stress (2× carbon)",
+             f"USD {mys_str30:.1f}bn (24.3% GDP)", f"USD {phl_str30:.1f}bn (14.8% GDP)"],
+            ["HRe reserve gap (floor / base / stress)",
              f"USD {hre_floor:.1f}M / {hre_central:.1f}M / {hre_stress:.1f}M/yr", "SEA pool: USD 1.115bn/yr"],
         ],
         widths=[2.6, 1.85, 1.85])
-    para(doc, "")
     h2(doc, "Five Strategic Recommendations")
     table(doc,
         ["#", "Recommendation", "Trigger / Regulatory Anchor"],
         [
-            ["R1","GEV EAL flood loading","+35–36% MYS treaties >USD 50M; +1–2% floor PHL. BNM CCPT Pillar 1 s.3.4"],
+            ["R1","GEV EAL flood loading","+35–36% MYS treaties >USD 50M; +1–2% PHL floor. BNM CCPT Pillar 1 s.3.4"],
             ["R2","Country transition surcharges","3–5% MYS (CCPT C3/C4); 1–2% PHL (BSP 1085 s.X.4)"],
-            ["R3","ENSO conditional audit trigger","NOAA OND ONI ≤ -0.5°C. TCFD Risk Mgmt Rec (b). NOT a pricing variable"],
-            ["R4","Climate warranty clause","MYS LULUCF: 10% co-participation. EUDR Art. 8; Lloyd's ESG 2023 s.2.3"],
-            ["R5","Data procurement (0–12 months)","Loss triangles + sub-national CHIRPS → narrows reserve band ~60%"],
+            ["R3","ENSO conditional audit","NOAA OND ONI ≤ -0.5°C → facultative audit. TCFD Risk Mgmt Rec (b)"],
+            ["R4","Climate warranty clause","MYS LULUCF: 10% co-participation. EUDR Art. 8; Lloyd's ESG s.2.3"],
+            ["R5","Data procurement (0–12 months)","Cedant triangles + CHIRPS grids → narrows reserve band ~60%"],
         ],
         widths=[0.35, 1.6, 4.35])
+    pb(doc)
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # PAGE 1b — INTEGRATED RISK DASHBOARD
+    # ══════════════════════════════════════════════════════════════════════════
+    h1(doc, "Integrated Risk Dashboard")
+    full_img(doc, "executive_summary.png",
+             "Dashboard – Physical hazard (GEV/PELT), transition risk (NGFS NZ2050), HRe reserve tiers, "
+             "and R1–R5 action timeline. All quantitative outputs reconciled to CSV sources.",
+             width=Inches(6.2))
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -381,7 +399,9 @@ def build():
         "Fig 1b – Climate Watch 2023 sector decomposition: Energy 69.5% of MYS total.",
         each_w=Inches(3.0))
     para(doc,
-        "GHG emissions grew +271% (MYS) and +177% (PHL) over 1990–2023. Malaysia's urban share increased "
+        "EM-DAT records 81 MYS flood events and 414 PHL typhoon events (1990–2023), with a documented "
+        "frequency acceleration post-2007 consistent with the PDO phase shift confirmed by PELT analysis."
+        " GHG emissions grew +271% (MYS) and +177% (PHL) over 1990–2023. Malaysia's urban share increased "
         "from 49% to 76% — the same flood footprint now covers 56% more assets, driving structural EAL growth "
         "independent of any change in hazard intensity. MYS LULUCF (15.7% of transition exposure) adds a "
         "regulatory burden entirely absent in PHL, underpinning the country-specific design of R2.", sa=3)
@@ -408,7 +428,7 @@ def build():
     full_img(doc, "r2_arima_combined.png",
              "Fig 2 – ARIMA(1,1,1) MYS MAPE 1.71% (left); ARIMA(2,1,0) PHL MAPE 3.56% (right). "
              "Fan charts show 80% and 95% prediction intervals. Forecasts run 2024–2030.",
-             width=Inches(6.2))
+             width=Inches(5.2))
     para(doc,
         f"MYS MAPE of {mys_mape:.2f}% reflects high forecast confidence. The upper 95% CI of 342.3 MtCO₂e "
         f"implies a worst-case +5.3% emission overstatement, which builds a margin of safety into the "
@@ -473,31 +493,27 @@ def build():
         f"that generates a p99 industry-wide gap of +USD {la_nina_gap:.1f}M (HRe 10% share: +USD {hre_la_nina:.2f}M/yr). "
         f"This justifies R3 as an audit trigger rather than a continuous pricing parameter.")
     side_by_side(doc,
-        "r3_enso_dependence.png",     "r8_copula_pit_scatter.png",
+        "r3_enso_dependence.png",     "r8_copula_analysis.png",
         "Fig 5a – ENSO ONI vs annual insured loss: r = -0.016, p = 0.93 (not significant).",
-        "Fig 5b – Copula PIT scatter: AIC selects Independence copula over Clayton and Gumbel.",
+        "Fig 5b – Copula analysis: AIC-based selection across Independence, Clayton, and Gumbel families.",
         each_w=Inches(3.0))
     table(doc,
         ["Test","Statistic","p-value / n","Interpretation"],
         [
-            ["Pearson r (MYS annual)",  "r = -0.016","p = 0.93","Not significant"],
-            ["Spearman rho (MYS)",      "ρ = -0.071","p = 0.69","Not significant"],
-            ["Pearson r (PHL annual)",  "r = -0.026","p = 0.83","Not significant"],
+            ["Pearson r (MYS annual)",  "r = -0.016","p = 0.93","Not significant; ENSO not a pricing variable"],
             ["AIC copula (full sample)","Independence (AIC=0)","ΔAIC = 0","Preferred vs Clayton, Gumbel"],
-            ["Kendall tau – La Niña",   "τ = +0.209","n = 14","Weak positive (sub-sample only)"],
             ["Gaussian rho – La Niña",  "ρ = +0.322","n = 14",f"p99 industry gap: +USD {la_nina_gap:.1f}M"],
         ],
         widths=[1.7, 1.5, 1.2, 1.9])
-    caption(doc, "Table 5 – ENSO dependence and copula selection results. Source: NOAA ONI DJF; EM-DAT.")
+    caption(doc, "Table 5 – Key ENSO / copula results. Source: NOAA ONI DJF; EM-DAT.")
     para(doc,
         "PHL structural underinsurance (~8% penetration vs. MYS ~15%, Swiss Re Sigma 1/2024) means the "
         f"USD {phl_r3.eal_pricing_gap_usd_bn*1000:.1f}M PHL protection gap is 83% wider than MYS's "
         f"USD {mys_r3.eal_pricing_gap_usd_bn*1000:.1f}M despite far higher event frequency — a key driver "
         "of asymmetric R1 loading.")
-    pb(doc)
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # PAGE 6 — TRANSITION RISK
+    # ══════════════════════════════════════════════════════════════════════════════
+    # PAGE 6 — TRANSITION RISK (flows from ENSO, no page break)
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "6. Transition Risk — NGFS GCAM 6.0 Assessment")
     para(doc,
@@ -508,8 +524,8 @@ def build():
         "(-26.9 MtCO₂e via REDD+), earning Art. 6.2 ITMO credits that offset ~18% of its burden. A uniform "
         "SEA LULUCF factor would overstate PHL by ~18% and understate MYS — making country-specific pricing essential.")
     side_by_side(doc,
-        "r4_exhibit2a_mys_sectors.png", "r4_exhibit2b_mys_vs_phl.png",
-        "Fig 6a – MYS sector costs at USD 55.578/t (NGFS NZ2050).",
+        "exhibit_2_chart_final.png", "r4_exhibit2b_mys_vs_phl.png",
+        "Fig 6a – Exhibit 2 (Hannover Re format): NGFS NZ2050 transition cost breakdown by sector and scenario.",
         "Fig 6b – MYS (incl. LULUCF emitter) vs. PHL (excl. LULUCF sink) head-to-head.",
         each_w=Inches(3.0))
     table(doc,
@@ -543,29 +559,29 @@ def build():
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "7. Stress Testing & 2030 Projections")
     para(doc,
-        "The NGFS NZ2050 carbon price ramps from USD 28.2/t in 2024 to USD 55.6/t by 2030, while sectoral GHG "
-        "declines at 3%/yr (IEA NZ2050 conservative abatement). Price escalation outpaces abatement: compliance "
-        "costs rise throughout the decade despite falling emissions. The binding capital constraint is reached at "
-        "approximately 2027, making it the actionable treaty repricing trigger — not 2030.")
+        f"The NGFS NZ2050 carbon price ramps from USD {cp_traj_2024:.1f}/t in 2024 to USD {cp_traj_2030:.1f}/t by 2030, "
+        "while sectoral GHG declines at 3%/yr (IEA NZ2050 conservative abatement). Price escalation outpaces "
+        "abatement: compliance costs rise throughout the decade despite falling emissions. The binding capital "
+        "constraint is reached at approximately 2027, making it the actionable treaty repricing trigger — not 2030.")
     full_img(doc, "r4_carbon_price_trajectory.png",
-             "Fig 7a – NGFS GCAM 6.0 NZ2050 carbon price trajectory: baseline $28/t (2024) → $56/t (2030) → $110/t (2050). "
+             f"Fig 7a – NGFS GCAM 6.0 NZ2050 carbon price trajectory: ${cp_traj_2024:.1f}/t (2024) → ${cp_traj_2030:.1f}/t (2030). "
              "2× stress path and 2027 capital constraint trigger are marked.",
-             width=Inches(6.2))
+             width=Inches(5.0))
     h2(doc, "Trajectory & Stress Scenarios")
     table(doc,
         ["Scenario","GHG Basis","Carbon Price","MYS Full Cost","PHL Full Cost","Key Implication"],
         [
             ["Current Policies",    "—",         "USD 0/t",    "USD 0",       "USD 0",       "Reference"],
-            ["NZ2050 (2024 ARIMA)", "2024 ARIMA","USD 55.578/t",f"USD {mys_bn_24:.1f}bn",f"USD {phl_bn_24:.1f}bn","Trigger year ~2027"],
-            ["NZ2050 (2030 ARIMA)", "2030 ARIMA","USD 55.578/t",f"USD {mys_bn_30:.1f}bn",f"USD {phl_bn_30:.1f}bn","2030 forward exposure"],
-            ["2× Stress (2024)",   "2024 ARIMA","USD 111/t",   f"USD {mys_bn_24*2:.1f}bn",f"USD {phl_bn_24*2:.1f}bn","Binding SEA capital"],
-            ["2× Stress (2030)",   "2030 ARIMA","USD 111/t",   f"USD {mys_str30:.1f}bn",f"USD {phl_str30:.1f}bn","Worst-case 2030"],
+            ["NZ2050 (2024 ARIMA)", "2024 ARIMA",f"USD {cp_24_base:.1f}/t",f"USD {mys_bn_24:.1f}bn",f"USD {phl_bn_24:.1f}bn","Trigger year ~2027"],
+            ["NZ2050 (2030 ARIMA)", "2030 ARIMA",f"USD {cp_30_base:.1f}/t",f"USD {mys_bn_30:.1f}bn",f"USD {phl_bn_30:.1f}bn","2030 forward exposure"],
+            ["2× Stress (2024)",   "2024 ARIMA",f"USD {cp_24_str:.0f}/t",  f"USD {mys_str24:.1f}bn",f"USD {phl_str24:.1f}bn","Binding SEA capital"],
+            ["2× Stress (2030)",   "2030 ARIMA",f"USD {cp_30_str:.0f}/t",  f"USD {mys_str30:.1f}bn",f"USD {phl_str30:.1f}bn","Worst-case 2030"],
         ],
         widths=[1.5, 1.0, 1.1, 1.1, 1.0, 1.6])
     caption(doc, "Table 8 – Full compliance cost scenarios. MYS includes LULUCF (+63.3 MtCO₂e). Source: NGFS GCAM 6.0; ARIMA 7-step forecast.")
     full_img(doc, "r4_transition_cost_trajectory.png",
              "Fig 7b – HRe SEA combined transition cost 2024–2030. Capital constraint binds ~2027 at 10% SEA allocation.",
-             width=Inches(6.2))
+             width=Inches(4.8))
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -594,19 +610,10 @@ def build():
              "Fig 8 – HRe SEA reserve gap as a function of carbon price and pass-through rate. "
              "Dashed contours: Floor USD 3.4M / Central USD 9.7M / Stress USD 18.6M. "
              "Red zone: binding capital constraint (>USD 18.6M). Trigger ~2027 marked.",
-             width=Inches(6.2))
-    table(doc,
-        ["Country","Penetration","Economic Gap/yr","Treaty Implication"],
-        [
-            ["Malaysia",   "~15%","USD 6.5M","EAL understated +5.87%; R1 loading applies"],
-            ["Philippines","~8%", "USD 11.9M","EAL understated +1.28%; elevated monitoring zone"],
-        ],
-        widths=[1.0, 0.85, 1.1, 3.35])
-    caption(doc, "Table 10 – Insurance penetration gap. Source: Swiss Re Sigma 1/2024.")
-    pb(doc)
+             width=Inches(5.0))
 
     # ══════════════════════════════════════════════════════════════════════════
-    # PAGE 9 — RECOMMENDATIONS
+    # PAGE 9 — RECOMMENDATIONS (flows from S8, no page break)
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "9. Strategic Risk Management Recommendations")
     h2(doc, "R1 — EAL-Calibrated Flood Loading  (implement at next renewal)", color=RED)
@@ -644,6 +651,9 @@ def build():
         "R5 (0–12 months, TCFD Metrics Rec (a)): procure cedant 10+ year loss triangles and 0.05-degree "
         "sub-national CHIRPS grids — growing the GEV sample from n=34 to n≥43 narrows the PHL CI from "
         "±44.5pp to ±12pp and reduces the reserve band from USD 15.2M to USD 6.1M.")
+    full_img(doc, "r4_rec5_procurement_matrix.png",
+             "Fig 10c – R5 data procurement matrix: cedant loss triangles + sub-national CHIRPS timeline and reserve-narrowing impact.",
+             width=Inches(5.8))
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -651,19 +661,17 @@ def build():
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "10. Limitations, Scalability & Conclusion")
     h2(doc, "10.1 Key Limitations")
-    bullet(doc, f"Sample size (n=34): PHL GEV CI spans [326–985mm] — a 3× range. Permutation testing at n=34 "
-           f"carries ~25% power, so the 2007 break is supported primarily by the PDO literature (Cinco et al. 2014) "
-           f"rather than statistical significance alone. PHL carries a floor loading only until R5 delivers n≥43.")
-    bullet(doc, "Pass-through rate (±2pp): a single percentage point shift in the pass-through assumption drives a "
-           "5× change in the HRe reserve estimate (USD 3.0–14.9M at 10% alloc.). Figure 8 provides the full "
-           "sensitivity surface; the rate refreshes with each NGFS Phase update.")
-    bullet(doc, "ARIMA no-break assumption: the NETR 2023 policy trajectory may accelerate MYS decarbonisation, "
-           "biasing GHG forecasts conservatively high. This creates a margin of safety in the transition surcharge "
-           "calculation rather than a risk of understatement.")
-    bullet(doc, "LULUCF uncertainty (±20–30%, FAO FRA 2020): re-evaluated against FRA 2025 when published. "
-           "La Niña copula (n=14) is insufficient for block-maxima GEV; the USD 2.59M/yr figure is indicative only.")
+    bullet(doc, f"Sample size & statistical power: PHL GEV CI spans [326–985mm] (n=34, ~25% permutation power). "
+           f"The 2007 PELT break is supported by PDO literature (Cinco et al. 2014) rather than significance alone. "
+           f"Pass-through rate (±2pp) drives 5× reserve variance (USD 3.0–14.9M); both limitations resolved by R5 (n≥43, cedant triangles).")
+    bullet(doc, "Model assumptions: ARIMA no-break assumption biases MYS GHG high — a margin of safety, not a risk. "
+           "LULUCF uncertainty (±20–30%, FAO FRA 2020) and La Niña copula (n=14) are indicative only; "
+           "both refresh against FRA 2025 and the next NGFS Phase update.")
     para(doc, "")
     h2(doc, "10.2 Regulatory Anchor Mapping")
+    full_img(doc, "regulatory_context.png",
+             "Fig 11 – Regulatory context map: BNM CCPT, BSP 1085, TCFD, EUDR Art. 8, Lloyd's ESG 2023 — R1–R5 compliance anchors.",
+             width=Inches(5.8))
     table(doc,
         ["Rec","Regulatory Framework","Specific Clause / Section"],
         [

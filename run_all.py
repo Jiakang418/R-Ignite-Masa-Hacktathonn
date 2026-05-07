@@ -25,10 +25,11 @@ TIMEOUT      = 600  # 10 minutes per notebook (generous for bootstrap)
 NOTEBOOKS = [
     ("01_data_ingestion.ipynb",        "Load & validate all raw data sources"),
     ("02_indicator_analysis.ipynb",    "16-indicator EDA + sector GHG decomposition"),
-    ("03_arima_ghg_forecast.ipynb",    "ARIMA GHG forecast 2024–2026 (MYS + PHL)"),
+    ("03_arima_ghg_forecast.ipynb",    "ARIMA GHG forecast 2024–2030 (MYS + PHL)"),
     ("04_chirps_gev_enso.ipynb",       "GEV extreme value + PELT regime break + ENSO"),
     ("05_exhibit2_visualization.ipynb","Transition cost (NGFS NZ2050) + stress matrix"),
     ("06_executive_summary.ipynb",     "Three Gaps dashboard + interactive HTML"),
+    ("07_recommendations.ipynb",        "R1–R5 treaty recommendations + procurement roadmap"),
     ("08_gev_copula.ipynb",            "GEV-Copula joint model — MYS-PHL tail dependence"),
 ]
 
