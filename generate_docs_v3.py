@@ -296,22 +296,26 @@ def build():
     # ── TABLE OF CONTENTS ─────────────────────────────────────────────────────
     h1(doc, "Table of Contents")
     toc_items = [
-        ("1.",   "Executive Summary"),
-        ("2.",   "Problem Framing & Data Landscape"),
-        ("3.",   "GHG Forecasting — ARIMA Model"),
-        ("4.",   "Physical Hazard — GEV Analysis & EAL Repricing"),
-        ("5.",   "ENSO Dependence & Copula Analysis"),
-        ("6.",   "Transition Risk — NGFS GCAM 6.0 Assessment"),
-        ("7.",   "Stress Testing & 2030 Projections"),
-        ("8.",   "Financial Impact — Hannover Re Reserve Implications"),
-        ("9.",   "Strategic Risk Management Recommendations"),
-        ("10.",  "Limitations, Scalability & Conclusion"),
+        ("1.",      "Executive Summary",                              False),
+        ("2.",      "Problem Framing & Data Landscape",              False),
+        ("3.",      "GHG Forecasting — ARIMA Model",                 False),
+        ("4.",      "Physical Hazard — GEV Analysis & EAL Repricing",False),
+        ("5.",      "ENSO Dependence & Copula Analysis",             False),
+        ("6.",      "Transition Risk — NGFS GCAM 6.0 Assessment",    False),
+        ("7.",      "Stress Testing & 2030 Projections",             False),
+        ("8.",      "Financial Impact — Hannover Re Reserve Implications", False),
+        ("9.",      "Strategic Risk Management Recommendations",      False),
+        ("10.",     "Limitations, Scalability & Conclusion",         False),
+        ("  10.1",  "Key Limitations",                               True),
+        ("  10.2",  "Regulatory Anchor Mapping",                     True),
+        ("  10.3",  "Scalability",                                   True),
+        ("  10.4",  "Conclusion",                                    True),
     ]
-    for num, title in toc_items:
+    for num, title, sub in toc_items:
         p = doc.add_paragraph()
-        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.space_after = Pt(1 if sub else 2)
         r = p.add_run(f"{num}  {title}")
-        _tnr(r, size=12, bold=not num.startswith("   "))
+        _tnr(r, size=11 if sub else 12, bold=not sub, italic=sub)
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -363,19 +367,13 @@ def build():
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # PAGE 1b — INTEGRATED RISK DASHBOARD
-    # ══════════════════════════════════════════════════════════════════════════
-    h1(doc, "Integrated Risk Dashboard")
-    full_img(doc, "executive_summary.png",
-             "Dashboard – Physical hazard (GEV/PELT), transition risk (NGFS NZ2050), HRe reserve tiers, "
-             "and R1–R5 action timeline. All quantitative outputs reconciled to CSV sources.",
-             width=Inches(6.2))
-    pb(doc)
-
-    # ══════════════════════════════════════════════════════════════════════════
     # PAGE 2 — PROBLEM FRAMING + DATA
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "2. Problem Framing & Data Landscape")
+    full_img(doc, "executive_summary.png",
+             "Fig 0 – Integrated risk dashboard: physical (GEV/PELT), transition (NGFS NZ2050), "
+             "HRe reserve tiers, and R1–R5 action timeline. All outputs reconciled to CSV sources.",
+             width=Inches(6.0))
     para(doc,
         "Hannover Re's current treaty pricing relies on burning-cost methods calibrated before a documented 2007 "
         "hazard regime shift — leaving flood and typhoon treaties systematically underpriced. Simultaneously, "
@@ -435,7 +433,11 @@ def build():
         f"transition surcharge. PHL MAPE of {phl_mape:.2f}% reflects EPIRA-driven energy policy variability. "
         f"Under NZ2050, GHG baselines decline (3%/yr IEA abatement) to 317 MtCO₂e (MYS) and 162 MtCO₂e "
         f"(PHL) by 2030 — but carbon price escalation outpaces abatement, keeping compliance costs on an "
-        f"upward trajectory through the decade.")
+        f"upward trajectory through the decade. "
+        f"The 2030 prediction intervals widen substantially beyond the 2024 one-year horizon (Fig 2 fan "
+        f"charts show 80% and 95% bands); rather than carry 7-step CI bounds through the transition cost "
+        f"chain, the 2× carbon stress scenario in Section 7 is calibrated to span the upper tail of combined "
+        f"forecast and price uncertainty.")
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -446,8 +448,13 @@ def build():
         "A Generalized Extreme Value distribution was fitted to 34 years of CHIRPS RX5day annual maxima using "
         "maximum likelihood estimation with 500-iteration bootstrap confidence intervals. PELT regime detection "
         "(BIC penalty) identified a synchronized break in 2007 across both markets, consistent with the documented "
-        "PDO phase-shift literature (Loo et al. 2015; Cinco et al. 2014). Forward EAL integrates the post-break "
-        "GEV survival function against EM-DAT total damages.")
+        "PDO phase-shift literature (Loo et al. 2015; Cinco et al. 2014). Forward EAL is derived by rescaling "
+        "EM-DAT historical mean annual damages by the ratio of the post-break GEV mean to the full-sample "
+        "burning-cost mean — a linear proportionality assumption (damage ∝ GEV exceedance probability above "
+        "the historical mean). This deliberately understates the true repricing need: flood damage exhibits "
+        "convexity in precipitation depth (a 10% hazard uplift translates to more than 10% loss increase at "
+        "high return periods), so the +5.87%/+1.28% EAL gaps are conservative lower bounds. Cedant loss "
+        "triangles (R5) would replace this with empirical loss-development curves.")
     table(doc,
         ["Country","GEV Family","RL-100yr (mm)","95% CI","PELT Break","Hazard Uplift","EAL Gap"],
         [
@@ -487,11 +494,13 @@ def build():
     para(doc,
         f"NOAA ONI DJF anomalies (1990–2023) were correlated against EM-DAT annual insured losses and subjected "
         f"to AIC-based copula selection (Independence vs. Clayton vs. Gumbel). Annual ENSO correlation is "
-        f"statistically indistinguishable from zero for both markets (MYS: r = {enso_r_mys:.3f}, p = {enso_p_mys:.2f}; "
-        f"PHL: r = -0.026, p = 0.83), and AIC selects the Independence copula. ENSO is therefore not a pricing "
-        f"variable. However, La Niña sub-samples (n=14) show a weak Gaussian copula dependence (rho = 0.32) "
-        f"that generates a p99 industry-wide gap of +USD {la_nina_gap:.1f}M (HRe 10% share: +USD {hre_la_nina:.2f}M/yr). "
-        f"This justifies R3 as an audit trigger rather than a continuous pricing parameter.")
+        f"indistinguishable from zero (MYS: r = {enso_r_mys:.3f}, p = {enso_p_mys:.2f}; PHL: r = -0.026, p = 0.83). "
+        f"The slightly negative MYS coefficient reflects a DJF lag behind the Oct–Jan flood season, compounded "
+        f"by opposing country signals — La Niña floods Malaysia while El Niño suppresses PHL rainfall — biasing "
+        f"the portfolio-level correlation toward zero; country-level copulas (MYS-only, PHL-only) both confirm "
+        f"independence. ENSO is therefore not a pricing variable. La Niña sub-samples (n=14) show a weak "
+        f"Gaussian dependence (ρ = 0.32) generating a p99 industry gap of +USD {la_nina_gap:.1f}M "
+        f"(HRe 10%: +USD {hre_la_nina:.2f}M/yr), justifying R3 as an audit trigger, not a pricing input.")
     side_by_side(doc,
         "r3_enso_dependence.png",     "r8_copula_analysis.png",
         "Fig 5a – ENSO ONI vs annual insured loss: r = -0.016, p = 0.93 (not significant).",
@@ -523,6 +532,22 @@ def build():
         "palm oil) subject to EUDR Art. 8 and BNM CCPT Pillar 2, while the Philippines is a net carbon sink "
         "(-26.9 MtCO₂e via REDD+), earning Art. 6.2 ITMO credits that offset ~18% of its burden. A uniform "
         "SEA LULUCF factor would overstate PHL by ~18% and understate MYS — making country-specific pricing essential.")
+    h2(doc, "Pass-Through Rate Derivation (3% Baseline)")
+    table(doc,
+        ["Step", "Mechanism", "Result"],
+        [
+            ["1 — Cedant cost uplift",
+             "MYS energy sector (279.85 MtCO₂e) at $55.578/t = $15.55bn levy vs. ~$280bn revenue",
+             "5.6% cost-of-production increase for CCPT C3/C4 cedants"],
+            ["2 — Insured value pass-through",
+             "BNM CCPT Pillar 2 s.4.2: 50–60% of compliance cost materialises as higher insured BI/property sums",
+             "~3.0% uplift in declared insured exposure across the property cat book"],
+            ["3 — Treaty scaling",
+             "Proportional treaty: 3% insured-exposure uplift flows 1-for-1 into treaty premium (no attachment leakage)",
+             "3% baseline loading — anchored to BNM CCPT, not EIOPA (European P&C calibration)"],
+        ],
+        widths=[1.6, 3.25, 1.45])
+    caption(doc, "Table 6b – 3% pass-through rate derivation. Sensitivity ±2pp drives 5× reserve variance (Table 7); quantitative case for R5.")
     side_by_side(doc,
         "exhibit_2_chart_final.png", "r4_exhibit2b_mys_vs_phl.png",
         "Fig 6a – Exhibit 2 (Hannover Re format): NGFS NZ2050 transition cost breakdown by sector and scenario.",
@@ -559,10 +584,12 @@ def build():
     # ══════════════════════════════════════════════════════════════════════════
     h1(doc, "7. Stress Testing & 2030 Projections")
     para(doc,
-        f"The NGFS NZ2050 carbon price ramps from USD {cp_traj_2024:.1f}/t in 2024 to USD {cp_traj_2030:.1f}/t by 2030, "
-        "while sectoral GHG declines at 3%/yr (IEA NZ2050 conservative abatement). Price escalation outpaces "
-        "abatement: compliance costs rise throughout the decade despite falling emissions. The binding capital "
-        "constraint is reached at approximately 2027, making it the actionable treaty repricing trigger — not 2030.")
+        f"The NGFS NZ2050 carbon price ramps from USD {cp_traj_2024:.1f}/t (2024) to USD {cp_traj_2030:.1f}/t (2030); "
+        "price escalation outpaces 3%/yr abatement throughout the decade. The 2027 repricing trigger is "
+        "derived from the mid-decade trajectory: at ~USD 85/t, ARIMA GHG (MYS 297, PHL 267 MtCO₂e after "
+        "abatement) yields a ~USD 1.44bn/yr SEA pool, placing HRe's central reserve gap at ~USD 12.3M/yr — "
+        "crossing the BNM CCPT Pillar 2 s.4.2 mandatory review threshold. Waiting until 2028 forfeits one "
+        "renewal cycle at underpriced rates; the 2× stress (USD 18.6M/yr) binds in 2029.")
     full_img(doc, "r4_carbon_price_trajectory.png",
              f"Fig 7a – NGFS GCAM 6.0 NZ2050 carbon price trajectory: ${cp_traj_2024:.1f}/t (2024) → ${cp_traj_2030:.1f}/t (2030). "
              "2× stress path and 2027 capital constraint trigger are marked.",
@@ -579,9 +606,6 @@ def build():
         ],
         widths=[1.5, 1.0, 1.1, 1.1, 1.0, 1.6])
     caption(doc, "Table 8 – Full compliance cost scenarios. MYS includes LULUCF (+63.3 MtCO₂e). Source: NGFS GCAM 6.0; ARIMA 7-step forecast.")
-    full_img(doc, "r4_transition_cost_trajectory.png",
-             "Fig 7b – HRe SEA combined transition cost 2024–2030. Capital constraint binds ~2027 at 10% SEA allocation.",
-             width=Inches(4.8))
     pb(doc)
 
     # ══════════════════════════════════════════════════════════════════════════
