@@ -16,6 +16,7 @@ AI tools were used **strictly for assistance** — code optimization, documentat
 | Tool | Version | Purpose |
 |------|---------|---------|
 | Claude Sonnet 4.6 (Anthropic) | May 2026 | Code optimization, documentation drafting, script structuring |
+| Cursor (cursor.com) | May 2026 | In-editor debugging assistance, error diagnosis, code navigation |
 | GitHub Copilot | — | In-editor code completion suggestions |
 
 ---
@@ -25,6 +26,7 @@ AI tools were used **strictly for assistance** — code optimization, documentat
 - Helped restructure Python functions for readability 
 - Suggested docstring and comment phrasing
 - Assisted in formatting table layouts in `python-docx`
+- Cursor used for in-editor debugging: tracing runtime errors, stack traces, and import issues in notebooks and scripts
 
 ---
 
